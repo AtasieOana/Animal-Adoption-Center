@@ -4,12 +4,13 @@ CREATE TABLE IF NOT EXISTS employees_details (
     last_name VARCHAR(50) NOT NULL,
     employment_date datetime,
     phone_number VARCHAR(10),
+    UNIQUE(first_name, last_name),
     PRIMARY KEY (id)
 );
 
 CREATE TABLE IF NOT EXISTS caretakers (
     id BIGINT NOT NULL AUTO_INCREMENT,
-    responsibility VARCHAR(100),
+    responsibility VARCHAR(100) NOT NULL,
     PRIMARY KEY (id)
 );
 
@@ -24,7 +25,7 @@ CREATE TABLE IF NOT EXISTS caretakers_employees_details (
 
 CREATE TABLE IF NOT EXISTS vets (
     id BIGINT NOT NULL AUTO_INCREMENT,
-    experience INT,
+    experience INT NOT NULL,
     PRIMARY KEY (id)
 );
 
@@ -61,7 +62,7 @@ CREATE TABLE IF NOT EXISTS animals (
     PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS employees_details (
+CREATE TABLE IF NOT EXISTS clients (
     id BIGINT NOT NULL AUTO_INCREMENT,
     first_name VARCHAR(50) NOT NULL,
     last_name VARCHAR(50) NOT NULL,
@@ -69,6 +70,7 @@ CREATE TABLE IF NOT EXISTS employees_details (
     birth_date datetime,
     phone_number VARCHAR(10),
     gender CHAR,
+    UNIQUE(first_name, last_name),
     PRIMARY KEY (id)
 );
 
@@ -92,7 +94,7 @@ CREATE TABLE IF NOT EXISTS animals_clients (
 
 CREATE TABLE IF NOT EXISTS diets (
     id BIGINT NOT NULL AUTO_INCREMENT,
-    diet_type VARCHAR(50) NOT NULL,
+    diet_type VARCHAR(50) NOT NULL UNIQUE,
     quantity_on_stock INT,
     PRIMARY KEY (id)
 );
@@ -108,7 +110,7 @@ CREATE TABLE IF NOT EXISTS animals_diets (
 
 CREATE TABLE IF NOT EXISTS vaccines (
     id BIGINT NOT NULL AUTO_INCREMENT,
-    vaccine_name VARCHAR(50) NOT NULL,
+    vaccine_name VARCHAR(50) NOT NULL UNIQUE,
     expiration_date datetime NOT NULL,
     quantity_on_stock INT,
     PRIMARY KEY (id)

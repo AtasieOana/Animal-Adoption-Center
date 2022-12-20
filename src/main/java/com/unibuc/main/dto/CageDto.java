@@ -19,6 +19,6 @@ public class CageDto {
     @NotNull(message = ProjectConstants.NR_PLACES_NULL)
     private Integer numberPlaces;
 
-    private CaretakerDto caretakerDto;
+    private EmployeeDto caretakerDto;
 
 }

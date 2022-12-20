@@ -1,8 +1,7 @@
-package com.unibuc.validation.gender;
+package com.unibuc.main.validation.phonenumber;
 
 
 import com.unibuc.main.constants.ProjectConstants;
-import com.unibuc.validation.phonenumber.PhoneNumberMatchValidation;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
@@ -13,10 +12,10 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = OnlyCharacterMFValidation.class)
-public @interface OnlyCharacterMF {
+@Constraint(validatedBy = PhoneNumberMatchValidation.class)
+public @interface PhoneNumberMatch {
 
-    String message() default ProjectConstants.GENDER_MATCH;
+    String message() default ProjectConstants.PHONE_NUMBER_MATCH;
 
     // represents groups of constraints
     Class<?>[] groups() default {};

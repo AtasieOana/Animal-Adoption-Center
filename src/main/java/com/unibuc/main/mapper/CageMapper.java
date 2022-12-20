@@ -9,13 +9,13 @@ import org.springframework.stereotype.Component;
 public class CageMapper {
 
     @Autowired
-    private CaretakerMapper caretakerMapper;
+    private EmployeeMapper employeeMapper;
 
     public Cage mapToCage(CageDto cageDto) {
         return Cage.builder()
                 .id(cageDto.getId())
                 .numberPlaces(cageDto.getNumberPlaces())
-                .caretaker(caretakerMapper.mapToCaretaker(cageDto.getCaretakerDto()))
+                .caretaker(employeeMapper.mapToEmployee(cageDto.getCaretakerDto()))
                 .build();
     }
 
@@ -23,7 +23,7 @@ public class CageMapper {
         return CageDto.builder()
                 .id(cage.getId())
                 .numberPlaces(cage.getNumberPlaces())
-                .caretakerDto(caretakerMapper.mapToCaretakerDto(cage.getCaretaker()))
+                .caretakerDto(employeeMapper.mapToEmployeeDto(cage.getCaretaker()))
                 .build();
     }
 }

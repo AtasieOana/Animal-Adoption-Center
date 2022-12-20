@@ -1,43 +1,29 @@
-CREATE TABLE IF NOT EXISTS employees_details (
+CREATE TABLE IF NOT EXISTS persons_details (
     id BIGINT NOT NULL AUTO_INCREMENT,
     first_name VARCHAR(50) NOT NULL,
     last_name VARCHAR(50) NOT NULL,
-    employment_date datetime,
     phone_number VARCHAR(10),
     UNIQUE(first_name, last_name),
     PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS caretakers (
+CREATE TABLE IF NOT EXISTS employees (
     id BIGINT NOT NULL AUTO_INCREMENT,
-    responsibility VARCHAR(100) NOT NULL,
+    responsibility VARCHAR(100),
+    experience INT,
+    employment_date datetime,
+    salary INT,
     PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS caretakers_employees_details (
+CREATE TABLE IF NOT EXISTS employees_persons_details (
     id BIGINT NOT NULL AUTO_INCREMENT,
-    employees_details BIGINT NOT NULL,
-    caretakers BIGINT NOT NULL,
+    employees BIGINT NOT NULL,
+    persons_details BIGINT NOT NULL,
     PRIMARY KEY (id),
-    FOREIGN KEY (caretakers) REFERENCES caretakers(id),
-    FOREIGN KEY (employees_details) REFERENCES employees_details(id)
+    FOREIGN KEY (employees) REFERENCES employees(id),
+    FOREIGN KEY (persons_details) REFERENCES persons_details(id)
 );
-
-CREATE TABLE IF NOT EXISTS vets (
-    id BIGINT NOT NULL AUTO_INCREMENT,
-    experience INT NOT NULL,
-    PRIMARY KEY (id)
-);
-
-CREATE TABLE IF NOT EXISTS vets_employees_details (
-    id BIGINT NOT NULL AUTO_INCREMENT,
-    employees_details BIGINT NOT NULL,
-    vets BIGINT NOT NULL,
-    PRIMARY KEY (id),
-    FOREIGN KEY (vets) REFERENCES vets(id),
-    FOREIGN KEY (employees_details) REFERENCES employees_details(id)
-);
-
 
 CREATE TABLE IF NOT EXISTS cages (
     id BIGINT NOT NULL AUTO_INCREMENT,
@@ -45,13 +31,13 @@ CREATE TABLE IF NOT EXISTS cages (
     PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS cages_caretakers (
+CREATE TABLE IF NOT EXISTS cages_employees (
     id BIGINT NOT NULL AUTO_INCREMENT,
     cages BIGINT NOT NULL,
-    caretakers BIGINT NOT NULL,
+    employees BIGINT NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (cages) REFERENCES cages(id),
-    FOREIGN KEY (caretakers) REFERENCES caretakers(id)
+    FOREIGN KEY (employees) REFERENCES employees(id)
 );
 
 CREATE TABLE IF NOT EXISTS animals (
@@ -64,14 +50,19 @@ CREATE TABLE IF NOT EXISTS animals (
 
 CREATE TABLE IF NOT EXISTS clients (
     id BIGINT NOT NULL AUTO_INCREMENT,
-    first_name VARCHAR(50) NOT NULL,
-    last_name VARCHAR(50) NOT NULL,
     date_becoming_client datetime,
     birth_date datetime,
-    phone_number VARCHAR(10),
     gender CHAR,
-    UNIQUE(first_name, last_name),
     PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS clients_persons_details (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    clients BIGINT NOT NULL,
+    persons_details BIGINT NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (clients) REFERENCES clients(id),
+    FOREIGN KEY (persons_details) REFERENCES persons_details(id)
 );
 
 CREATE TABLE IF NOT EXISTS animals_cages (
@@ -141,11 +132,11 @@ CREATE TABLE IF NOT EXISTS vaccines_medical_records (
     FOREIGN KEY (vaccines) REFERENCES vaccines(id)
 );
 
-CREATE TABLE IF NOT EXISTS vets_medical_records (
+CREATE TABLE IF NOT EXISTS employees_medical_records (
     id BIGINT NOT NULL AUTO_INCREMENT,
     medical_records BIGINT NOT NULL,
-    vets BIGINT NOT NULL,
+    employees BIGINT NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (medical_records) REFERENCES medical_records(id),
-    FOREIGN KEY (vets) REFERENCES vets(id)
+    FOREIGN KEY (employees) REFERENCES employees(id)
 );

@@ -2,7 +2,6 @@ package com.unibuc.main.mapper;
 
 import com.unibuc.main.dto.VaccineDto;
 import com.unibuc.main.entity.Vaccine;
-import com.unibuc.main.entity.EmployeeDetails;
 import org.springframework.stereotype.Component;
 
 @Component

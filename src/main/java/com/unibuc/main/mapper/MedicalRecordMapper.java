@@ -15,7 +15,7 @@ public class MedicalRecordMapper {
     private VaccineMapper vaccineMapper;
 
     @Autowired
-    private VetMapper vetMapper;
+    private EmployeeMapper employeeMapper;
 
     public MedicalRecord mapToMedicalRecord(MedicalRecordDto medicalRecordDto) {
         return MedicalRecord.builder()
@@ -24,7 +24,7 @@ public class MedicalRecordMapper {
                 .generationDate(medicalRecordDto.getGenerationDate())
                 .animal(animalMapper.mapToAnimal((medicalRecordDto.getAnimalDto())))
                 .vaccine(vaccineMapper.mapToVaccine(medicalRecordDto.getVaccineDto()))
-                .vet(vetMapper.mapToVet(medicalRecordDto.getVetDto()))
+                .vet(employeeMapper.mapToEmployee(medicalRecordDto.getVetDto()))
                 .build();
     }
 
@@ -35,7 +35,7 @@ public class MedicalRecordMapper {
                 .generationDate(medicalRecord.getGenerationDate())
                 .animalDto(animalMapper.mapToAnimalDto((medicalRecord.getAnimal())))
                 .vaccineDto(vaccineMapper.mapToVaccineDto(medicalRecord.getVaccine()))
-                .vetDto(vetMapper.mapToVetDto(medicalRecord.getVet()))
+                .vetDto(employeeMapper.mapToEmployeeDto(medicalRecord.getVet()))
                 .build();
     }
 }

@@ -1,8 +1,8 @@
 package com.unibuc.main.dto;
 
 import com.unibuc.main.constants.ProjectConstants;
-import com.unibuc.validation.gender.OnlyCharacterMF;
-import com.unibuc.validation.phonenumber.PhoneNumberMatch;
+import com.unibuc.main.validation.gender.OnlyCharacterMF;
+import com.unibuc.main.validation.phonenumber.PhoneNumberMatch;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;

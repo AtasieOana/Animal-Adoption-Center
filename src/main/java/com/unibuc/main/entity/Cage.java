@@ -22,10 +22,10 @@ public class Cage {
     private Integer numberPlaces;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(name="cages_caretakers",
+    @JoinTable(name="cages_employees",
             joinColumns = { @JoinColumn(name="cages", referencedColumnName = "id")
             }, inverseJoinColumns = {
-            @JoinColumn(name = "caretakers", referencedColumnName = "id")
+            @JoinColumn(name = "employees", referencedColumnName = "id")
     })
-    private Caretaker caretaker;
+    private Employee caretaker;
 }

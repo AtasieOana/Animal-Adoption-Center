@@ -1,6 +1,5 @@
-package com.unibuc.validation.phonenumber;
+package com.unibuc.main.validation.phonenumber;
 
-import com.unibuc.validation.phonenumber.PhoneNumberMatch;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 

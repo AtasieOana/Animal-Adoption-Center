@@ -2,9 +2,6 @@ package com.unibuc.main.constants;
 
 public class ProjectConstants {
 
-    public static final String RESPONSIBILITY_NULL = "Responsibility for the caretaker should not be null";
-    public static final String EXPERIENCE_NULL = "Experience for the vet should not be null";
-
     public static final String FIRST_NAME_NULL = "First name should not be null";
     public static final String LAST_NAME_NULL = "Last name should not be null";
     public static final String PHONE_NUMBER_MATCH = "Phone number is invalid";
@@ -16,7 +13,11 @@ public class ProjectConstants {
     public static final String EXP_DATE_NULL = "Expiration date name should not be null";
     public static final String ANIMAL_TYPE_NULL = "Animal type should not be null";
     public static final String HEALTH_NULL = "General health state should not be null";
+    public static final String EMPLOYEE_NOT_FOUND = "Employee with name %s doesn't exist";
+    public static final String CARETAKER_WRONG_INFO = "In order to insert a caretaker, responsibilities must be mentioned, experience is not required.";
 
+    public static final String OBJ_DELETED = "Object was deleted.";
 
+    public static final String OBJ_DELETED_ERROR = "Object can't be deleted.";
 
 }

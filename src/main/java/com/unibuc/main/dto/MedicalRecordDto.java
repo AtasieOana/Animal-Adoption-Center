@@ -1,10 +1,7 @@
 package com.unibuc.main.dto;
 
 import com.unibuc.main.constants.ProjectConstants;
-import com.unibuc.main.entity.Animal;
-import com.unibuc.main.entity.Vaccine;
-import com.unibuc.main.entity.Vet;
-import jakarta.persistence.*;
+
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
@@ -31,5 +28,5 @@ public class MedicalRecordDto {
 
     private VaccineDto vaccineDto;
 
-    private VetDto vetDto;
+    private EmployeeDto vetDto;
 }

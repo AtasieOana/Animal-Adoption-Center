@@ -43,10 +43,10 @@ public class MedicalRecord {
     private Vaccine vaccine;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(name="vets_medical_records",
+    @JoinTable(name="employees_medical_records",
             joinColumns = { @JoinColumn(name="medical_records", referencedColumnName = "id")
             }, inverseJoinColumns = {
-            @JoinColumn(name = "vets", referencedColumnName = "id")
+            @JoinColumn(name = "employees", referencedColumnName = "id")
     })
-    private Vet vet;
+    private Employee vet;
 }

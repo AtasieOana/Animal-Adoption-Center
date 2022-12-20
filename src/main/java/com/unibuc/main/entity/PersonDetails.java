@@ -14,7 +14,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Entity
 @Table(name = "employees_details")
-public class EmployeeDetails {
+public class PersonDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,9 +25,6 @@ public class EmployeeDetails {
 
     @Column(name = "last_name")
     private String lastName;
-
-    @Column(name = "employment_date")
-    private Date employmentDate;
 
     @Column(name = "phone_number")
     private String phoneNumber;

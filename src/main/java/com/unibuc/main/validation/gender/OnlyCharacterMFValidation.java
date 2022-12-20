@@ -1,7 +1,7 @@
 package com.unibuc.main.validation.gender;
 
-import jakarta.validation.ConstraintValidator;
-import jakarta.validation.ConstraintValidatorContext;
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
 
 public class OnlyCharacterMFValidation implements ConstraintValidator<OnlyCharacterMF, Character> {
 

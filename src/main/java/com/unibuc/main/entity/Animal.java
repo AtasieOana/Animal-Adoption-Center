@@ -1,11 +1,11 @@
 package com.unibuc.main.entity;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
 import java.util.Date;
 
 @Builder
@@ -29,7 +29,7 @@ public class Animal {
     @Column(name = "found_date")
     private Date foundDate;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinTable(name="animals_cages",
             joinColumns = { @JoinColumn(name="animals", referencedColumnName = "id")
             }, inverseJoinColumns = {
@@ -38,7 +38,7 @@ public class Animal {
     private Cage cage;
     /* un animal poate sta intr-o singura cusca, iar intr-o cusca pot sta mai multe animale */
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinTable(name="animals_clients",
             joinColumns = { @JoinColumn(name="animals", referencedColumnName = "id")
             }, inverseJoinColumns = {
@@ -46,7 +46,7 @@ public class Animal {
     })
     private Client client;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinTable(name="animals_diets",
             joinColumns = { @JoinColumn(name="animals", referencedColumnName = "id")
             }, inverseJoinColumns = {

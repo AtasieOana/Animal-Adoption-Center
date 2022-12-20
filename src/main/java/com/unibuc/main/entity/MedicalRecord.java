@@ -1,6 +1,6 @@
 package com.unibuc.main.entity;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -34,7 +34,7 @@ public class MedicalRecord {
     })
     private Animal animal;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinTable(name="vaccines_medical_records",
             joinColumns = { @JoinColumn(name="medical_records", referencedColumnName = "id")
             }, inverseJoinColumns = {
@@ -42,7 +42,7 @@ public class MedicalRecord {
     })
     private Vaccine vaccine;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinTable(name="employees_medical_records",
             joinColumns = { @JoinColumn(name="medical_records", referencedColumnName = "id")
             }, inverseJoinColumns = {

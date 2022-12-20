@@ -1,4 +1,4 @@
-package com.unibuc.main.service;
+package com.unibuc.main.service.employees;
 
 import com.unibuc.main.dto.EmployeeDto;
 

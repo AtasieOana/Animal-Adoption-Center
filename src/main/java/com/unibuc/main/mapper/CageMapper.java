@@ -12,18 +12,35 @@ public class CageMapper {
     private EmployeeMapper employeeMapper;
 
     public Cage mapToCage(CageDto cageDto) {
-        return Cage.builder()
-                .id(cageDto.getId())
-                .numberPlaces(cageDto.getNumberPlaces())
-                .caretaker(employeeMapper.mapToEmployee(cageDto.getCaretakerDto()))
-                .build();
+        if(cageDto.getCaretaker() != null) {
+            return Cage.builder()
+                    .id(cageDto.getId())
+                    .numberPlaces(cageDto.getNumberPlaces())
+                    .caretaker(employeeMapper.mapToEmployee(cageDto.getCaretaker()))
+                    .build();
+        }
+        else{
+            return Cage.builder()
+                    .id(cageDto.getId())
+                    .numberPlaces(cageDto.getNumberPlaces())
+                    .build();
+        }
     }
 
     public CageDto mapToCageDto(Cage cage){
-        return CageDto.builder()
-                .id(cage.getId())
-                .numberPlaces(cage.getNumberPlaces())
-                .caretakerDto(employeeMapper.mapToEmployeeDto(cage.getCaretaker()))
-                .build();
+        if(cage.getCaretaker() != null){
+            return CageDto.builder()
+                    .id(cage.getId())
+                    .numberPlaces(cage.getNumberPlaces())
+                    .caretaker(employeeMapper.mapToEmployeeDto(cage.getCaretaker()))
+                    .build();
+        }
+        else{
+            return CageDto.builder()
+                    .id(cage.getId())
+                    .numberPlaces(cage.getNumberPlaces())
+                    .build();
+        }
+
     }
 }

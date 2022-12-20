@@ -1,7 +1,7 @@
 package com.unibuc.main.validation.phonenumber;
 
-import jakarta.validation.ConstraintValidator;
-import jakarta.validation.ConstraintValidatorContext;
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
 
 public class PhoneNumberMatchValidation implements ConstraintValidator<PhoneNumberMatch, String> {
 

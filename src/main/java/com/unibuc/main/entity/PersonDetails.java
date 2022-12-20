@@ -1,6 +1,6 @@
 package com.unibuc.main.entity;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +13,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "employees_details")
+@Table(name = "persons_details")
 public class PersonDetails {
 
     @Id

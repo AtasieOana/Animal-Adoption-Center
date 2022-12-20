@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS employees_persons_details (
 
 CREATE TABLE IF NOT EXISTS cages (
     id BIGINT NOT NULL AUTO_INCREMENT,
-    number_places NUMBER NOT NULL,
+    number_places INT NOT NULL,
     PRIMARY KEY (id)
 );
 
@@ -36,8 +36,8 @@ CREATE TABLE IF NOT EXISTS cages_employees (
     cages BIGINT NOT NULL,
     employees BIGINT NOT NULL,
     PRIMARY KEY (id),
-    FOREIGN KEY (cages) REFERENCES cages(id),
-    FOREIGN KEY (employees) REFERENCES employees(id)
+    FOREIGN KEY (cages) REFERENCES cages(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (employees) REFERENCES employees(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS animals (

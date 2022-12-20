@@ -2,11 +2,12 @@ package com.unibuc.main.controller;
 
 import com.unibuc.main.constants.ProjectConstants;
 import com.unibuc.main.dto.EmployeeDto;
-import com.unibuc.main.service.EmployeeService;
+import com.unibuc.main.service.employees.CaretakerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -14,37 +15,37 @@ import java.util.List;
 public class CaretakerController {
 
     @Autowired
-    private EmployeeService employeeService;
+    private CaretakerService caretakerService;
     
     @GetMapping()
     public ResponseEntity<List<EmployeeDto>> getAllCaretakers(){
-        return ResponseEntity.ok(employeeService.getAllEmployees());
+        return ResponseEntity.ok(caretakerService.getAllEmployees());
     }
     
     @GetMapping("/{firstName}/{lastName}")
     public ResponseEntity<EmployeeDto> getCaretakerByName(@PathVariable String firstName, @PathVariable String lastName){
-        return ResponseEntity.ok(employeeService.getEmployeeByName(firstName, lastName));
+        return ResponseEntity.ok(caretakerService.getEmployeeByName(firstName, lastName));
     }
 
     @PostMapping
-    public ResponseEntity<EmployeeDto> addNewCaretaker(@RequestBody EmployeeDto employeeDto){
-        return ResponseEntity.ok(employeeService.addNewEmployee(employeeDto));
+    public ResponseEntity<EmployeeDto> addNewCaretaker(@Valid @RequestBody EmployeeDto employeeDto){
+        return ResponseEntity.ok(caretakerService.addNewEmployee(employeeDto));
     }
 
     @DeleteMapping("/{firstName}/{lastName}")
     public ResponseEntity<String> deleteEmployee(@PathVariable String firstName, @PathVariable String lastName){
-        employeeService.deleteEmployee(firstName, lastName);
+        caretakerService.deleteEmployee(firstName, lastName);
         return ResponseEntity.ok(ProjectConstants.OBJ_DELETED);
     }
 
     @PutMapping("/{oldFirstName}/{oldLastName}")
-    public ResponseEntity<EmployeeDto> updateCaretaker(@PathVariable String oldFirstName, @PathVariable String oldLastName, @RequestBody EmployeeDto newEmployeeDto){
-        return ResponseEntity.ok(employeeService.updateEmployee(oldFirstName, oldLastName, newEmployeeDto));
+    public ResponseEntity<EmployeeDto> updateCaretaker(@PathVariable String oldFirstName, @PathVariable String oldLastName, @Valid @RequestBody EmployeeDto newEmployeeDto){
+        return ResponseEntity.ok(caretakerService.updateEmployee(oldFirstName, oldLastName, newEmployeeDto));
     }
 
     @PutMapping("/updateAllSalaries/{percent}")
     public ResponseEntity<List<EmployeeDto>> updateCaretaker(@PathVariable Integer percent){
-        return ResponseEntity.ok(employeeService.updateAllSalariesWithAPercent(percent));
+        return ResponseEntity.ok(caretakerService.updateAllSalariesWithAPercent(percent));
     }
 
 }

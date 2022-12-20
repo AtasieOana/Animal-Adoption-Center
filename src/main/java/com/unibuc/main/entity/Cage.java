@@ -1,6 +1,6 @@
 package com.unibuc.main.entity;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,7 +21,7 @@ public class Cage {
     @Column(name = "number_places")
     private Integer numberPlaces;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinTable(name="cages_employees",
             joinColumns = { @JoinColumn(name="cages", referencedColumnName = "id")
             }, inverseJoinColumns = {

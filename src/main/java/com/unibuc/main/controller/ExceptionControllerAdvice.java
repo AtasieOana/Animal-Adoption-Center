@@ -16,7 +16,8 @@ public class ExceptionControllerAdvice {
 
     @ExceptionHandler({EmployeeNotFoundException.class, EmployeeAlreadyExistsException.class, EmployeeAlreadyExistsException.class,
             EmployeeInfoWrongException.class, CageNotFoundException.class, VaccineAlreadyExistsException.class,
-            VaccineNotFoundException.class,
+            VaccineNotFoundException.class, DietAlreadyExistsException.class, DietNotFoundException.class,
+            ClientNotFoundException.class, ClientAlreadyExistsException.class,
             EntityNotFoundException.class, SQLIntegrityConstraintViolationException.class})
     public ResponseEntity<String> handleControllerExceptions(Exception exception) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)

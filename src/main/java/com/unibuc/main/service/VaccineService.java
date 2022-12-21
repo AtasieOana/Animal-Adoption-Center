@@ -1,4 +1,4 @@
-package com.unibuc.main.service.employees;
+package com.unibuc.main.service;
 
 import com.unibuc.main.constants.ProjectConstants;
 import com.unibuc.main.dto.EmployeeDto;

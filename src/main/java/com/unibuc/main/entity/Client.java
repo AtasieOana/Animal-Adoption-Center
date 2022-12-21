@@ -27,11 +27,11 @@ public class Client {
     private Date birthDate;
 
     @Column(name = "gender")
-    private Character gender;
+    private String gender;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    @JoinTable(name="employees_persons_details",
-            joinColumns = { @JoinColumn(name="employees", referencedColumnName = "id")
+    @JoinTable(name="clients_persons_details",
+            joinColumns = { @JoinColumn(name="clients", referencedColumnName = "id")
             }, inverseJoinColumns = {
             @JoinColumn(name = "persons_details", referencedColumnName = "id")
     })

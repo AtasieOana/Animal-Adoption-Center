@@ -2,7 +2,7 @@ package com.unibuc.main.controller;
 
 import com.unibuc.main.dto.PartialVaccineDto;
 import com.unibuc.main.dto.VaccineDto;
-import com.unibuc.main.service.employees.VaccineService;
+import com.unibuc.main.service.VaccineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS clients (
     id BIGINT NOT NULL AUTO_INCREMENT,
     date_becoming_client datetime,
     birth_date datetime,
-    gender CHAR,
+    gender VARCHAR(2),
     PRIMARY KEY (id)
 );
 

@@ -16,6 +16,8 @@ public class ProjectConstants {
     public static final String HEALTH_NULL = "General health state should not be null";
     public static final String EMPLOYEE_NOT_FOUND = "Employee with name %s doesn't exist";
     public static final String CARETAKER_WRONG_INFO = "In order to insert a caretaker, responsibilities must be mentioned, experience is not required.";
+    public static final String CLIENT_NOT_FOUND = "Client with name %s doesn't exist";
+    public static final String CLIENT_EXISTS = "Client with name %s already exists.";
     public static final String VET_WRONG_INFO = "In order to insert a VET, experience must be mentioned, responsibilities is not required.";
     public static final String OBJ_DELETED = "Object was deleted.";
     public static final String EMPLOYEE_EXISTS = "Employee with name %s already exists.";
@@ -24,6 +26,10 @@ public class ProjectConstants {
     public static final String VACCINE_EXISTS = "Vaccine with name %s already exists.";
     public static final String NO_EXP_VACCINES = "There are no expired vaccines.";
     public static final String DELETED_EXP_VACCINES = "All expired vaccines have been deleted";
-
+    public static final String DIET_EXISTS = "Diet with type %s already exists.";
+    public static final String DIET_NOT_FOUND = "Diet with name %s doesn't exist";
+    public static final String DIET_NOT_DELETED = "The diet can't be deleted until the quantity is 0.";
+    public static final String DIET_DELETED = "The diet was deleted.";
+    public static final String CLIENT_GENDERS = "In total, there are %s clients, of which %s are women, and the remaining %s are men.";
 
 }

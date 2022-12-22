@@ -44,7 +44,7 @@ public class VetController {
     }
 
     @PutMapping("/updateAllSalaries/{percent}")
-    public ResponseEntity<List<EmployeeDto>> updateVet(@PathVariable Integer percent){
+    public ResponseEntity<List<EmployeeDto>> updateAllSalariesWithAPercent(@PathVariable Integer percent){
         return ResponseEntity.ok(vetService.updateAllSalariesWithAPercent(percent));
     }
 

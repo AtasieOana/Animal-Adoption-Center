@@ -44,7 +44,7 @@ public class CaretakerController {
     }
 
     @PutMapping("/updateAllSalaries/{percent}")
-    public ResponseEntity<List<EmployeeDto>> updateCaretaker(@PathVariable Integer percent){
+    public ResponseEntity<List<EmployeeDto>> updateAllSalariesWithAPercent(@PathVariable Integer percent){
         return ResponseEntity.ok(caretakerService.updateAllSalariesWithAPercent(percent));
     }
 

@@ -58,7 +58,8 @@ public class CaretakerService implements EmployeeService {
             throw new EmployeeNotFoundException(String.format(ProjectConstants.EMPLOYEE_NOT_FOUND, firstName + ' ' + lastName));
         }
         employeeRepository.delete(employee.get());
-        return true;    }
+        return true;
+    }
 
     @Override
     public EmployeeDto updateEmployee(String oldFirstName, String oldLastName, EmployeeDto newEmployeeDto) {
@@ -77,7 +78,7 @@ public class CaretakerService implements EmployeeService {
     @Override
     public List<EmployeeDto> updateAllSalariesWithAPercent(Integer percent) {
         return employeeRepository.findAllByResponsibilityNotNull()
-                .stream().map(e -> {employeeRepository.delete(e); e.setSalary(e.getSalary() + (percent * e.getSalary())/100); return employeeMapper.mapToEmployeeDto(employeeRepository.save(e));})
+                .stream().map(e -> { e.setSalary(e.getSalary() + (percent * e.getSalary())/100); return employeeMapper.mapToEmployeeDto(employeeRepository.save(e));})
                 .collect(Collectors.toList());
     }
 

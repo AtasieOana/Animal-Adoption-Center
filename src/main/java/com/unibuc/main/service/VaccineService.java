@@ -38,7 +38,7 @@ public class VaccineService {
     }
 
     public String deleteExpiredVaccines() {
-        List<Vaccine> vaccineListExpired = vaccineRepository.findAllByExpirationDateBefore(new Date());
+        List<Vaccine> vaccineListExpired = vaccineRepository.findAllByExpirationDateBefore();
         if(vaccineListExpired.isEmpty()){
             return ProjectConstants.NO_EXP_VACCINES;
         }
@@ -58,9 +58,8 @@ public class VaccineService {
             throw new VaccineNotFoundException(String.format(ProjectConstants.VACCINE_NOT_FOUND, vaccineName));
         }
         Vaccine newVaccine = vaccine.get();
-        newVaccine.setQuantityOnStock(newVaccine.getQuantityOnStock()  != null ? newVaccine.getQuantityOnStock()  : vaccine.get().getQuantityOnStock());
-        newVaccine.setExpirationDate(newVaccine.getExpirationDate()  != null ? newVaccine.getExpirationDate()  : vaccine.get().getExpirationDate());
-        //vaccineRepository.updateVaccine(newVaccine.getId(), newVaccine.getExpirationDate(), newVaccine.getQuantityOnStock());
+        newVaccine.setQuantityOnStock(partialVaccineDto.getQuantityOnStock()  != null ? partialVaccineDto.getQuantityOnStock()  : vaccine.get().getQuantityOnStock());
+        newVaccine.setExpirationDate(partialVaccineDto.getExpirationDate()  != null ? partialVaccineDto.getExpirationDate()  : vaccine.get().getExpirationDate());
         return vaccineMapper.mapToVaccineDto(vaccineRepository.save(newVaccine));
     }
 }

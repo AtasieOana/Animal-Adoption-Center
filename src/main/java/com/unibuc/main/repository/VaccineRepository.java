@@ -17,15 +17,11 @@ public interface VaccineRepository extends JpaRepository<Vaccine, Long> {
     @Query("SELECT v FROM Vaccine v ORDER BY v.expirationDate ASC")
     List<Vaccine> findAllOrderByExpirationDate();
 
-    List<Vaccine> findAllByExpirationDateBefore(Date date);
+    @Query("SELECT v FROM Vaccine v WHERE v.expirationDate < CURRENT_DATE")
+    List<Vaccine> findAllByExpirationDateBefore();
 
     @Query("SELECT v FROM Vaccine v WHERE v.quantityOnStock = 0")
     List<Vaccine> findAllVaccinesWithEmptyStock();
-
-    @Modifying
-    @Transactional
-    @Query("UPDATE Vaccine d SET d.quantityOnStock = :quantityOnStock, d.expirationDate = :expirationDate WHERE d.id = :id")
-    void updateVaccine(Long id, Date expirationDate, Integer quantityOnStock);
 
     Optional<Vaccine> findByVaccineName(String name);
 }

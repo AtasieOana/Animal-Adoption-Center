@@ -8,7 +8,6 @@ import com.unibuc.main.exception.EmployeeInfoWrongException;
 import com.unibuc.main.exception.EmployeeNotFoundException;
 import com.unibuc.main.mapper.EmployeeMapper;
 import com.unibuc.main.repository.EmployeeRepository;
-import com.unibuc.main.service.employees.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -79,7 +78,7 @@ public class VetService implements EmployeeService {
     @Override
     public List<EmployeeDto> updateAllSalariesWithAPercent(Integer percent) {
         return employeeRepository.findAllByExperienceNotNull()
-                .stream().map(e -> {employeeRepository.delete(e); e.setSalary(e.getSalary() + (percent * e.getSalary())/100); return employeeMapper.mapToEmployeeDto(employeeRepository.save(e));})
+                .stream().map(e -> {e.setSalary(e.getSalary() + (percent * e.getSalary())/100); return employeeMapper.mapToEmployeeDto(employeeRepository.save(e));})
                             .collect(Collectors.toList());
     }
 

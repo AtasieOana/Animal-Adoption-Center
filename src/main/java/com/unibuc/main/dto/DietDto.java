@@ -1,14 +1,16 @@
 package com.unibuc.main.dto;
 
 import com.unibuc.main.constants.ProjectConstants;
-import javax.validation.constraints.NotNull;
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
-@Data
+import javax.persistence.Entity;
+import javax.validation.constraints.NotNull;
+
+import lombok.*;
+
 @Builder
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Setter
 @Getter
 public class DietDto {

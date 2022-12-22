@@ -34,13 +34,22 @@
 - Cage
 
 ## Endpoints
-📍 Nume endpoint <br />
-&emsp;&emsp;&emsp; - path: <br />
-&emsp;&emsp;&emsp; - description: <br />
-&emsp;&emsp;&emsp; - parameters: <br />
 
-📍 Nume endpoint <br />
-&emsp;&emsp;&emsp; - path: <br />
-&emsp;&emsp;&emsp; - description: <br />
-&emsp;&emsp;&emsp; - parameters: <br />
-    
+#### Employee endpoints: </br>
+📍 **GET:** Getting all employees who have the role of vet <br />
+&emsp;&emsp;&emsp; - path: <ins>/vets</ins> <br />
+📍 **GET:** Getting a vet by first and last name <br />
+&emsp;&emsp;&emsp; - path: <ins>/vets/{firstName}/{lastName}</ins> <br />
+&emsp;&emsp;&emsp; - parameters: String firstName, String lastName<br />
+📍 **POST:** Adding a new vet employee to the system <br />
+&emsp;&emsp;&emsp; - path: <ins>/vets</ins> <br />
+&emsp;&emsp;&emsp; - parameters: RequestBody EmployeeDto <br />
+📍 **DELETE:** Delete a vet with a given first and last name <br />
+&emsp;&emsp;&emsp; - path: <ins>/vets/{firstName}/{lastName}</ins> <br />
+&emsp;&emsp;&emsp; - parameters: String firstName, String lastName<br />
+📍 **PUT:** Update the info of a vet <br />
+&emsp;&emsp;&emsp; - path: <ins>/vets/{oldFirstName}/{oldLastName}</ins> <br />
+&emsp;&emsp;&emsp; - parameters: String oldFirstName, String oldLastName, RequestBody EmployeeDto<br />
+📍 **PUT:** Increase all vets' salaries by a certain percentage <br />
+&emsp;&emsp;&emsp; - path: <ins>/vets/updateAllSalaries/{percent}</ins> <br />
+&emsp;&emsp;&emsp; - parameters: Integer percent <br />

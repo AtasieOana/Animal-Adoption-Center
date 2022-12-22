@@ -9,7 +9,7 @@
 1. Viewing employees (caretakers and vets) records
 2. Administering the duties of employees (caretakers and vets)
 3. Viewing all the animals in the center along with details related to their care
-4. Viewing statistics related to the animals in the center
+4. Viewing the center's animal records
 5. Marking the adoption of an animal by a customer
 6. Visualization of statistics related to the center's clients
 7. Keeping an animal's health record

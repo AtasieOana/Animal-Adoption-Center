@@ -13,19 +13,12 @@ import java.util.Date;
 @Builder
 @Setter
 @Getter
-public class AnimalDto {
+public class PartialMedicalRecordDto {
 
-    private Long id;
+    @NotNull(message = ProjectConstants.HEALTH_NULL)
+    private String generalHealthState;
 
-    private String animalType;
+    @NotNull(message = ProjectConstants.GENERATION_DATE_NULL)
+    private Date generationDate;
 
-    private Integer birthYear;
-
-    private Date foundDate;
-
-    private CageDto cageDto;
-
-    private ClientDto clientDto;
-
-    private DietDto dietDto;
 }

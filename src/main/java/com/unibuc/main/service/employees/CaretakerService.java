@@ -71,7 +71,6 @@ public class CaretakerService implements EmployeeService {
         }
         Employee newEmployee = employeeMapper.mapToEmployee(newEmployeeDto);
         newEmployee.setId(employee.get().getId());
-        employeeRepository.delete(employee.get());
         return employeeMapper.mapToEmployeeDto(employeeRepository.save(newEmployee));
     }
 

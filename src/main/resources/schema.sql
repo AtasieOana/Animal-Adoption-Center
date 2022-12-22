@@ -42,8 +42,8 @@ CREATE TABLE IF NOT EXISTS cages_employees (
 
 CREATE TABLE IF NOT EXISTS animals (
     id BIGINT NOT NULL AUTO_INCREMENT,
-    animal_type VARCHAR(50),
-    birth_year INT,
+    animal_type VARCHAR(50) NOT NULL,
+    birth_year INT NOT NULL,
     found_date datetime NOT NULL,
     PRIMARY KEY (id)
 );
@@ -70,8 +70,8 @@ CREATE TABLE IF NOT EXISTS animals_cages (
     cages BIGINT NOT NULL,
     animals BIGINT NOT NULL,
     PRIMARY KEY (id),
-    FOREIGN KEY (cages) REFERENCES cages(id),
-    FOREIGN KEY (animals) REFERENCES animals(id)
+    FOREIGN KEY (cages) REFERENCES cages(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (animals) REFERENCES animals(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS animals_clients (
@@ -79,8 +79,8 @@ CREATE TABLE IF NOT EXISTS animals_clients (
     clients BIGINT NOT NULL,
     animals BIGINT NOT NULL,
     PRIMARY KEY (id),
-    FOREIGN KEY (clients) REFERENCES clients(id),
-    FOREIGN KEY (animals) REFERENCES animals(id)
+    FOREIGN KEY (clients) REFERENCES clients(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (animals) REFERENCES animals(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS diets (
@@ -95,8 +95,8 @@ CREATE TABLE IF NOT EXISTS animals_diets (
     diets BIGINT NOT NULL,
     animals BIGINT NOT NULL,
     PRIMARY KEY (id),
-    FOREIGN KEY (diets) REFERENCES diets(id),
-    FOREIGN KEY (animals) REFERENCES animals(id)
+    FOREIGN KEY (diets) REFERENCES diets(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (animals) REFERENCES animals(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS vaccines (
@@ -119,8 +119,8 @@ CREATE TABLE IF NOT EXISTS animals_medical_records (
     medical_records BIGINT NOT NULL,
     animals BIGINT NOT NULL,
     PRIMARY KEY (id),
-    FOREIGN KEY (medical_records) REFERENCES medical_records(id),
-    FOREIGN KEY (animals) REFERENCES animals(id)
+    FOREIGN KEY (medical_records) REFERENCES medical_records(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (animals) REFERENCES animals(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS vaccines_medical_records (
@@ -128,8 +128,8 @@ CREATE TABLE IF NOT EXISTS vaccines_medical_records (
     medical_records BIGINT NOT NULL,
     vaccines BIGINT NOT NULL,
     PRIMARY KEY (id),
-    FOREIGN KEY (medical_records) REFERENCES medical_records(id),
-    FOREIGN KEY (vaccines) REFERENCES vaccines(id)
+    FOREIGN KEY (medical_records) REFERENCES medical_records(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (vaccines) REFERENCES vaccines(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS employees_medical_records (
@@ -137,6 +137,6 @@ CREATE TABLE IF NOT EXISTS employees_medical_records (
     medical_records BIGINT NOT NULL,
     employees BIGINT NOT NULL,
     PRIMARY KEY (id),
-    FOREIGN KEY (medical_records) REFERENCES medical_records(id),
-    FOREIGN KEY (employees) REFERENCES employees(id)
+    FOREIGN KEY (medical_records) REFERENCES medical_records(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (employees) REFERENCES employees(id) ON DELETE CASCADE ON UPDATE CASCADE
 );

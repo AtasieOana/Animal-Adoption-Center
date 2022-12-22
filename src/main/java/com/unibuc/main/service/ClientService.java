@@ -79,7 +79,6 @@ public class ClientService {
         pd.setFirstName(newClientInfo.getFirstName() != null ? newClientInfo.getFirstName() : oldFirstName);
         pd.setLastName(newClientInfo.getLastName() != null ? newClientInfo.getLastName() : oldLastName);
         pd.setPhoneNumber(newClientInfo.getPhoneNumber() != null ? newClientInfo.getPhoneNumber() : updateClient.getPersonDetails().getPhoneNumber());
-        clientRepository.delete(client.get());
         return clientMapper.mapToClientDto(clientRepository.save(updateClient));
     }
 

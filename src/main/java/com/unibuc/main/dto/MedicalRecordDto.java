@@ -16,17 +16,22 @@ import java.util.Date;
 @Getter
 public class MedicalRecordDto {
 
-    @NotNull(message = ProjectConstants.ID_NULL)
-    private Long id;
-
     @NotNull(message = ProjectConstants.HEALTH_NULL)
     private String generalHealthState;
 
+    @NotNull(message = ProjectConstants.GENERATION_DATE_NULL)
     private Date generationDate;
 
-    private AnimalDto animalDto;
+    @NotNull(message = ProjectConstants.ID_NULL)
+    private Long animalId;
 
-    private VaccineDto vaccineDto;
+    @NotNull(message = ProjectConstants.VACCINE_NAME_NULL)
+    private String vaccineName;
 
-    private EmployeeDto vetDto;
+    @NotNull(message = ProjectConstants.FIRST_NAME_NULL)
+    private String vetFirstName;
+
+    @NotNull(message = ProjectConstants.LAST_NAME_NULL)
+    private String vetLastName;
+
 }

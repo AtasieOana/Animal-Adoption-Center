@@ -19,23 +19,19 @@ public class MedicalRecordMapper {
 
     public MedicalRecord mapToMedicalRecord(MedicalRecordDto medicalRecordDto) {
         return MedicalRecord.builder()
-                .id(medicalRecordDto.getId())
                 .generalHealthState(medicalRecordDto.getGeneralHealthState())
                 .generationDate(medicalRecordDto.getGenerationDate())
-                .animal(animalMapper.mapToAnimal((medicalRecordDto.getAnimalDto())))
-                .vaccine(vaccineMapper.mapToVaccine(medicalRecordDto.getVaccineDto()))
-                .vet(employeeMapper.mapToEmployee(medicalRecordDto.getVetDto()))
                 .build();
     }
 
     public MedicalRecordDto mapToMedicalRecordDto(MedicalRecord medicalRecord){
         return MedicalRecordDto.builder()
-                .id(medicalRecord.getId())
                 .generalHealthState(medicalRecord.getGeneralHealthState())
                 .generationDate(medicalRecord.getGenerationDate())
-                .animalDto(animalMapper.mapToAnimalDto((medicalRecord.getAnimal())))
-                .vaccineDto(vaccineMapper.mapToVaccineDto(medicalRecord.getVaccine()))
-                .vetDto(employeeMapper.mapToEmployeeDto(medicalRecord.getVet()))
+                .animalId(medicalRecord.getAnimal().getId())
+                .vaccineName(medicalRecord.getVaccine().getVaccineName())
+                .vetFirstName(medicalRecord.getVet().getPersonDetails().getFirstName())
+                .vetLastName(medicalRecord.getVet().getPersonDetails().getLastName())
                 .build();
     }
 }

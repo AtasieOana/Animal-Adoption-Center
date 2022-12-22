@@ -1,10 +1,9 @@
 package com.unibuc.main.service;
 
 import com.unibuc.main.constants.ProjectConstants;
-import com.unibuc.main.dto.EmployeeDto;
 import com.unibuc.main.dto.PartialVaccineDto;
 import com.unibuc.main.dto.VaccineDto;
-import com.unibuc.main.entity.Employee;
+import com.unibuc.main.entity.Diet;
 import com.unibuc.main.entity.Vaccine;
 import com.unibuc.main.exception.*;
 import com.unibuc.main.mapper.VaccineMapper;
@@ -12,7 +11,6 @@ import com.unibuc.main.repository.VaccineRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -59,16 +57,10 @@ public class VaccineService {
         if (vaccine.isEmpty()) {
             throw new VaccineNotFoundException(String.format(ProjectConstants.VACCINE_NOT_FOUND, vaccineName));
         }
-        Vaccine newVaccine = vaccineMapper.mapPartialToVaccine(partialVaccineDto);
-        newVaccine.setId(vaccine.get().getId());
-        newVaccine.setVaccineName(vaccine.get().getVaccineName());
-        if(newVaccine.getQuantityOnStock() == null){
-            newVaccine.setQuantityOnStock(vaccine.get().getQuantityOnStock());
-        }
-        if(newVaccine.getExpirationDate() == null){
-            newVaccine.setExpirationDate(vaccine.get().getExpirationDate());
-        }
-        vaccineRepository.delete(vaccine.get());
+        Vaccine newVaccine = vaccine.get();
+        newVaccine.setQuantityOnStock(newVaccine.getQuantityOnStock()  != null ? newVaccine.getQuantityOnStock()  : vaccine.get().getQuantityOnStock());
+        newVaccine.setExpirationDate(newVaccine.getExpirationDate()  != null ? newVaccine.getExpirationDate()  : vaccine.get().getExpirationDate());
+        //vaccineRepository.updateVaccine(newVaccine.getId(), newVaccine.getExpirationDate(), newVaccine.getQuantityOnStock());
         return vaccineMapper.mapToVaccineDto(vaccineRepository.save(newVaccine));
     }
 }

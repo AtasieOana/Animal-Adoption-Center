@@ -10,4 +10,6 @@ import java.util.List;
 public interface CageRepository extends JpaRepository<Cage, Long> {
 
     List<Cage> findAllByCaretakerNull();
+
+
 }

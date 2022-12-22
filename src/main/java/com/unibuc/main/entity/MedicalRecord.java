@@ -26,7 +26,7 @@ public class MedicalRecord {
     @Column(name = "generation_date")
     private Date generationDate;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinTable(name="animals_medical_records",
             joinColumns = { @JoinColumn(name="medical_records", referencedColumnName = "id")
             }, inverseJoinColumns = {
@@ -34,7 +34,7 @@ public class MedicalRecord {
     })
     private Animal animal;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinTable(name="vaccines_medical_records",
             joinColumns = { @JoinColumn(name="medical_records", referencedColumnName = "id")
             }, inverseJoinColumns = {
@@ -42,7 +42,7 @@ public class MedicalRecord {
     })
     private Vaccine vaccine;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinTable(name="employees_medical_records",
             joinColumns = { @JoinColumn(name="medical_records", referencedColumnName = "id")
             }, inverseJoinColumns = {

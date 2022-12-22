@@ -10,6 +10,7 @@ import com.unibuc.main.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.Console;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -29,6 +30,18 @@ public class AnimalService {
     @Autowired
     private DietRepository dietRepository;
 
+    public List<AnimalDto> getAllAnimals() {
+        return animalRepository.findAll()
+                .stream().map(a -> animalMapper.mapToAnimalDto(a))
+                .collect(Collectors.toList());
+    }
+
+    public List<AnimalDto> showAnimalsInCage(Long cageId){
+        return animalRepository.findAllByCage_Id(cageId)
+                .stream().map(a -> animalMapper.mapToAnimalDto(a))
+                .collect(Collectors.toList());
+    }
+
     public AnimalDto addAnimal(PartialAnimalDto partialAnimalDto) {
         Optional<Diet> diet = dietRepository.findByDietType(partialAnimalDto.getDietType());
         if (diet.isEmpty()) {
@@ -37,12 +50,6 @@ public class AnimalService {
         Animal animal = animalMapper.mapPartialToAnimal(partialAnimalDto);
         animal.setDiet(diet.get());
         return animalMapper.mapToAnimalDto(animalRepository.save(animal));
-    }
-
-    public List<AnimalDto> getAllAnimals() {
-        return animalRepository.findAll()
-                .stream().map(a -> animalMapper.mapToAnimalDto(a))
-                .collect(Collectors.toList());
     }
 
     public AnimalDto adoptAnimal(Long id, String firstName, String lastName){
@@ -78,12 +85,6 @@ public class AnimalService {
         }
         addedAnimal.setCage(cage.get());
         return animalMapper.mapToAnimalDto(animalRepository.save(addedAnimal));
-    }
-
-    public List<AnimalDto> showAnimalsInCage(Long cageId){
-        return animalRepository.findAllByCage_Id(cageId)
-                .stream().map(a -> animalMapper.mapToAnimalDto(a))
-                .collect(Collectors.toList());
     }
 
     public String deleteAdoptedAnimals() {

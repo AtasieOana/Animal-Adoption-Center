@@ -155,8 +155,10 @@ public class VaccineServiceTest {
         vaccine = VaccineMocks.mockVaccine();
         vaccineDto = VaccineMocks.mockVaccineDto();
         partialVaccineDto = VaccineMocks.mockPartialVaccineDto();
+        partialVaccineDto.setQuantityOnStock(5);
 
         Vaccine updatedVaccine = VaccineMocks.mockVaccine();
+        updatedVaccine.setQuantityOnStock(5);
         vaccineDto.setQuantityOnStock(5);
 
         //WHEN
@@ -183,6 +185,7 @@ public class VaccineServiceTest {
 
         //THEN
         VaccineNotFoundException vaccineNotFoundException = assertThrows(VaccineNotFoundException.class, () -> vaccineService.updateVaccine(TestConstants.VACCINE_NAME,partialVaccineDto));
-        assertEquals(String.format(ProjectConstants.VACCINE_NOT_FOUND, TestConstants.VACCINE_NAME), vaccineNotFoundException.getMessage());}
+        assertEquals(String.format(ProjectConstants.VACCINE_NOT_FOUND, TestConstants.VACCINE_NAME), vaccineNotFoundException.getMessage());
+    }
 
 }

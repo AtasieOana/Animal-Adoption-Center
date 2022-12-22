@@ -49,7 +49,6 @@ public class DietService {
         Diet newDiet = diet.get();
         newDiet.setDietType(dietDto.getDietType() != null ? dietDto.getDietType() : diet.get().getDietType());
         newDiet.setQuantityOnStock(dietDto.getQuantityOnStock() != null ? dietDto.getQuantityOnStock() : diet.get().getQuantityOnStock());
-        //dietRepository.updateDiet(newDiet.getId(), newDiet.getDietType(), newDiet.getQuantityOnStock());
         return dietMapper.mapToDietDto(dietRepository.save(newDiet));
     }
 

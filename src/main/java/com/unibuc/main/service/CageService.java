@@ -26,6 +26,19 @@ public class CageService {
     @Autowired
     private EmployeeRepository employeeRepository;
 
+    public CageDto getCageById(Long id) {
+        Optional<Cage> cage = cageRepository.findById(id);
+        if (cage.isEmpty()) {
+            throw new CageNotFoundException(String.format(ProjectConstants.CAGE_NOT_FOUND, id));
+        }
+        return cageMapper.mapToCageDto(cage.get());
+    }
+
+    public List<CageDto> getCagesWithoutACaretaker(){
+        return cageRepository.findAllByCaretakerNull()
+                .stream().map(c -> cageMapper.mapToCageDto(c))
+                .collect(Collectors.toList());
+    }
     public CageDto addCage(CageDto cageDto) {
         Cage cage = cageMapper.mapToCage(cageDto);
         if (cageDto.getCaretaker() != null) {
@@ -71,17 +84,4 @@ public class CageService {
         return cageMapper.mapToCageDto(cageRepository.save(newCage));
     }
 
-    public CageDto getCageById(Long id) {
-        Optional<Cage> cage = cageRepository.findById(id);
-        if (cage.isEmpty()) {
-            throw new CageNotFoundException(String.format(ProjectConstants.CAGE_NOT_FOUND, id));
-        }
-        return cageMapper.mapToCageDto(cage.get());
-    }
-
-    public List<CageDto> getCagesWithoutACaretaker(){
-        return cageRepository.findAllByCaretakerNull()
-                .stream().map(c -> cageMapper.mapToCageDto(c))
-                .collect(Collectors.toList());
-    }
 }

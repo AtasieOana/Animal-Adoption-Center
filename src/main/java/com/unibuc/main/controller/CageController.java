@@ -44,7 +44,7 @@ public class CageController {
     }
 
     @PatchMapping("/updateCagePlaces/{id}/{nrPlaces}")
-    public ResponseEntity<CageDto> updateCage(@PathVariable Long id, @PathVariable Integer nrPlaces){
+    public ResponseEntity<CageDto> updateCagePlaces(@PathVariable Long id, @PathVariable Integer nrPlaces){
         return ResponseEntity.ok(cageService.updatePlacesInCage(id, nrPlaces));
     }
 

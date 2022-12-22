@@ -204,7 +204,8 @@ public class VetServiceTest {
 
         //THEN
         EmployeeNotFoundException employeeNotFoundException = assertThrows(EmployeeNotFoundException.class, () -> vetService.updateEmployee(TestConstants.FIRSTNAME, TestConstants.LASTNAME,vetDto));
-        assertEquals(String.format(ProjectConstants.EMPLOYEE_NOT_FOUND, TestConstants.FIRSTNAME + " " + TestConstants.LASTNAME), employeeNotFoundException.getMessage());}
+        assertEquals(String.format(ProjectConstants.EMPLOYEE_NOT_FOUND, TestConstants.FIRSTNAME + " " + TestConstants.LASTNAME), employeeNotFoundException.getMessage());
+    }
 
     @Test
     public void testUpdateEmployeeWrongInfoException() {

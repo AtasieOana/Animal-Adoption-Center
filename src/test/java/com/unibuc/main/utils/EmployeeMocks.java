@@ -55,4 +55,27 @@ public class EmployeeMocks {
                 .experience(1)
                 .build();
     }
+
+    public static Employee mockCaretaker2() {
+        return Employee.builder()
+                .id(1L)
+                .personDetails(PersonDetails.builder().firstName(TestConstants.FIRSTNAME2)
+                        .lastName(TestConstants.LASTNAME)
+                        .phoneNumber(TestConstants.PHONE_NUMBER).build())
+                .salary(2000)
+                .employmentDate(new Date(2022,Calendar.NOVEMBER,10))
+                .responsibility(TestConstants.RESPONSIBILITY)
+                .build();
+    }
+
+    public static EmployeeDto mockCaretakerDto2() {
+        return EmployeeDto.builder()
+                .firstName(TestConstants.FIRSTNAME2)
+                .lastName(TestConstants.LASTNAME)
+                .phoneNumber(TestConstants.PHONE_NUMBER)
+                .salary(2000)
+                .employmentDate(new Date(2022,Calendar.NOVEMBER,10))
+                .responsibility(TestConstants.RESPONSIBILITY)
+                .build();
+    }
 }

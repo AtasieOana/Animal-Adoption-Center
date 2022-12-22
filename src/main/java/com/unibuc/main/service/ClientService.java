@@ -44,12 +44,13 @@ public class ClientService {
         return clientMapper.mapToClientDto(clientRepository.save(clientMapper.mapToClient(clientDto)));
     }
 
-    public void deleteClient(String firstName, String lastName) {
+    public boolean deleteClient(String firstName, String lastName) {
         Optional<Client> client = clientRepository.findClientByName(firstName, lastName);
         if (client.isEmpty()) {
             throw new ClientNotFoundException(String.format(ProjectConstants.CLIENT_NOT_FOUND, firstName + ' ' + lastName));
         }
         clientRepository.delete(client.get());
+        return true;
     }
 
     public Integer getAvgAgeForClient() {

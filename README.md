@@ -41,7 +41,7 @@
 
 ## Endpoints
 
-More info about the endpoints can be seen in [Swagger Documentation](swagger-documentation.html).
+More info about the endpoints can be seen in [Swagger Documentation](swagger-documentation.pdf).
 
 #### Employee endpoints: </br>
 📍 **GET:** Getting all employees who have the role of vet <br />

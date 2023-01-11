@@ -6,16 +6,16 @@
 <div align="justify"> The purpose of the application is to help the administrator and employees of an animal adoption center to process more easily the information related to the animals brought to the center, as well as the information necessary for their care. </div>
 
 ## Business requirements
-1. Viewing employees (caretakers and vets) records
-2. Administering the duties of employees (caretakers and vets)
-3. Viewing all the animals in the center along with details related to their care
-4. Viewing the center's animal records
-5. Marking the adoption of an animal by a customer
-6. Visualization of statistics related to the center's clients
-7. Keeping an animal's health record
-8. Viewing the vaccines administered to an animal
-9. Keeping records of existing vaccines in stock
-10. Keeping records of the diets in stock
+1. Administering the employees (caretakers and vets)
+2. Administering all the animals in the center along with the details related to their care
+3. Administering the clients
+4. Visualization of statistics related to the center's clients
+5. Marking the adoption of an animal by a client
+6. Keeping records of existing vaccines in stock
+7. Keeping records of the diets in stock
+8. Keeping an animal's health record
+9. Viewing the vaccines administered to an animal
+10. Administering the cages in which the animals are placed
 
 ## Five main features
 - Employee

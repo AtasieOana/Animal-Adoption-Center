@@ -1,40 +1,36 @@
 package com.unibuc.main.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.unibuc.main.constants.ProjectConstants;
-import com.unibuc.main.dto.EmployeeDto;
 import com.unibuc.main.dto.CageDto;
+import com.unibuc.main.dto.EmployeeDto;
 import com.unibuc.main.service.CageService;
 import com.unibuc.main.utils.CageMocks;
 import com.unibuc.main.utils.EmployeeMocks;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(MockitoExtension.class)
-@WebMvcTest(controllers = CageController.class)
 public class CageControllerTest {
-    @Autowired
-    private MockMvc mockMvc;
-    @Autowired
-    private ObjectMapper objectMapper;
-    @MockBean
+
+    @InjectMocks
+    CageController cageController;
+    @Mock
     CageService cageService;
     CageDto cageDto;
 
     @Test
-    public void getCagesWithoutACaretakerTest() throws Exception {
+    public void getCagesWithoutACaretakerTest() {
         //GIVEN
         cageDto = CageMocks.mockCageDto();
         cageDto.setCaretaker(null);
@@ -46,26 +42,26 @@ public class CageControllerTest {
         when(cageService.getCagesWithoutACaretaker()).thenReturn(cageDtos);
 
         //THEN
-        mockMvc.perform(get("/cages/getCagesWithoutACaretaker"))
-                .andExpect(status().isOk())
-                .andExpect(content().string(objectMapper.writeValueAsString(cageDtos)));
+        ResponseEntity<List<CageDto>> result = cageController.getCagesWithoutACaretaker();
+        assertEquals(result.getBody(), cageDtos);
+        assertEquals(result.getStatusCode().value(), 200);
     }
 
     @Test
-    public void getCageByIdTest() throws Exception {
+    public void getCageByIdTest() {
         //GIVEN
         cageDto = CageMocks.mockCageDto();
         //WHEN
         when(cageService.getCageById(cageDto.getId())).thenReturn(cageDto);
 
         //THEN
-        mockMvc.perform(get("/cages/" + cageDto.getId()))
-                .andExpect(status().isOk())
-                .andExpect(content().string(objectMapper.writeValueAsString(cageDto)));
+        ResponseEntity<CageDto> result = cageController.getCageById(cageDto.getId());
+        assertEquals(result.getBody(), cageDto);
+        assertEquals(result.getStatusCode().value(), 200);
     }
 
     @Test
-    public void addNewCageTest() throws Exception {
+    public void addNewCageTest() {
         //GIVEN
         cageDto = CageMocks.mockCageDto();
 
@@ -73,16 +69,14 @@ public class CageControllerTest {
         when(cageService.addCage(cageDto)).thenReturn(cageDto);
 
         //THEN
-        mockMvc.perform(post("/cages")
-                        .contentType("application/json")
-                        .content(objectMapper.writeValueAsString(cageDto)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.numberPlaces").value(cageDto.getNumberPlaces()))
-                .andExpect(jsonPath("$.caretaker.firstName").value(cageDto.getCaretaker().getFirstName()));
+        ResponseEntity<CageDto> result = cageController.addNewCage(cageDto);
+        assertEquals(result.getBody(), cageDto);
+        assertEquals(Objects.requireNonNull(result.getBody()).getId(), cageDto.getId());
+        assertEquals(result.getStatusCode().value(), 200);
     }
 
     @Test
-    public void deleteCageTest() throws Exception {
+    public void deleteCageTest() {
         //GIVEN
         cageDto = CageMocks.mockCageDto();
 
@@ -90,16 +84,16 @@ public class CageControllerTest {
         when( cageService.deleteCage(cageDto.getId())).thenReturn(true);
 
         //THEN
-        mockMvc.perform(delete("/cages/" + cageDto.getId()))
-                .andExpect(status().isOk())
-                .andExpect(content().string(ProjectConstants.OBJ_DELETED));
+        ResponseEntity<String> result = cageController.deleteCage(cageDto.getId());
+        assertEquals(result.getBody(), ProjectConstants.OBJ_DELETED);
+        assertEquals(result.getStatusCode().value(), 200);
     }
 
     @Test
-    public void updateCageCaretakerTest() throws Exception {
+    public void updateCageCaretakerTest() {
         //GIVEN
         cageDto = CageMocks.mockCageDto();
-        CageDto updatedCage = cageDto;
+        CageDto updatedCage = CageMocks.mockCageDto();
         EmployeeDto caretaker = EmployeeMocks.mockCaretakerDto2();
         updatedCage.setCaretaker(caretaker);
 
@@ -107,28 +101,25 @@ public class CageControllerTest {
         when(cageService.updateCageCaretaker(cageDto.getId(), caretaker.getFirstName(), caretaker.getLastName())).thenReturn(updatedCage);
 
         //THEN
-        mockMvc.perform(patch("/cages/updateCageCaretaker/" + cageDto.getId() + "/"+ caretaker.getFirstName() + "/" + caretaker.getLastName()))
-                .andExpect(status().isOk())
-                .andExpect(content().string(objectMapper.writeValueAsString(updatedCage)))
-                .andExpect(jsonPath("$.caretaker.firstName").value(caretaker.getFirstName()))
-                .andExpect(jsonPath("$.numberPlaces").value(3));
+        ResponseEntity<CageDto> result = cageController.updateCageCaretaker(cageDto.getId(), caretaker.getFirstName(), caretaker.getLastName());
+        assertEquals(result.getBody(), updatedCage);
+        assertEquals(result.getStatusCode().value(), 200);
+        assertEquals(Objects.requireNonNull(result.getBody()).getCaretaker(), updatedCage.getCaretaker());
     }
 
     @Test
-    public void updateCagePlacesTest() throws Exception {
+    public void updateCagePlacesTest() {
         //GIVEN
         cageDto = CageMocks.mockCageDto();
-        CageDto updatedCage = cageDto;
+        CageDto updatedCage = CageMocks.mockCageDto();
         updatedCage.setNumberPlaces(5);
 
         //WHEN
         when(cageService.updatePlacesInCage(cageDto.getId(), 5)).thenReturn(updatedCage);
 
         //THEN
-        mockMvc.perform(patch("/cages/updateCagePlaces/" + cageDto.getId() + "/5"))
-                .andExpect(status().isOk())
-                .andExpect(content().string(objectMapper.writeValueAsString(updatedCage)))
-                .andExpect(jsonPath("$.caretaker.firstName").value(EmployeeMocks.mockCaretaker().getPersonDetails().getFirstName()))
-                .andExpect(jsonPath("$.numberPlaces").value(5));
+        ResponseEntity<CageDto> result = cageController.updateCagePlaces(cageDto.getId(), 5);
+        assertEquals(result.getBody(), updatedCage);
+        assertEquals(result.getStatusCode().value(), 200);
     }
 }

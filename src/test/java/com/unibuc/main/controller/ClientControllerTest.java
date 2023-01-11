@@ -1,6 +1,5 @@
 package com.unibuc.main.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.unibuc.main.constants.ProjectConstants;
 import com.unibuc.main.constants.TestConstants;
 import com.unibuc.main.dto.ClientDto;
@@ -9,33 +8,29 @@ import com.unibuc.main.service.ClientService;
 import com.unibuc.main.utils.ClientMocks;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(MockitoExtension.class)
-@WebMvcTest(controllers = ClientController.class)
 public class ClientControllerTest {
-    @Autowired
-    private MockMvc mockMvc;
-    @Autowired
-    private ObjectMapper objectMapper;
-    @MockBean
+    @InjectMocks
+    ClientController clientController;
+    @Mock
     ClientService clientService;
     ClientDto clientDto;
     PartialClientDto partialClientDto;
 
     @Test
-    public void getAllClientsTest() throws Exception {
+    public void getAllClientsTest() {
         //GIVEN
         clientDto = ClientMocks.mockClientDto();
 
@@ -46,13 +41,13 @@ public class ClientControllerTest {
         when(clientService.getAllClients()).thenReturn(clientDtos);
 
         //THEN
-        mockMvc.perform(get("/clients"))
-                .andExpect(status().isOk())
-                .andExpect(content().string(objectMapper.writeValueAsString(clientDtos)));
+        ResponseEntity<List<ClientDto>> result = clientController.getAllClients();
+        assertEquals(result.getBody(), clientDtos);
+        assertEquals(result.getStatusCode().value(), 200);
     }
 
     @Test
-    public void getClientByNameTest() throws Exception {
+    public void getClientByNameTest() {
         //GIVEN
         clientDto = ClientMocks.mockClientDto();
 
@@ -60,13 +55,13 @@ public class ClientControllerTest {
         when(clientService.getClientByName(TestConstants.FIRSTNAME,TestConstants.LASTNAME)).thenReturn(clientDto);
 
         //THEN
-        mockMvc.perform(get("/clients/" + TestConstants.FIRSTNAME + "/" + TestConstants.LASTNAME))
-                .andExpect(status().isOk())
-                .andExpect(content().string(objectMapper.writeValueAsString(clientDto)));
+        ResponseEntity<ClientDto> result = clientController.getClientByName(TestConstants.FIRSTNAME,TestConstants.LASTNAME);
+        assertEquals(result.getBody(), clientDto);
+        assertEquals(result.getStatusCode().value(), 200);
     }
 
     @Test
-    public void avgAgeForClientTest() throws Exception {
+    public void avgAgeForClientTest() {
         //GIVEN
         clientDto = null;
 
@@ -74,13 +69,13 @@ public class ClientControllerTest {
         when(clientService.getAvgAgeForClient()).thenReturn(21);
 
         //THEN
-        mockMvc.perform(get("/clients/avgAgeForClient"))
-                .andExpect(status().isOk())
-                .andExpect(content().string(objectMapper.writeValueAsString(21)));
+        ResponseEntity<Integer> result = clientController.getAvgAgeForClient();
+        assertEquals(result.getBody(), 21);
+        assertEquals(result.getStatusCode().value(), 200);
     }
 
     @Test
-    public void clientsNumberByGenderTest() throws Exception {
+    public void clientsNumberByGenderTest() {
         //GIVEN
         clientDto = null;
 
@@ -88,13 +83,13 @@ public class ClientControllerTest {
         when(clientService.getClientNumberByGender()).thenReturn(String.format(ProjectConstants.CLIENT_GENDERS, 12, 8, 4));
 
         //THEN
-        mockMvc.perform(get("/clients/clientsNumberByGender"))
-                .andExpect(status().isOk())
-                .andExpect(content().string(String.format(ProjectConstants.CLIENT_GENDERS, 12, 8, 4)));
+        ResponseEntity<String> result = clientController.getClientNumberByGender();
+        assertEquals(result.getBody(), String.format(ProjectConstants.CLIENT_GENDERS, 12, 8, 4));
+        assertEquals(result.getStatusCode().value(), 200);
     }
 
     @Test
-    public void addNewClientTest() throws Exception {
+    public void addNewClientTest() {
         //GIVEN
         clientDto = ClientMocks.mockClientDto();
 
@@ -102,16 +97,13 @@ public class ClientControllerTest {
         when(clientService.addNewClient(clientDto)).thenReturn(clientDto);
 
         //THEN
-        mockMvc.perform(post("/clients")
-                        .contentType("application/json")
-                        .content(objectMapper.writeValueAsString(clientDto)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.firstName").value(clientDto.getFirstName()))
-                .andExpect(jsonPath("$.lastName").value(clientDto.getLastName()));
+        ResponseEntity<ClientDto> result = clientController.addNewClient(clientDto);
+        assertEquals(result.getBody(), clientDto);
+        assertEquals(result.getStatusCode().value(), 200);
     }
 
     @Test
-    public void deleteClientTest() throws Exception {
+    public void deleteClientTest() {
         //GIVEN
         clientDto = null;
 
@@ -119,16 +111,16 @@ public class ClientControllerTest {
         when( clientService.deleteClient(TestConstants.FIRSTNAME, TestConstants.LASTNAME)).thenReturn(true);
 
         //THEN
-        mockMvc.perform(delete("/clients/" + TestConstants.FIRSTNAME + "/" + TestConstants.LASTNAME))
-                .andExpect(status().isOk())
-                .andExpect(content().string(ProjectConstants.OBJ_DELETED));
+        ResponseEntity<String> result = clientController.deleteClient(TestConstants.FIRSTNAME, TestConstants.LASTNAME);
+        assertEquals(result.getBody(), ProjectConstants.OBJ_DELETED);
+        assertEquals(result.getStatusCode().value(), 200);
     }
 
     @Test
-    public void updateClientTest() throws Exception {
+    public void updateClientTest() {
         //GIVEN
         clientDto = ClientMocks.mockClientDto();
-        ClientDto updatedClient = clientDto;
+        ClientDto updatedClient = ClientMocks.mockClientDto();
         updatedClient.setPhoneNumber("0764112345");
         partialClientDto = ClientMocks.mockPartialClientDto();
         partialClientDto.setPhoneNumber("0764112345");
@@ -137,12 +129,9 @@ public class ClientControllerTest {
         when(clientService.updateClientInfo(TestConstants.FIRSTNAME, TestConstants.LASTNAME, partialClientDto)).thenReturn(updatedClient);
 
         //THEN
-        mockMvc.perform(put("/clients/" + TestConstants.FIRSTNAME + "/" + TestConstants.LASTNAME)
-                    .contentType("application/json")
-                    .content(objectMapper.writeValueAsString(partialClientDto)))
-                .andExpect(status().isOk())
-                .andExpect(content().string(objectMapper.writeValueAsString(updatedClient)))
-                .andExpect(jsonPath("$.firstName").value(clientDto.getFirstName()))
-                .andExpect(jsonPath("$.phoneNumber").value(updatedClient.getPhoneNumber()));
+        ResponseEntity<ClientDto> result = clientController.updateClient(TestConstants.FIRSTNAME, TestConstants.LASTNAME, partialClientDto);
+        assertEquals(result.getBody(), updatedClient);
+        assertEquals(Objects.requireNonNull(result.getBody()).getPhoneNumber(), updatedClient.getPhoneNumber());
+        assertEquals(result.getStatusCode().value(), 200);
     }
 }

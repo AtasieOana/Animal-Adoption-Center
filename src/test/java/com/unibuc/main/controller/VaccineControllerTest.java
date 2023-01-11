@@ -1,6 +1,5 @@
 package com.unibuc.main.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.unibuc.main.constants.ProjectConstants;
 import com.unibuc.main.constants.TestConstants;
 import com.unibuc.main.dto.PartialVaccineDto;
@@ -9,33 +8,29 @@ import com.unibuc.main.service.VaccineService;
 import com.unibuc.main.utils.VaccineMocks;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(MockitoExtension.class)
-@WebMvcTest(controllers = VaccineController.class)
 public class VaccineControllerTest {
-    @Autowired
-    private MockMvc mockMvc;
-    @Autowired
-    private ObjectMapper objectMapper;
-    @MockBean
+    @InjectMocks
+    VaccineController vaccineController;
+    @Mock
     VaccineService vaccineService;
     VaccineDto vaccineDto;
     PartialVaccineDto partialVaccineDto;
 
     @Test
-    public void getAllVaccinesOrderByExpiredDateTest() throws Exception {
+    public void getAllVaccinesOrderByExpiredDateTest() {
         //GIVEN
         vaccineDto = VaccineMocks.mockVaccineDto();
 
@@ -46,13 +41,13 @@ public class VaccineControllerTest {
         when(vaccineService.getAllVaccinesOrderByExpiredDate()).thenReturn(vaccineDtos);
 
         //THEN
-        mockMvc.perform(get("/vaccines/getAllVaccinesOrderByExpiredDate"))
-                .andExpect(status().isOk())
-                .andExpect(content().string(objectMapper.writeValueAsString(vaccineDtos)));
+        ResponseEntity<List<VaccineDto>> result = vaccineController.getAllVaccinesOrderByExpiredDate();
+        assertEquals(result.getBody(), vaccineDtos);
+        assertEquals(result.getStatusCode().value(), 200);
     }
 
     @Test
-    public void getAllVaccinesWithEmptyStockTest() throws Exception {
+    public void getAllVaccinesWithEmptyStockTest() {
         //GIVEN
         vaccineDto = VaccineMocks.mockVaccineDto();
 
@@ -63,13 +58,13 @@ public class VaccineControllerTest {
         when(vaccineService.getAllVaccinesWithEmptyStock()).thenReturn(vaccineDtos);
 
         //THEN
-        mockMvc.perform(get("/vaccines/getAllVaccinesWithEmptyStock"))
-                .andExpect(status().isOk())
-                .andExpect(content().string(objectMapper.writeValueAsString(vaccineDtos)));
+        ResponseEntity<List<VaccineDto>> result = vaccineController.getAllVaccinesWithEmptyStock();
+        assertEquals(result.getBody(), vaccineDtos);
+        assertEquals(result.getStatusCode().value(), 200);
     }
 
     @Test
-    public void addNewVaccineTest() throws Exception {
+    public void addNewVaccineTest() {
         //GIVEN
         vaccineDto = VaccineMocks.mockVaccineDto();
 
@@ -77,16 +72,13 @@ public class VaccineControllerTest {
         when(vaccineService.addVaccine(vaccineDto)).thenReturn(vaccineDto);
 
         //THEN
-        mockMvc.perform(post("/vaccines")
-                        .contentType("application/json")
-                        .content(objectMapper.writeValueAsString(vaccineDto)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.vaccineName").value(vaccineDto.getVaccineName()))
-                .andExpect(jsonPath("$.quantityOnStock").value(0));
+        ResponseEntity<VaccineDto> result = vaccineController.addNewVaccine(vaccineDto);
+        assertEquals(result.getBody(), vaccineDto);
+        assertEquals(result.getStatusCode().value(), 200);
     }
 
     @Test
-    public void deleteExpiredVaccinesTest() throws Exception {
+    public void deleteExpiredVaccinesTest() {
         //GIVEN
         vaccineDto = null;
 
@@ -94,16 +86,16 @@ public class VaccineControllerTest {
         when( vaccineService.deleteExpiredVaccines()).thenReturn(ProjectConstants.DELETED_EXP_VACCINES);
 
         //THEN
-        mockMvc.perform(delete("/vaccines/deleteExpiredVaccines"))
-                .andExpect(status().isOk())
-                .andExpect(content().string(ProjectConstants.DELETED_EXP_VACCINES));
+        ResponseEntity<String> result = vaccineController.deleteExpiredVaccines();
+        assertEquals(result.getBody(), ProjectConstants.DELETED_EXP_VACCINES);
+        assertEquals(result.getStatusCode().value(), 200);
     }
 
     @Test
-    public void updateVaccineTest() throws Exception {
+    public void updateVaccineTest() {
         //GIVEN
         vaccineDto = VaccineMocks.mockVaccineDto();
-        VaccineDto updatedVaccine = vaccineDto;
+        VaccineDto updatedVaccine = VaccineMocks.mockVaccineDto();
         updatedVaccine.setQuantityOnStock(10);
         partialVaccineDto = VaccineMocks.mockPartialVaccineDto();
         partialVaccineDto.setQuantityOnStock(10);
@@ -112,13 +104,10 @@ public class VaccineControllerTest {
         when(vaccineService.updateVaccine(TestConstants.VACCINE_NAME, partialVaccineDto)).thenReturn(updatedVaccine);
 
         //THEN
-        mockMvc.perform(put("/vaccines/" + TestConstants.VACCINE_NAME)
-                    .contentType("application/json")
-                    .content(objectMapper.writeValueAsString(partialVaccineDto)))
-                .andExpect(status().isOk())
-                .andExpect(content().string(objectMapper.writeValueAsString(updatedVaccine)))
-                .andExpect(jsonPath("$.vaccineName").value(vaccineDto.getVaccineName()))
-                .andExpect(jsonPath("$.quantityOnStock").value(10));
+        ResponseEntity<VaccineDto> result = vaccineController.updateVaccine(TestConstants.VACCINE_NAME, partialVaccineDto);
+        assertEquals(result.getBody(), updatedVaccine);
+        assertEquals(Objects.requireNonNull(result.getBody()).getQuantityOnStock(), partialVaccineDto.getQuantityOnStock());
+        assertEquals(result.getStatusCode().value(), 200);
     }
 
 }

@@ -1,6 +1,5 @@
 package com.unibuc.main.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.unibuc.main.constants.ProjectConstants;
 import com.unibuc.main.constants.TestConstants;
 import com.unibuc.main.dto.EmployeeDto;
@@ -8,36 +7,29 @@ import com.unibuc.main.service.employees.CaretakerService;
 import com.unibuc.main.utils.EmployeeMocks;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(MockitoExtension.class)
-@WebMvcTest(controllers = CaretakerController.class)
 public class CaretakerControllerTest {
-    @Autowired
-    private MockMvc mockMvc;
-    @Autowired
-    private ObjectMapper objectMapper;
-    @MockBean
+
+    @InjectMocks
+    CaretakerController caretakerController;
+    @Mock
     CaretakerService caretakerService;
     EmployeeDto caretakerDto;
 
     @Test
-    public void getAllCaretakersTest() throws Exception {
+    public void getAllCaretakersTest() {
         //GIVEN
         caretakerDto = EmployeeMocks.mockCaretakerDto();
 
@@ -48,13 +40,13 @@ public class CaretakerControllerTest {
         when(caretakerService.getAllEmployees()).thenReturn(employeeDtos);
 
         //THEN
-        mockMvc.perform(get("/caretakers"))
-                .andExpect(status().isOk())
-                .andExpect(content().string(objectMapper.writeValueAsString(employeeDtos)));
+        ResponseEntity<List<EmployeeDto>> result = caretakerController.getAllCaretakers();
+        assertEquals(result.getBody(), employeeDtos);
+        assertEquals(result.getStatusCode().value(), 200);
     }
 
     @Test
-    public void getCaretakerByNameTest() throws Exception {
+    public void getCaretakerByNameTest() {
         //GIVEN
         caretakerDto = EmployeeMocks.mockCaretakerDto();
 
@@ -62,13 +54,13 @@ public class CaretakerControllerTest {
         when(caretakerService.getEmployeeByName(TestConstants.FIRSTNAME,TestConstants.LASTNAME)).thenReturn(caretakerDto);
 
         //THEN
-        mockMvc.perform(get("/caretakers/" + TestConstants.FIRSTNAME + "/" + TestConstants.LASTNAME))
-                .andExpect(status().isOk())
-                .andExpect(content().string(objectMapper.writeValueAsString(caretakerDto)));
+        ResponseEntity<EmployeeDto> result = caretakerController.getCaretakerByName(TestConstants.FIRSTNAME,TestConstants.LASTNAME);
+        assertEquals(result.getBody(), caretakerDto);
+        assertEquals(result.getStatusCode().value(), 200);
     }
 
     @Test
-    public void addNewCaretakerTest() throws Exception {
+    public void addNewCaretakerTest() {
         //GIVEN
         caretakerDto = EmployeeMocks.mockCaretakerDto();
 
@@ -76,16 +68,13 @@ public class CaretakerControllerTest {
         when(caretakerService.addNewEmployee(caretakerDto)).thenReturn(caretakerDto);
 
         //THEN
-        mockMvc.perform(post("/caretakers")
-                        .contentType("application/json")
-                        .content(objectMapper.writeValueAsString(caretakerDto)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.firstName").value(caretakerDto.getFirstName()))
-                .andExpect(jsonPath("$.salary").value(caretakerDto.getSalary()));
+        ResponseEntity<EmployeeDto> result = caretakerController.addNewCaretaker(caretakerDto);
+        assertEquals(result.getBody(), caretakerDto);
+        assertEquals(result.getStatusCode().value(), 200);
     }
 
     @Test
-    public void deleteEmployeeTest() throws Exception {
+    public void deleteEmployeeTest() {
         //GIVEN
         caretakerDto = null;
 
@@ -93,36 +82,33 @@ public class CaretakerControllerTest {
         when( caretakerService.deleteEmployee(TestConstants.FIRSTNAME, TestConstants.LASTNAME)).thenReturn(true);
 
         //THEN
-        mockMvc.perform(delete("/caretakers/" + TestConstants.FIRSTNAME + "/" + TestConstants.LASTNAME))
-                .andExpect(status().isOk())
-                .andExpect(content().string(ProjectConstants.OBJ_DELETED));
+        ResponseEntity<String> result = caretakerController.deleteEmployee(TestConstants.FIRSTNAME, TestConstants.LASTNAME);
+        assertEquals(result.getBody(), ProjectConstants.OBJ_DELETED);
+        assertEquals(result.getStatusCode().value(), 200);
     }
 
     @Test
-    public void updateCaretakerTest() throws Exception {
+    public void updateCaretakerTest() {
         //GIVEN
         caretakerDto = EmployeeMocks.mockCaretakerDto();
-        EmployeeDto updatedCaretaker = caretakerDto;
+        EmployeeDto updatedCaretaker = EmployeeMocks.mockCaretakerDto();
         updatedCaretaker.setSalary(2200);
 
         //WHEN
         when(caretakerService.updateEmployee(TestConstants.FIRSTNAME, TestConstants.LASTNAME, caretakerDto)).thenReturn(updatedCaretaker);
 
         //THEN
-        mockMvc.perform(put("/caretakers/" + TestConstants.FIRSTNAME + "/" + TestConstants.LASTNAME)
-                    .contentType("application/json")
-                    .content(objectMapper.writeValueAsString(caretakerDto)))
-                .andExpect(status().isOk())
-                .andExpect(content().string(objectMapper.writeValueAsString(updatedCaretaker)))
-                .andExpect(jsonPath("$.firstName").value(caretakerDto.getFirstName()))
-                .andExpect(jsonPath("$.salary").value(updatedCaretaker.getSalary()));
+        ResponseEntity<EmployeeDto> result = caretakerController.updateCaretaker(TestConstants.FIRSTNAME, TestConstants.LASTNAME, caretakerDto);
+        assertEquals(result.getBody(), updatedCaretaker);
+        assertEquals(result.getStatusCode().value(), 200);
+        assertEquals(Objects.requireNonNull(result.getBody()).getSalary(), updatedCaretaker.getSalary());
     }
 
     @Test
-    public void updateAllSalariesWithAPercentTest() throws Exception {
+    public void updateAllSalariesWithAPercentTest() {
         //GIVEN
         caretakerDto = EmployeeMocks.mockCaretakerDto();
-        EmployeeDto updatedCaretaker = caretakerDto;
+        EmployeeDto updatedCaretaker = EmployeeMocks.mockCaretakerDto();
         updatedCaretaker.setSalary(caretakerDto.getSalary() + caretakerDto.getSalary() * 20/100);
         List<EmployeeDto> employeeDtos = new ArrayList<>();
         employeeDtos.add(updatedCaretaker);
@@ -131,9 +117,9 @@ public class CaretakerControllerTest {
         when(caretakerService.updateAllSalariesWithAPercent(20)).thenReturn(employeeDtos);
 
         //THEN
-        mockMvc.perform(put("/caretakers/updateAllSalaries/20"))
-                .andExpect(status().isOk())
-                .andExpect(content().string(objectMapper.writeValueAsString(employeeDtos)));
+        ResponseEntity<List<EmployeeDto>> result = caretakerController.updateAllSalariesWithAPercent(20);
+        assertEquals(result.getBody(), employeeDtos);
+        assertEquals(result.getStatusCode().value(), 200);
     }
 
 

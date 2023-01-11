@@ -1,6 +1,5 @@
 package com.unibuc.main.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.unibuc.main.constants.ProjectConstants;
 import com.unibuc.main.dto.AnimalDto;
 import com.unibuc.main.dto.CageDto;
@@ -12,33 +11,29 @@ import com.unibuc.main.utils.CageMocks;
 import com.unibuc.main.utils.ClientMocks;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(MockitoExtension.class)
-@WebMvcTest(controllers = AnimalController.class)
 public class AnimalControllerTest {
-    @Autowired
-    private MockMvc mockMvc;
-    @Autowired
-    private ObjectMapper objectMapper;
-    @MockBean
+
+    @InjectMocks
+    AnimalController animalController;
+    @Mock
     AnimalService animalService;
     AnimalDto animalDto;
     PartialAnimalDto partialAnimalDto;
 
     @Test
-    public void getAllAnimalsTest() throws Exception {
+    public void getAllAnimalsTest() {
         //GIVEN
         animalDto = AnimalMocks.mockAnimalDto();
 
@@ -49,13 +44,13 @@ public class AnimalControllerTest {
         when(animalService.getAllAnimals()).thenReturn(animalDtos);
 
         //THEN
-        mockMvc.perform(get("/animals"))
-                .andExpect(status().isOk())
-                .andExpect(content().string(objectMapper.writeValueAsString(animalDtos)));
+        ResponseEntity<List<AnimalDto>> result = animalController.getAllAnimals();
+        assertEquals(result.getBody(), animalDtos);
+        assertEquals(result.getStatusCode().value(), 200);
     }
 
     @Test
-    public void showAnimalsInCageTest() throws Exception {
+    public void showAnimalsInCageTest() {
         //GIVEN
         animalDto = AnimalMocks.mockAnimalDtoWithCage();
 
@@ -66,13 +61,13 @@ public class AnimalControllerTest {
         when(animalService.showAnimalsInCage(animalDto.getCageDto().getId())).thenReturn(animalDtos);
 
         //THEN
-        mockMvc.perform(get("/animals/inCage/" + animalDto.getCageDto().getId()))
-                .andExpect(status().isOk())
-                .andExpect(content().string(objectMapper.writeValueAsString(animalDtos)));
+        ResponseEntity<List<AnimalDto>> result = animalController.showAnimalsInCage(animalDto.getCageDto().getId());
+        assertEquals(result.getBody(), animalDtos);
+        assertEquals(result.getStatusCode().value(), 200);
     }
 
     @Test
-    public void getOldestAnimalInCenterTest() throws Exception {
+    public void getOldestAnimalInCenterTest() {
         //GIVEN
         animalDto = AnimalMocks.mockAnimalDto();
 
@@ -80,13 +75,13 @@ public class AnimalControllerTest {
         when(animalService.getOldestAnimalInCenter()).thenReturn(animalDto);
 
         //THEN
-        mockMvc.perform(get("/animals/getOldestAnimalInCenter"))
-                .andExpect(status().isOk())
-                .andExpect(content().string(objectMapper.writeValueAsString(animalDto)));
+        ResponseEntity<AnimalDto> result = animalController.getOldestAnimalInCenter();
+        assertEquals(result.getBody(), animalDto);
+        assertEquals(result.getStatusCode().value(), 200);
     }
 
     @Test
-    public void addNewAnimalTest() throws Exception {
+    public void addNewAnimalTest() {
         //GIVEN
         animalDto = AnimalMocks.mockAnimalDto();
         partialAnimalDto = AnimalMocks.mockPartialAnimalDto();
@@ -94,33 +89,31 @@ public class AnimalControllerTest {
         when(animalService.addAnimal(partialAnimalDto)).thenReturn(animalDto);
 
         //THEN
-        mockMvc.perform(post("/animals")
-                        .contentType("application/json")
-                        .content(objectMapper.writeValueAsString(partialAnimalDto)))
-                .andExpect(status().isOk())
-                .andExpect(content().string(objectMapper.writeValueAsString(animalDto)));
+        ResponseEntity<AnimalDto> result = animalController.addNewAnimal(partialAnimalDto);
+        assertEquals(result.getBody(), animalDto);
+        assertEquals(result.getStatusCode().value(), 200);
     }
 
     @Test
-    public void deleteAdoptedAnimalsTest() throws Exception {
+    public void deleteAdoptedAnimalsTest() {
         //GIVEN
         animalDto = AnimalMocks.mockAnimalDto();
         animalDto.setClientDto(ClientMocks.mockClientDto());
 
         //WHEN
-        when( animalService.deleteAdoptedAnimals()).thenReturn(ProjectConstants.NO_ADOPTED_ANIMALS);
+        when( animalService.deleteAdoptedAnimals()).thenReturn(ProjectConstants.DELETED_ADOPTED_ANIMALS);
 
         //THEN
-        mockMvc.perform(delete("/animals/deleteAdoptedAnimals"))
-                .andExpect(status().isOk())
-                .andExpect(content().string(ProjectConstants.NO_ADOPTED_ANIMALS));
+        ResponseEntity<String> result = animalController.deleteAdoptedAnimals();
+        assertEquals(result.getBody(), ProjectConstants.DELETED_ADOPTED_ANIMALS);
+        assertEquals(result.getStatusCode().value(), 200);
     }
 
     @Test
-    public void adoptAnimalTest() throws Exception {
+    public void adoptAnimalTest() {
         //GIVEN
         animalDto = AnimalMocks.mockAnimalDto();
-        AnimalDto updatedAnimal = animalDto;
+        AnimalDto updatedAnimal = AnimalMocks.mockAnimalDto();
         ClientDto clientDto = ClientMocks.mockClientDto();
         updatedAnimal.setClientDto(clientDto);
 
@@ -128,17 +121,16 @@ public class AnimalControllerTest {
         when(animalService.adoptAnimal(animalDto.getId(), clientDto.getFirstName(), clientDto.getLastName())).thenReturn(updatedAnimal);
 
         //THEN
-        mockMvc.perform(put("/animals/adoptAnimal/" + animalDto.getId() + "/" + clientDto.getFirstName() + "/" + clientDto.getLastName()))
-                .andExpect(status().isOk())
-                .andExpect(content().string(objectMapper.writeValueAsString(updatedAnimal)))
-                .andExpect(jsonPath("$.clientDto.firstName").value(clientDto.getFirstName()));
+        ResponseEntity<AnimalDto> result = animalController.adoptAnimal(animalDto.getId(), clientDto.getFirstName(), clientDto.getLastName());
+        assertEquals(result.getBody(), updatedAnimal);
+        assertEquals(result.getStatusCode().value(), 200);
     }
 
     @Test
-    public void putAnimalInCageTest() throws Exception {
+    public void putAnimalInCageTest() {
         //GIVEN
         animalDto = AnimalMocks.mockAnimalDto();
-        AnimalDto updatedAnimal = animalDto;
+        AnimalDto updatedAnimal = AnimalMocks.mockAnimalDto();
         CageDto cageDto = CageMocks.mockCageDto();
         updatedAnimal.setCageDto(cageDto);
 
@@ -146,10 +138,9 @@ public class AnimalControllerTest {
         when(animalService.putAnimalInCage(animalDto.getId(), cageDto.getId())).thenReturn(updatedAnimal);
 
         //THEN
-        mockMvc.perform(put("/animals/putAnimalInCage/" + animalDto.getId() + "/" + cageDto.getId()))
-                .andExpect(status().isOk())
-                .andExpect(content().string(objectMapper.writeValueAsString(updatedAnimal)))
-                .andExpect(jsonPath("$.cageDto.numberPlaces").value(cageDto.getNumberPlaces()));
+        ResponseEntity<AnimalDto> result = animalController.putAnimalInCage(animalDto.getId(), cageDto.getId());
+        assertEquals(result.getBody(), updatedAnimal);
+        assertEquals(result.getStatusCode().value(), 200);
     }
 
 }

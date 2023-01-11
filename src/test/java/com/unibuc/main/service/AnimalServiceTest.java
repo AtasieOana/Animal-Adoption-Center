@@ -133,7 +133,7 @@ public class AnimalServiceTest {
         animal = AnimalMocks.mockAnimal();
         animalDto = AnimalMocks.mockAnimalDto();
         animalDto.setClientDto(ClientMocks.mockClientDto());
-        Animal updatedAnimal = animal;
+        Animal updatedAnimal =  AnimalMocks.mockAnimal();
         updatedAnimal.setClient(ClientMocks.mockClient());
         animal.setClient(null);
         //WHEN
@@ -203,7 +203,7 @@ public class AnimalServiceTest {
         animal = AnimalMocks.mockAnimal();
         animalDto = AnimalMocks.mockAnimalDto();
         animalDto.setCageDto(CageMocks.mockCageDto());
-        Animal updatedAnimal = animal;
+        Animal updatedAnimal =  AnimalMocks.mockAnimal();
         updatedAnimal.setCage(CageMocks.mockCage());
         Cage cage = CageMocks.mockCage();
 

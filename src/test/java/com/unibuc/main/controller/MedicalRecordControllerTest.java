@@ -1,41 +1,36 @@
 package com.unibuc.main.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.unibuc.main.constants.ProjectConstants;
 import com.unibuc.main.dto.MedicalRecordDto;
 import com.unibuc.main.dto.PartialMedicalRecordDto;
+import com.unibuc.main.dto.VaccineDto;
 import com.unibuc.main.service.MedicalRecordService;
 import com.unibuc.main.utils.MedicalRecordMocks;
 import com.unibuc.main.utils.VaccineMocks;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(MockitoExtension.class)
-@WebMvcTest(controllers = MedicalRecordController.class)
 public class MedicalRecordControllerTest {
-    @Autowired
-    private MockMvc mockMvc;
-    @Autowired
-    private ObjectMapper objectMapper;
-    @MockBean
+    @InjectMocks
+    MedicalRecordController medicalRecordController;
+    @Mock
     MedicalRecordService medicalRecordService;
     MedicalRecordDto medicalRecordDto;
     PartialMedicalRecordDto partialMedicalRecordDto;
 
     @Test
-    public void getMedicalRecordsForAnimalTest() throws Exception {
+    public void getMedicalRecordsForAnimalTest() {
         //GIVEN
         medicalRecordDto = MedicalRecordMocks.mockMedicalRecordDto2();
         List<MedicalRecordDto> medicalRecordDtos = new ArrayList<>();
@@ -45,13 +40,13 @@ public class MedicalRecordControllerTest {
         when(medicalRecordService.getAllMedicalRecordsForAnimal(medicalRecordDto.getAnimalId())).thenReturn(medicalRecordDtos);
 
         //THEN
-        mockMvc.perform(get("/medicalRecords/getMedicalRecordsForAnimal/" + medicalRecordDto.getAnimalId()))
-                .andExpect(status().isOk())
-                .andExpect(content().string(objectMapper.writeValueAsString(medicalRecordDtos)));
+        ResponseEntity<List<MedicalRecordDto>> result = medicalRecordController.getAllMedicalRecordsForAnimal(medicalRecordDto.getAnimalId());
+        assertEquals(result.getBody(), medicalRecordDtos);
+        assertEquals(result.getStatusCode().value(), 200);
     }
 
     @Test
-    public void getMostUsedVaccineTest() throws Exception {
+    public void getMostUsedVaccineTest() {
         //GIVEN
         medicalRecordDto = MedicalRecordMocks.mockMedicalRecordDto();
 
@@ -59,12 +54,13 @@ public class MedicalRecordControllerTest {
         when(medicalRecordService.getMostUsedVaccine()).thenReturn(VaccineMocks.mockVaccineDto());
 
         //THEN
-        mockMvc.perform(get("/medicalRecords/getMostUsedVaccine"))
-                .andExpect(status().isOk())
-                .andExpect(content().string(objectMapper.writeValueAsString(VaccineMocks.mockVaccineDto())));
+        ResponseEntity<VaccineDto> result = medicalRecordController.getMostUsedVaccine();
+        assertEquals(result.getBody(), VaccineMocks.mockVaccineDto());
+        assertEquals(result.getStatusCode().value(), 200);
     }
+
     @Test
-    public void addNewMedicalRecordTest() throws Exception {
+    public void addNewMedicalRecordTest() {
         //GIVEN
         medicalRecordDto = MedicalRecordMocks.mockMedicalRecordDto2();
 
@@ -72,15 +68,13 @@ public class MedicalRecordControllerTest {
         when(medicalRecordService.addMedicalRecord(medicalRecordDto)).thenReturn(medicalRecordDto);
 
         //THEN
-        mockMvc.perform(post("/medicalRecords")
-                        .contentType("application/json")
-                        .content(objectMapper.writeValueAsString(medicalRecordDto)))
-                .andExpect(status().isOk())
-                .andExpect(content().string(objectMapper.writeValueAsString(medicalRecordDto)));
+        ResponseEntity<MedicalRecordDto> result = medicalRecordController.addNewMedicalRecord(medicalRecordDto);
+        assertEquals(result.getBody(), medicalRecordDto);
+        assertEquals(result.getStatusCode().value(), 200);
     }
 
     @Test
-    public void deleteMedicalRecordBeforeADateTest() throws Exception {
+    public void deleteMedicalRecordBeforeADateTest() {
         //GIVEN
         medicalRecordDto = MedicalRecordMocks.mockMedicalRecordDto();
 
@@ -88,13 +82,13 @@ public class MedicalRecordControllerTest {
         when( medicalRecordService.deleteMedicalRecordBeforeADate("2021-10-10")).thenReturn(ProjectConstants.DELETED_RECORDS);
 
         //THEN
-        mockMvc.perform(delete("/medicalRecords/deleteMedicalRecordBeforeDate/2021-10-10"))
-                .andExpect(status().isOk())
-                .andExpect(content().string(ProjectConstants.DELETED_RECORDS));
+        ResponseEntity<String> result = medicalRecordController.deleteMedicalRecordBeforeADate("2021-10-10");
+        assertEquals(result.getBody(), ProjectConstants.DELETED_RECORDS);
+        assertEquals(result.getStatusCode().value(), 200);
     }
 
     @Test
-    public void updateMedicalRecordTest() throws Exception {
+    public void updateMedicalRecordTest() {
         //GIVEN
         medicalRecordDto = MedicalRecordMocks.mockMedicalRecordDto2();
         partialMedicalRecordDto = MedicalRecordMocks.mockPartialMedicalRecordDto();
@@ -105,10 +99,8 @@ public class MedicalRecordControllerTest {
         when(medicalRecordService.updateMedicalRecord(1L, partialMedicalRecordDto)).thenReturn(medicalRecordDto);
 
         //THEN
-        mockMvc.perform(put("/medicalRecords/1")
-                    .contentType("application/json")
-                    .content(objectMapper.writeValueAsString(partialMedicalRecordDto)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.generalHealthState").value("Very good"));
+        ResponseEntity<MedicalRecordDto> result = medicalRecordController.updateMedicalRecord(1L, partialMedicalRecordDto);
+        assertEquals(result.getBody(), medicalRecordDto);
+        assertEquals(result.getStatusCode().value(), 200);
     }
 }

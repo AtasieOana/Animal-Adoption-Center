@@ -1,11 +1,11 @@
 package com.unibuc.main.utils;
 
 import com.unibuc.main.dto.CageDto;
+import com.unibuc.main.dto.PartialCageDto;
 import com.unibuc.main.entity.Cage;
 
 
 public class CageMocks {
-
 
     public static Cage mockCage() {
         return Cage.builder()
@@ -23,10 +23,10 @@ public class CageMocks {
                 .build();
     }
 
-    public static CageDto mockCageDto2() {
-        return CageDto.builder()
+    public static PartialCageDto mockPartialCageDto() {
+        return PartialCageDto.builder()
                 .numberPlaces(3)
-                .caretaker(EmployeeMocks.mockCaretakerDto2())
+                .caretaker(EmployeeMocks.mockCaretakerDto())
                 .build();
     }
 

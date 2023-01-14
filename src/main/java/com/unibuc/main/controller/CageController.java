@@ -2,6 +2,7 @@ package com.unibuc.main.controller;
 
 import com.unibuc.main.constants.ProjectConstants;
 import com.unibuc.main.dto.CageDto;
+import com.unibuc.main.dto.PartialCageDto;
 import com.unibuc.main.service.CageService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ public class CageController {
 
     @PostMapping
     @ApiOperation("Addition of a new cage characterized by a number a places and possibly a caretaker")
-    public ResponseEntity<CageDto> addNewCage(@Valid @RequestBody CageDto cageDto){
+    public ResponseEntity<CageDto> addNewCage(@Valid @RequestBody PartialCageDto cageDto){
         return ResponseEntity.ok(cageService.addCage(cageDto));
     }
 

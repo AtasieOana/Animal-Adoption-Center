@@ -1,6 +1,7 @@
 package com.unibuc.main.mapper;
 
 import com.unibuc.main.dto.CageDto;
+import com.unibuc.main.dto.PartialCageDto;
 import com.unibuc.main.entity.Cage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -43,4 +44,19 @@ public class CageMapper {
         }
 
     }
+
+    public Cage mapPartialToCage(PartialCageDto cageDto) {
+        if(cageDto.getCaretaker() != null) {
+            return Cage.builder()
+                    .numberPlaces(cageDto.getNumberPlaces())
+                    .caretaker(employeeMapper.mapToEmployee(cageDto.getCaretaker()))
+                    .build();
+        }
+        else{
+            return Cage.builder()
+                    .numberPlaces(cageDto.getNumberPlaces())
+                    .build();
+        }
+    }
+
 }

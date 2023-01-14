@@ -3,6 +3,7 @@ package com.unibuc.main.controller;
 import com.unibuc.main.constants.ProjectConstants;
 import com.unibuc.main.dto.CageDto;
 import com.unibuc.main.dto.EmployeeDto;
+import com.unibuc.main.dto.PartialCageDto;
 import com.unibuc.main.service.CageService;
 import com.unibuc.main.utils.CageMocks;
 import com.unibuc.main.utils.EmployeeMocks;
@@ -28,6 +29,7 @@ public class CageControllerTest {
     @Mock
     CageService cageService;
     CageDto cageDto;
+    PartialCageDto partialCageDto;
 
     @Test
     public void getCagesWithoutACaretakerTest() {
@@ -64,12 +66,13 @@ public class CageControllerTest {
     public void addNewCageTest() {
         //GIVEN
         cageDto = CageMocks.mockCageDto();
+        partialCageDto = CageMocks.mockPartialCageDto();
 
         //WHEN
-        when(cageService.addCage(cageDto)).thenReturn(cageDto);
+        when(cageService.addCage(partialCageDto)).thenReturn(cageDto);
 
         //THEN
-        ResponseEntity<CageDto> result = cageController.addNewCage(cageDto);
+        ResponseEntity<CageDto> result = cageController.addNewCage(partialCageDto);
         assertEquals(result.getBody(), cageDto);
         assertEquals(Objects.requireNonNull(result.getBody()).getId(), cageDto.getId());
         assertEquals(result.getStatusCode().value(), 200);

@@ -5,6 +5,7 @@ import com.unibuc.main.constants.ProjectConstants;
 import com.unibuc.main.controller.CageController;
 import com.unibuc.main.dto.EmployeeDto;
 import com.unibuc.main.dto.CageDto;
+import com.unibuc.main.dto.PartialCageDto;
 import com.unibuc.main.service.CageService;
 import com.unibuc.main.utils.CageMocks;
 import com.unibuc.main.utils.EmployeeMocks;
@@ -33,6 +34,7 @@ public class CageControllerIT {
     @MockBean
     CageService cageService;
     CageDto cageDto;
+    PartialCageDto partialCageDto;
 
     @Test
     public void getCagesWithoutACaretakerTest() throws Exception {
@@ -69,14 +71,15 @@ public class CageControllerIT {
     public void addNewCageTest() throws Exception {
         //GIVEN
         cageDto = CageMocks.mockCageDto();
+        partialCageDto = CageMocks.mockPartialCageDto();
 
         //WHEN
-        when(cageService.addCage(cageDto)).thenReturn(cageDto);
+        when(cageService.addCage(partialCageDto)).thenReturn(cageDto);
 
         //THEN
         mockMvc.perform(post("/cages")
                         .contentType("application/json")
-                        .content(objectMapper.writeValueAsString(cageDto)))
+                        .content(objectMapper.writeValueAsString(partialCageDto)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.numberPlaces").value(cageDto.getNumberPlaces()))
                 .andExpect(jsonPath("$.caretaker.firstName").value(cageDto.getCaretaker().getFirstName()));

@@ -2,6 +2,7 @@ package com.unibuc.main.service;
 
 import com.unibuc.main.constants.ProjectConstants;
 import com.unibuc.main.dto.CageDto;
+import com.unibuc.main.dto.PartialCageDto;
 import com.unibuc.main.entity.Cage;
 import com.unibuc.main.entity.Employee;
 import com.unibuc.main.exception.CageNotFoundException;
@@ -39,12 +40,12 @@ public class CageService {
                 .stream().map(c -> cageMapper.mapToCageDto(c))
                 .collect(Collectors.toList());
     }
-    public CageDto addCage(CageDto cageDto) {
-        Cage cage = cageMapper.mapToCage(cageDto);
-        if (cageDto.getCaretaker() != null) {
-            Optional<Employee> employee = employeeRepository.findCaretakerByName(cageDto.getCaretaker().getFirstName(), cageDto.getCaretaker().getLastName());
+    public CageDto addCage(PartialCageDto partialCageDto) {
+        Cage cage = cageMapper.mapPartialToCage(partialCageDto);
+        if (partialCageDto.getCaretaker() != null) {
+            Optional<Employee> employee = employeeRepository.findCaretakerByName(partialCageDto.getCaretaker().getFirstName(), partialCageDto.getCaretaker().getLastName());
             if (employee.isEmpty()) {
-                throw new EmployeeNotFoundException(String.format(ProjectConstants.EMPLOYEE_NOT_FOUND, cageDto.getCaretaker().getFirstName() + ' ' + cageDto.getCaretaker().getLastName()));
+                throw new EmployeeNotFoundException(String.format(ProjectConstants.EMPLOYEE_NOT_FOUND, partialCageDto.getCaretaker().getFirstName() + ' ' + partialCageDto.getCaretaker().getLastName()));
             }
             cage.setCaretaker(employee.get());
         }

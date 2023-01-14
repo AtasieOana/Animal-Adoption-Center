@@ -3,6 +3,7 @@ package com.unibuc.main.service;
 import com.unibuc.main.constants.ProjectConstants;
 import com.unibuc.main.constants.TestConstants;
 import com.unibuc.main.dto.CageDto;
+import com.unibuc.main.dto.PartialCageDto;
 import com.unibuc.main.entity.Cage;
 import com.unibuc.main.exception.CageNotFoundException;
 import com.unibuc.main.exception.EmployeeNotFoundException;
@@ -44,6 +45,8 @@ public class CageServiceTest {
 
     CageDto cageDto;
 
+    PartialCageDto partialCageDto;
+
     @Test
     public void testGetCageById() {
         //GIVEN
@@ -84,15 +87,16 @@ public class CageServiceTest {
         //GIVEN
         cage = CageMocks.mockCage();
         cageDto = CageMocks.mockCageDto();
+        partialCageDto = CageMocks.mockPartialCageDto();
 
         //WHEN
-        when(cageMapper.mapToCage(cageDto)).thenReturn(cage);
+        when(cageMapper.mapPartialToCage(partialCageDto)).thenReturn(cage);
         when(employeeRepository.findCaretakerByName(TestConstants.FIRSTNAME, TestConstants.LASTNAME)).thenReturn(Optional.ofNullable(EmployeeMocks.mockCaretaker()));
         when(cageMapper.mapToCageDto(cage)).thenReturn(cageDto);
         when(cageRepository.save(cage)).thenReturn(cage);
 
         //THEN
-        CageDto result = cageService.addCage(cageDto);
+        CageDto result = cageService.addCage(partialCageDto);
         assertEquals(result, cageDto);
         assertThat(result.getNumberPlaces()).isNotNull();
         assertThat(result.getCaretaker()).isNotNull();
@@ -104,13 +108,14 @@ public class CageServiceTest {
         //GIVEN
         cage = CageMocks.mockCage();
         cageDto = CageMocks.mockCageDto();
+        partialCageDto = CageMocks.mockPartialCageDto();
 
         //WHEN
-        when(cageMapper.mapToCage(cageDto)).thenReturn(cage);
+        when(cageMapper.mapPartialToCage(partialCageDto)).thenReturn(cage);
         when(employeeRepository.findCaretakerByName(TestConstants.FIRSTNAME, TestConstants.LASTNAME)).thenReturn(Optional.empty());
 
         //THEN
-        EmployeeNotFoundException employeeNotFoundException = assertThrows(EmployeeNotFoundException.class, () -> cageService.addCage(cageDto));
+        EmployeeNotFoundException employeeNotFoundException = assertThrows(EmployeeNotFoundException.class, () -> cageService.addCage(partialCageDto));
         assertEquals(String.format(ProjectConstants.EMPLOYEE_NOT_FOUND, TestConstants.FIRSTNAME + " " + TestConstants.LASTNAME), employeeNotFoundException.getMessage());
     }
 

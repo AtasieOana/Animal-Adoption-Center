@@ -14,15 +14,22 @@ import javax.persistence.EntityNotFoundException;
 @ControllerAdvice
 public class ExceptionControllerAdvice {
 
-    @ExceptionHandler({EmployeeNotFoundException.class, EmployeeAlreadyExistsException.class, EmployeeAlreadyExistsException.class,
-            EmployeeInfoWrongException.class, CageNotFoundException.class, VaccineAlreadyExistsException.class,
-            VaccineNotFoundException.class, DietAlreadyExistsException.class, DietNotFoundException.class,
-            ClientNotFoundException.class, ClientAlreadyExistsException.class, MedicalRecordNotFoundException.class,
-            AnimalNotFoundException.class, AnimalAlreadyAdoptedException.class, NoPlaceInCageException.class,
+    @ExceptionHandler({EmployeeNotFoundException.class, CageNotFoundException.class,
+            VaccineNotFoundException.class, DietNotFoundException.class, ClientNotFoundException.class,
+            MedicalRecordNotFoundException.class, AnimalNotFoundException.class,
             EntityNotFoundException.class, SQLIntegrityConstraintViolationException.class,
             RuntimeException.class})
-    public ResponseEntity<String> handleControllerExceptions(Exception exception) {
+    public ResponseEntity<String> handleNotFoundExceptions(Exception exception) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(exception.getMessage());
+    }
+
+    @ExceptionHandler({EmployeeAlreadyExistsException.class, EmployeeInfoWrongException.class,
+            VaccineAlreadyExistsException.class, DietAlreadyExistsException.class,
+            ClientAlreadyExistsException.class, AnimalAlreadyAdoptedException.class,
+            NoPlaceInCageException.class})
+    public ResponseEntity<String> handleAlreadyExistsExceptions(Exception exception) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(exception.getMessage());
     }
 

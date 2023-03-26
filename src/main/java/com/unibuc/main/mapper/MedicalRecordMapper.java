@@ -29,7 +29,6 @@ public class MedicalRecordMapper {
                 .generalHealthState(medicalRecord.getGeneralHealthState())
                 .generationDate(medicalRecord.getGenerationDate())
                 .animalId(medicalRecord.getAnimal().getId())
-                .vaccineName(medicalRecord.getVaccine().getVaccineName())
                 .vetFirstName(medicalRecord.getVet().getPersonDetails().getFirstName())
                 .vetLastName(medicalRecord.getVet().getPersonDetails().getLastName())
                 .build();

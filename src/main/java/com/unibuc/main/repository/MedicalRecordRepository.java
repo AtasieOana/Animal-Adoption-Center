@@ -14,9 +14,6 @@ public interface MedicalRecordRepository extends JpaRepository<MedicalRecord, Lo
 
     List<MedicalRecord> findAllByAnimal_Id(Long animalId);
 
-    @Query("SELECT mr.vaccine FROM MedicalRecord mr")
-    List<Vaccine> findAllVaccines();
-
     List<MedicalRecord> findAllByGenerationDateBefore(Date generationDate);
 
 }

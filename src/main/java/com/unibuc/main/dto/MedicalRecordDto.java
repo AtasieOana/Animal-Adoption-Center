@@ -26,9 +26,6 @@ public class MedicalRecordDto {
     @NotNull(message = ProjectConstants.ID_NULL)
     private Long animalId;
 
-    @NotNull(message = ProjectConstants.VACCINE_NAME_NULL)
-    private String vaccineName;
-
     @NotNull(message = ProjectConstants.FIRST_NAME_NULL)
     private String vetFirstName;
 

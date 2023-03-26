@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -18,7 +19,15 @@ public class CageController {
 
     @Autowired
     private CageService cageService;
-    
+
+    @GetMapping("")
+    public ModelAndView cages(){
+        ModelAndView modelAndView = new ModelAndView("cageList");
+        List<CageDto> cageList = cageService.getAllCages();
+        modelAndView.addObject("cages",cageList);
+        return modelAndView;
+    }
+
     @GetMapping("/getCagesWithoutACaretaker")
     @ApiOperation("Getting cages without caretakers, to know what assignments are necessary")
     public ResponseEntity<List<CageDto>> getCagesWithoutACaretaker(){

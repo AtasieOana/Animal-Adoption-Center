@@ -35,14 +35,6 @@ public class MedicalRecord {
     private Animal animal;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinTable(name="vaccines_medical_records",
-            joinColumns = { @JoinColumn(name="medical_records", referencedColumnName = "id")
-            }, inverseJoinColumns = {
-            @JoinColumn(name = "vaccines", referencedColumnName = "id")
-    })
-    private Vaccine vaccine;
-
-    @ManyToOne(fetch = FetchType.EAGER)
     @JoinTable(name="employees_medical_records",
             joinColumns = { @JoinColumn(name="medical_records", referencedColumnName = "id")
             }, inverseJoinColumns = {

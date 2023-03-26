@@ -38,12 +38,6 @@ public class MedicalRecordController {
         return ResponseEntity.ok(medicalRecordService.deleteMedicalRecordBeforeADate(date));
     }
 
-    @GetMapping("/getMostUsedVaccine")
-    @ApiOperation("Finding the most used vaccine from medical records")
-    public ResponseEntity<VaccineDto> getMostUsedVaccine(){
-        return ResponseEntity.ok(medicalRecordService.getMostUsedVaccine());
-    }
-
     @PutMapping("/{id}")
     @ApiOperation("If the same vaccine is repeated on an animal, only the state of health and the generation date of the medical record can be updated")
     public ResponseEntity<MedicalRecordDto> updateMedicalRecord(@PathVariable Long id, @Valid @RequestBody PartialMedicalRecordDto newMedicalRecord){

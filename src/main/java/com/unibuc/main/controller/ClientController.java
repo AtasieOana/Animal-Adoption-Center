@@ -3,11 +3,14 @@ package com.unibuc.main.controller;
 import com.unibuc.main.constants.ProjectConstants;
 import com.unibuc.main.dto.ClientDto;
 import com.unibuc.main.dto.PartialClientDto;
+import com.unibuc.main.entity.Client;
 import com.unibuc.main.service.ClientService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -61,7 +64,13 @@ public class ClientController {
     public ResponseEntity<ClientDto> updateClient(@PathVariable String oldFirstName, @PathVariable String oldLastName, @Valid @RequestBody PartialClientDto newInfoClient){
         return ResponseEntity.ok(clientService.updateClientInfo(oldFirstName, oldLastName, newInfoClient));
     }
-
+    @GetMapping("/getAllClients")
+    public ModelAndView products(){
+        ModelAndView modelAndView = new ModelAndView("clientList");
+        List<ClientDto> clientList = clientService.getAllClients();
+        modelAndView.addObject("clients",clientList);
+        return modelAndView;
+    }
 
 
 }

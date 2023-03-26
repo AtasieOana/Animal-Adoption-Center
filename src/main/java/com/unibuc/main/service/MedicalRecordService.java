@@ -33,10 +33,6 @@ public class MedicalRecordService {
     @Autowired
     private AnimalRepository animalRepository;
     @Autowired
-    private VaccineRepository vaccineRepository;
-    @Autowired
-    private VaccineMapper vaccineMapper;
-    @Autowired
     private EmployeeRepository employeeRepository;
 
     public MedicalRecordDto addMedicalRecord(MedicalRecordDto addedMedicalRecord) {
@@ -45,17 +41,12 @@ public class MedicalRecordService {
         if (animal.isEmpty()) {
             throw new AnimalNotFoundException(String.format(ProjectConstants.ANIMAL_NOT_FOUND, addedMedicalRecord.getAnimalId()));
         }
-        Optional<Vaccine> vaccine = vaccineRepository.findByVaccineName(addedMedicalRecord.getVaccineName());
-        if (vaccine.isEmpty()) {
-            throw new VaccineNotFoundException(String.format(ProjectConstants.VACCINE_NOT_FOUND, addedMedicalRecord.getVaccineName()));
-        }
         Optional<Employee> vet = employeeRepository.findVetByName(addedMedicalRecord.getVetFirstName(), addedMedicalRecord.getVetLastName());
         if (vet.isEmpty()) {
             throw new EmployeeNotFoundException(String.format(ProjectConstants.EMPLOYEE_NOT_FOUND, addedMedicalRecord.getVetFirstName() + ' ' + addedMedicalRecord.getVetLastName()));
         }
         mr.setAnimal(animal.get());
         mr.setVet(vet.get());
-        mr.setVaccine(vaccine.get());
         return medicalRecordMapper.mapToMedicalRecordDto(medicalRecordRepository.save(mr));
     }
 
@@ -63,15 +54,6 @@ public class MedicalRecordService {
         return medicalRecordRepository.findAllByAnimal_Id(animalId)
                 .stream().map(a -> medicalRecordMapper.mapToMedicalRecordDto(a))
                 .collect(Collectors.toList());
-    }
-
-    public VaccineDto getMostUsedVaccine() {
-        Optional<Map.Entry<Vaccine, Long>> vaccine = medicalRecordRepository.findAllVaccines()
-                .stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
-                .entrySet()
-                .stream()
-                .max(Map.Entry.comparingByValue());
-        return vaccine.map(vaccineLongEntry -> vaccineMapper.mapToVaccineDto(vaccineLongEntry.getKey())).orElse(null);
     }
 
     public MedicalRecordDto updateMedicalRecord(Long id, PartialMedicalRecordDto updatedRecord) {

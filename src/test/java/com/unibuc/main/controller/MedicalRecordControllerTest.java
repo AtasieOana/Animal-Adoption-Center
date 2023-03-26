@@ -3,10 +3,8 @@ package com.unibuc.main.controller;
 import com.unibuc.main.constants.ProjectConstants;
 import com.unibuc.main.dto.MedicalRecordDto;
 import com.unibuc.main.dto.PartialMedicalRecordDto;
-import com.unibuc.main.dto.VaccineDto;
 import com.unibuc.main.service.MedicalRecordService;
 import com.unibuc.main.utils.MedicalRecordMocks;
-import com.unibuc.main.utils.VaccineMocks;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -44,21 +42,6 @@ public class MedicalRecordControllerTest {
         assertEquals(result.getBody(), medicalRecordDtos);
         assertEquals(result.getStatusCode().value(), 200);
     }
-
-    @Test
-    public void getMostUsedVaccineTest() {
-        //GIVEN
-        medicalRecordDto = MedicalRecordMocks.mockMedicalRecordDto();
-
-        //WHEN
-        when(medicalRecordService.getMostUsedVaccine()).thenReturn(VaccineMocks.mockVaccineDto());
-
-        //THEN
-        ResponseEntity<VaccineDto> result = medicalRecordController.getMostUsedVaccine();
-        assertEquals(result.getBody(), VaccineMocks.mockVaccineDto());
-        assertEquals(result.getStatusCode().value(), 200);
-    }
-
     @Test
     public void addNewMedicalRecordTest() {
         //GIVEN

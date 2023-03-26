@@ -1,12 +1,10 @@
 package com.unibuc.main.dto;
 
 import com.unibuc.main.constants.ProjectConstants;
+import lombok.*;
 
-import javax.persistence.Entity;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-
-import lombok.*;
 
 @Builder
 @Data

@@ -127,6 +127,7 @@ CREATE TABLE IF NOT EXISTS vaccines_medical_records (
     id BIGINT NOT NULL AUTO_INCREMENT,
     medical_records BIGINT NOT NULL,
     vaccines BIGINT NOT NULL,
+    registration_date datetime,
     PRIMARY KEY (id),
     FOREIGN KEY (medical_records) REFERENCES medical_records(id) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (vaccines) REFERENCES vaccines(id) ON DELETE CASCADE ON UPDATE CASCADE

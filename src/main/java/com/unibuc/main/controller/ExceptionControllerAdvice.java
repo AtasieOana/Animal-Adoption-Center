@@ -15,6 +15,7 @@ import javax.persistence.EntityNotFoundException;
 public class ExceptionControllerAdvice {
 
     @ExceptionHandler({EmployeeNotFoundException.class, CageNotFoundException.class,
+            RegisteredVaccineNotFoundException.class,
             VaccineNotFoundException.class, DietNotFoundException.class, ClientNotFoundException.class,
             MedicalRecordNotFoundException.class, AnimalNotFoundException.class,
             EntityNotFoundException.class, SQLIntegrityConstraintViolationException.class,

@@ -22,6 +22,7 @@ public class ProjectConstants {
     public static final String CARETAKER_WRONG_INFO = "In order to insert a caretaker, responsibilities must be mentioned, experience is not required.";
     public static final String CLIENT_NOT_FOUND = "Client with name %s doesn't exist";
     public static final String CLIENT_EXISTS = "Client with name %s already exists.";
+    public static final String REG_VACCINE_NOT_FOUND = "Register vaccine with id %s doesn't exist";
     public static final String VET_WRONG_INFO = "In order to insert a VET, experience must be mentioned, responsibilities is not required.";
     public static final String OBJ_DELETED = "Object was deleted.";
     public static final String EMPLOYEE_EXISTS = "Employee with name %s already exists.";

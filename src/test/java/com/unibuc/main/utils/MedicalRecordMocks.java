@@ -39,7 +39,6 @@ public class MedicalRecordMocks {
                 .generalHealthState(TestConstants.GENERAL_HEALTH_DATE)
                 .generationDate(new Date(2021, Calendar.APRIL,6))
                 .animal(AnimalMocks.mockAnimal())
-                .vaccine(VaccineMocks.mockVaccine())
                 .vet(EmployeeMocks.mockVet())
                 .build();
     }
@@ -49,7 +48,6 @@ public class MedicalRecordMocks {
                 .generalHealthState(TestConstants.GENERAL_HEALTH_DATE)
                 .generationDate(new Date(2021, Calendar.APRIL,6))
                 .animalId(AnimalMocks.mockAnimal().getId())
-                .vaccineName(VaccineMocks.mockVaccine().getVaccineName())
                 .vetFirstName(EmployeeMocks.mockVet().getPersonDetails().getFirstName())
                 .vetLastName(EmployeeMocks.mockVet().getPersonDetails().getLastName())
                 .build();

@@ -2,22 +2,20 @@ package com.unibuc.main.service;
 
 import com.unibuc.main.constants.ProjectConstants;
 import com.unibuc.main.constants.TestConstants;
-import com.unibuc.main.dto.PartialMedicalRecordDto;
 import com.unibuc.main.dto.MedicalRecordDto;
-import com.unibuc.main.dto.VaccineDto;
+import com.unibuc.main.dto.PartialMedicalRecordDto;
 import com.unibuc.main.entity.MedicalRecord;
-import com.unibuc.main.entity.Vaccine;
 import com.unibuc.main.exception.AnimalNotFoundException;
 import com.unibuc.main.exception.EmployeeNotFoundException;
 import com.unibuc.main.exception.MedicalRecordNotFoundException;
 import com.unibuc.main.exception.VaccineNotFoundException;
 import com.unibuc.main.mapper.MedicalRecordMapper;
-import com.unibuc.main.mapper.VaccineMapper;
 import com.unibuc.main.repository.AnimalRepository;
 import com.unibuc.main.repository.EmployeeRepository;
 import com.unibuc.main.repository.MedicalRecordRepository;
-import com.unibuc.main.repository.VaccineRepository;
-import com.unibuc.main.utils.*;
+import com.unibuc.main.utils.AnimalMocks;
+import com.unibuc.main.utils.EmployeeMocks;
+import com.unibuc.main.utils.MedicalRecordMocks;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -26,7 +24,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -49,12 +49,6 @@ public class MedicalRecordServiceTest {
 
     @Mock
     AnimalRepository animalRepository;
-
-    @Mock
-    VaccineRepository vaccineRepository;
-
-    @Mock
-    VaccineMapper vaccineMapper;
 
     MedicalRecord medicalRecord;
     MedicalRecordDto medicalRecordDto;
@@ -92,7 +86,6 @@ public class MedicalRecordServiceTest {
         //WHEN
         when(medicalRecordMapper.mapToMedicalRecord(medicalRecordDto)).thenReturn(medicalRecord);
         when(animalRepository.findById(medicalRecordDto.getAnimalId())).thenReturn(Optional.ofNullable(AnimalMocks.mockAnimal()));
-        when(vaccineRepository.findByVaccineName(medicalRecordDto.getVaccineName())).thenReturn(Optional.ofNullable(VaccineMocks.mockVaccine()));
         when(employeeRepository.findVetByName(medicalRecordDto.getVetFirstName(), medicalRecordDto.getVetLastName())).thenReturn(Optional.ofNullable(EmployeeMocks.mockVet()));
         when(medicalRecordMapper.mapToMedicalRecordDto(updatedMedicalRecord)).thenReturn(updatedMedicalRecordDto);
         when(medicalRecordRepository.save(updatedMedicalRecord)).thenReturn(updatedMedicalRecord);
@@ -100,7 +93,6 @@ public class MedicalRecordServiceTest {
         //THEN
         MedicalRecordDto result = medicalRecordService.addMedicalRecord(medicalRecordDto);
         assertEquals(result, updatedMedicalRecordDto);
-        assertThat(result.getVaccineName()).isNotNull();
         assertThat(result.getVetLastName()).isNotNull();
         assertThat(result.getAnimalId()).isNotNull();
         assertNotNull(result);
@@ -122,22 +114,6 @@ public class MedicalRecordServiceTest {
     }
 
     @Test
-    public void testAddNewMedicalRecordVaccineException() {
-        //GIVEN
-        medicalRecord = MedicalRecordMocks.mockMedicalRecord2();
-        medicalRecordDto = MedicalRecordMocks.mockMedicalRecordDto2();
-
-        //WHEN
-        when(medicalRecordMapper.mapToMedicalRecord(medicalRecordDto)).thenReturn(medicalRecord);
-        when(animalRepository.findById(medicalRecordDto.getAnimalId())).thenReturn(Optional.ofNullable(AnimalMocks.mockAnimal()));
-        when(vaccineRepository.findByVaccineName(medicalRecordDto.getVaccineName())).thenReturn(Optional.empty());
-
-        //THEN
-        VaccineNotFoundException vaccineNotFoundException = assertThrows(VaccineNotFoundException.class, () -> medicalRecordService.addMedicalRecord(medicalRecordDto));
-        assertEquals(String.format(ProjectConstants.VACCINE_NOT_FOUND, TestConstants.VACCINE_NAME), vaccineNotFoundException.getMessage());
-    }
-
-    @Test
     public void testAddNewMedicalRecordVetException() {
         //GIVEN
         medicalRecord = MedicalRecordMocks.mockMedicalRecord2();
@@ -146,30 +122,11 @@ public class MedicalRecordServiceTest {
         //WHEN
         when(medicalRecordMapper.mapToMedicalRecord(medicalRecordDto)).thenReturn(medicalRecord);
         when(animalRepository.findById(medicalRecordDto.getAnimalId())).thenReturn(Optional.ofNullable(AnimalMocks.mockAnimal()));
-        when(vaccineRepository.findByVaccineName(medicalRecordDto.getVaccineName())).thenReturn(Optional.ofNullable(VaccineMocks.mockVaccine()));
         when(employeeRepository.findVetByName(medicalRecordDto.getVetFirstName(), medicalRecordDto.getVetLastName())).thenReturn(Optional.empty());
 
         //THEN
         EmployeeNotFoundException employeeNotFoundException = assertThrows(EmployeeNotFoundException.class, () -> medicalRecordService.addMedicalRecord(medicalRecordDto));
         assertEquals(String.format(ProjectConstants.EMPLOYEE_NOT_FOUND, TestConstants.FIRSTNAME + " " + TestConstants.LASTNAME), employeeNotFoundException.getMessage());
-    }
-
-    @Test
-    public void getMostUsedVaccineTest() {
-        //GIVEN
-        medicalRecord = MedicalRecordMocks.mockMedicalRecord();
-        medicalRecordDto = MedicalRecordMocks.mockMedicalRecordDto();
-
-        List<Vaccine> vaccineList = new ArrayList<>();
-        vaccineList.add(VaccineMocks.mockVaccine());
-
-        //WHEN
-        when(medicalRecordRepository.findAllVaccines()).thenReturn(vaccineList);
-        when(vaccineMapper.mapToVaccineDto(VaccineMocks.mockVaccine())).thenReturn(VaccineMocks.mockVaccineDto());
-
-        //THEN
-        VaccineDto result = medicalRecordService.getMostUsedVaccine();
-        assertEquals(result, VaccineMocks.mockVaccineDto());
     }
 
     @Test
@@ -226,7 +183,6 @@ public class MedicalRecordServiceTest {
         //THEN
         MedicalRecordDto result = medicalRecordService.updateMedicalRecord(medicalRecord.getId(), partialMedicalRecordDto);
         assertEquals(result, medicalRecordDto);
-        assertEquals(result.getVaccineName(), TestConstants.VACCINE_NAME);
         assertEquals(result.getGeneralHealthState(), updatedMedicalRecord.getGeneralHealthState());
         assertNotNull(result);
     }

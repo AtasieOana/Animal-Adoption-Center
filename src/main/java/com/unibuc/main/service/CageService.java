@@ -2,6 +2,7 @@ package com.unibuc.main.service;
 
 import com.unibuc.main.constants.ProjectConstants;
 import com.unibuc.main.dto.CageDto;
+import com.unibuc.main.dto.ClientDto;
 import com.unibuc.main.dto.PartialCageDto;
 import com.unibuc.main.entity.Cage;
 import com.unibuc.main.entity.Employee;
@@ -27,6 +28,11 @@ public class CageService {
     @Autowired
     private EmployeeRepository employeeRepository;
 
+    public List<CageDto> getAllCages() {
+        return cageRepository.findAll()
+                .stream().map(v -> cageMapper.mapToCageDto(v))
+                .collect(Collectors.toList());
+    }
     public CageDto getCageById(Long id) {
         Optional<Cage> cage = cageRepository.findById(id);
         if (cage.isEmpty()) {

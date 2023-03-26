@@ -2,7 +2,6 @@ package com.unibuc.main.service;
 
 import com.unibuc.main.constants.ProjectConstants;
 import com.unibuc.main.dto.CageDto;
-import com.unibuc.main.dto.ClientDto;
 import com.unibuc.main.dto.PartialCageDto;
 import com.unibuc.main.entity.Cage;
 import com.unibuc.main.entity.Employee;

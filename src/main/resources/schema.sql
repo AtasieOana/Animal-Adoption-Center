@@ -3,7 +3,6 @@ CREATE TABLE IF NOT EXISTS persons_details (
     first_name VARCHAR(50) NOT NULL,
     last_name VARCHAR(50) NOT NULL,
     phone_number VARCHAR(10),
-    UNIQUE(first_name, last_name),
     PRIMARY KEY (id)
 );
 

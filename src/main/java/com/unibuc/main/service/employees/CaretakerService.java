@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -63,15 +64,26 @@ public class CaretakerService implements EmployeeService {
 
     @Override
     public EmployeeDto updateEmployee(String oldFirstName, String oldLastName, EmployeeDto newEmployeeDto) {
-        Optional<Employee> employee = employeeRepository.findCaretakerByName(oldFirstName, oldLastName);
-        if (employee.isEmpty()) {
+        Optional<Employee> employeeOpt = employeeRepository.findCaretakerByName(oldFirstName, oldLastName);
+        if (employeeOpt.isEmpty()) {
             throw new EmployeeNotFoundException(String.format(ProjectConstants.EMPLOYEE_NOT_FOUND, oldFirstName + ' ' + oldLastName));
         }
-        if(newEmployeeDto.getResponsibility() == null || newEmployeeDto.getExperience() != null){
+
+        String newFirstName = newEmployeeDto.getFirstName();
+        String newLastName = newEmployeeDto.getLastName();
+        Optional<Employee> existingEmployeeOpt = employeeRepository.findCaretakerByName(newFirstName, newLastName);
+        if (existingEmployeeOpt.isPresent() && !Objects.equals(existingEmployeeOpt.get().getId(), employeeOpt.get().getId())) {
+            throw new EmployeeAlreadyExistsException(String.format(ProjectConstants.EMPLOYEE_EXISTS, newFirstName + ' ' + newLastName));
+        }
+
+        if (newEmployeeDto.getResponsibility() == null || newEmployeeDto.getExperience() != null) {
             throw new EmployeeInfoWrongException(String.format(ProjectConstants.CARETAKER_WRONG_INFO));
         }
+
+        Employee existingEmployee = employeeOpt.get();
         Employee newEmployee = employeeMapper.mapToEmployee(newEmployeeDto);
-        newEmployee.setId(employee.get().getId());
+        newEmployee.setId(existingEmployee.getId());
+
         return employeeMapper.mapToEmployeeDto(employeeRepository.save(newEmployee));
     }
 

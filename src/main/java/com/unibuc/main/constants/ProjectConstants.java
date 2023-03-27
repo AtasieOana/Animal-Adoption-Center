@@ -4,6 +4,8 @@ public class ProjectConstants {
 
     public static final String FIRST_NAME_NULL = "First name should not be null";
     public static final String LAST_NAME_NULL = "Last name should not be null";
+    public static final String FIRST_NAME_BLANK = "First name should not be blank";
+    public static final String LAST_NAME_BLANK = "Last name should not be blank";
     public static final String PHONE_NUMBER_MATCH = "Phone number is invalid";
     public static final String ID_NULL = "Id field should not be null";
     public static final String NR_PLACES_NULL = "Number of places in a cage should not be null";

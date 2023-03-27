@@ -25,7 +25,7 @@ public class ExceptionControllerAdvice {
                 .body(exception.getMessage());
     }
 
-    @ExceptionHandler({EmployeeAlreadyExistsException.class, EmployeeInfoWrongException.class,
+    @ExceptionHandler({EmployeeInfoWrongException.class,
             VaccineAlreadyExistsException.class, DietAlreadyExistsException.class,
             ClientAlreadyExistsException.class, AnimalAlreadyAdoptedException.class,
             NoPlaceInCageException.class})

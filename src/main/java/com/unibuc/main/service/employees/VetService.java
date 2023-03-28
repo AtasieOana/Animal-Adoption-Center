@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -66,6 +67,12 @@ public class VetService implements EmployeeService {
         Optional<Employee> employee = employeeRepository.findVetByName(oldFirstName, oldLastName);
         if (employee.isEmpty()) {
             throw new EmployeeNotFoundException(String.format(ProjectConstants.EMPLOYEE_NOT_FOUND, oldFirstName + ' ' + oldLastName));
+        }
+        String newFirstName = newEmployeeDto.getFirstName();
+        String newLastName = newEmployeeDto.getLastName();
+        Optional<Employee> existingEmployeeOpt = employeeRepository.findVetByName(newFirstName, newLastName);
+        if (existingEmployeeOpt.isPresent() && !Objects.equals(existingEmployeeOpt.get().getId(), employee.get().getId())) {
+            throw new EmployeeAlreadyExistsException(String.format(ProjectConstants.EMPLOYEE_EXISTS, newFirstName + ' ' + newLastName));
         }
         if(newEmployeeDto.getResponsibility() != null || newEmployeeDto.getExperience() == null){
             throw new EmployeeInfoWrongException(String.format(ProjectConstants.VET_WRONG_INFO));

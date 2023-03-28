@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Caretakers</title>
+    <title>Vets</title>
 
     <link rel="stylesheet"
           href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
@@ -19,7 +19,7 @@
                 <div class="panel-group">
                     <div class="panel panel-primary">
                         <div class="panel-heading" >
-                            <h1 class="panel-title" th:text="${caretaker.firstName + ' ' + caretaker.lastName}" style="text-decoration: underline">Caretaker</h1>
+                            <h1 class="panel-title" th:text="${vet.firstName + ' ' + vet.lastName}" style="text-decoration: underline">Caretaker</h1>
                         </div>
                         <div class="panel-body" style="margin-top: 20px">
                             <div class="row">
@@ -27,7 +27,7 @@
                                     <h5>Employment Date:</h5>
                                 </div>
                                 <div class="col-md-6">
-                                    <p th:text="${caretaker.employmentDate}">Employment date</p>
+                                    <p th:text="${vet.employmentDate}">Employment date</p>
                                 </div>
                             </div>
                             <div class="row">
@@ -35,7 +35,7 @@
                                     <h5>Salary:</h5>
                                 </div>
                                 <div class="col-md-6">
-                                    <p th:text="${caretaker.salary + ' euro'}">Salary</p>
+                                    <p th:text="${vet.salary + ' euro'}">Salary</p>
                                 </div>
                             </div>
                             <div class="row">
@@ -43,15 +43,15 @@
                                     <h5>Phone Number:</h5>
                                 </div>
                                 <div class="col-md-6">
-                                    <p th:text="${caretaker.phoneNumber}">Phone Number</p>
+                                    <p th:text="${vet.phoneNumber}">Phone Number</p>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-5">
-                                    <h5>Responsibility:</h5>
+                                    <h5>Experience:</h5>
                                 </div>
                                 <div class="col-md-6">
-                                    <p th:text="${caretaker.responsibility}">Responsibility</p>
+                                    <p th:text="${vet.experience}">Experience</p>
                                 </div>
                             </div>
                         </div>

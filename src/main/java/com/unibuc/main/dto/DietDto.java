@@ -19,6 +19,7 @@ public class DietDto {
     @NotNull(message = ProjectConstants.DIET_TYPE_NULL)
     private String dietType;
 
+    @NotNull(message = ProjectConstants.NR_QUANTITY_NEGATIVE)
     @Min(value = 0, message = ProjectConstants.NR_QUANTITY_NEGATIVE)
     private Integer quantityOnStock;
 }

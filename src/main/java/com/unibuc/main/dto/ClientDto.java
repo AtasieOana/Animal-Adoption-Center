@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -25,8 +26,10 @@ public class ClientDto {
     @NotNull(message = ProjectConstants.LAST_NAME_NULL)
     private String lastName;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dateBecomingClient;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date birthDate;
 
     @OnlyCharacterMF

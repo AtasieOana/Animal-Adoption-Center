@@ -17,9 +17,12 @@ import java.util.Date;
 @Getter
 public class PartialClientDto {
 
+    @NotNull(message = ProjectConstants.FIRST_NAME_NULL)
     private String firstName;
 
+    @NotNull(message = ProjectConstants.LAST_NAME_NULL)
     private String lastName;
 
+    @PhoneNumberMatch
     private String phoneNumber;
 }

@@ -2,13 +2,10 @@ package com.unibuc.main.controller;
 
 import com.unibuc.main.dto.EmployeeDto;
 import com.unibuc.main.service.employees.CaretakerService;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -36,12 +33,6 @@ public class CaretakerController {
         EmployeeDto caretaker = caretakerService.getEmployeeByName(firstName, lastName);
         modelAndView.addObject("caretaker",caretaker);
         return modelAndView;
-    }
-
-    @RequestMapping("/delete/{firstName}/{lastName}")
-    public String deleteCaretaker(@PathVariable String firstName, @PathVariable String lastName){
-        caretakerService.deleteEmployee(firstName, lastName);
-        return "redirect:/caretakers";
     }
 
     @RequestMapping("/add")
@@ -88,37 +79,10 @@ public class CaretakerController {
         }
         return "redirect:/caretakers";
     }
-    /*
-    @GetMapping()
-    @ApiOperation("Getting all employees who have the role of caretaker")
-    public ResponseEntity<List<EmployeeDto>> getAllCaretakers(){
-        return ResponseEntity.ok(caretakerService.getAllEmployees());
-    }
 
-    @GetMapping("/{firstName}/{lastName}")
-    @ApiOperation("Getting a caretaker by first and last name")
-    public ResponseEntity<EmployeeDto> getCaretakerByName(@PathVariable String firstName, @PathVariable String lastName){
-        return ResponseEntity.ok(caretakerService.getEmployeeByName(firstName, lastName));
-    }
-
-    @DeleteMapping("/{firstName}/{lastName}")
-    @ApiOperation("Delete a caretaker with a given first and last name")
-    public ResponseEntity<String> deleteEmployee(@PathVariable String firstName, @PathVariable String lastName){
+    @RequestMapping("/delete/{firstName}/{lastName}")
+    public String deleteCaretaker(@PathVariable String firstName, @PathVariable String lastName){
         caretakerService.deleteEmployee(firstName, lastName);
-        return ResponseEntity.ok(ProjectConstants.OBJ_DELETED);
+        return "redirect:/caretakers";
     }
-
-    @PostMapping
-    @ApiOperation("Adding a new caretaker employee to the system")
-    public ResponseEntity<EmployeeDto> addNewCaretaker(@Valid @RequestBody EmployeeDto employeeDto){
-        return ResponseEntity.ok(caretakerService.addNewEmployee(employeeDto));
-    }
-
-    @PutMapping("/{oldFirstName}/{oldLastName}")
-    @ApiOperation("Update the info of a caretaker")
-    public ResponseEntity<EmployeeDto> updateCaretaker(@PathVariable String oldFirstName, @PathVariable String oldLastName, @Valid @RequestBody EmployeeDto newEmployeeDto){
-        return ResponseEntity.ok(caretakerService.updateEmployee(oldFirstName, oldLastName, newEmployeeDto));
-    }
-    */
-
 }

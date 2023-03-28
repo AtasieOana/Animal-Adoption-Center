@@ -3,8 +3,8 @@ package com.unibuc.main.service;
 import com.unibuc.main.constants.ProjectConstants;
 import com.unibuc.main.dto.ClientDto;
 import com.unibuc.main.dto.PartialClientDto;
-import com.unibuc.main.entity.*;
 import com.unibuc.main.entity.Client;
+import com.unibuc.main.entity.PersonDetails;
 import com.unibuc.main.exception.ClientAlreadyExistsException;
 import com.unibuc.main.exception.ClientNotFoundException;
 import com.unibuc.main.mapper.ClientMapper;
@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -74,6 +75,12 @@ public class ClientService {
         Optional<Client> client = clientRepository.findClientByName(oldFirstName, oldLastName);
         if (client.isEmpty()) {
             throw new ClientNotFoundException(String.format(ProjectConstants.CLIENT_NOT_FOUND, oldFirstName + ' ' + oldLastName));
+        }
+        String newFirstName = newClientInfo.getFirstName();
+        String newLastName = newClientInfo.getLastName();
+        Optional<Client> existingClientOpt = clientRepository.findClientByName(newFirstName, newLastName);
+        if (existingClientOpt.isPresent() && !Objects.equals(existingClientOpt.get().getId(), client.get().getId())) {
+            throw new ClientAlreadyExistsException(String.format(ProjectConstants.CLIENT_EXISTS, newFirstName + ' ' + newLastName));
         }
         Client updateClient = client.get();
         PersonDetails pd = updateClient.getPersonDetails();

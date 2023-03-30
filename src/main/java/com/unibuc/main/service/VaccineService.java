@@ -3,15 +3,14 @@ package com.unibuc.main.service;
 import com.unibuc.main.constants.ProjectConstants;
 import com.unibuc.main.dto.PartialVaccineDto;
 import com.unibuc.main.dto.VaccineDto;
-import com.unibuc.main.entity.Diet;
 import com.unibuc.main.entity.Vaccine;
-import com.unibuc.main.exception.*;
+import com.unibuc.main.exception.VaccineAlreadyExistsException;
+import com.unibuc.main.exception.VaccineNotFoundException;
 import com.unibuc.main.mapper.VaccineMapper;
 import com.unibuc.main.repository.VaccineRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -46,10 +45,12 @@ public class VaccineService {
         return ProjectConstants.DELETED_EXP_VACCINES;
     }
 
-    public List<VaccineDto> getAllVaccinesWithEmptyStock() {
-        return vaccineRepository.findAllVaccinesWithEmptyStock()
-                .stream().map(v -> vaccineMapper.mapToVaccineDto(v))
-                .collect(Collectors.toList());
+    public VaccineDto getVaccineByName(String vaccineName){
+        Optional<Vaccine> vaccine = vaccineRepository.findByVaccineName(vaccineName);
+        if (vaccine.isEmpty()) {
+            throw new VaccineNotFoundException(String.format(ProjectConstants.VACCINE_NOT_FOUND, vaccineName));
+        }
+        return vaccineMapper.mapToVaccineDto(vaccine.get());
     }
 
     public VaccineDto updateVaccine(String vaccineName, PartialVaccineDto partialVaccineDto) {

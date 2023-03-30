@@ -3,51 +3,88 @@ package com.unibuc.main.controller;
 import com.unibuc.main.dto.PartialVaccineDto;
 import com.unibuc.main.dto.VaccineDto;
 import com.unibuc.main.service.VaccineService;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.util.List;
 
-@RestController
+@Controller
 @RequestMapping("/vaccines")
 public class VaccineController {
 
     @Autowired
     private VaccineService vaccineService;
-    
-    @GetMapping("/getAllVaccinesOrderByExpiredDate")
-    @ApiOperation("Viewing the vaccines in the order of expiration")
-    public ResponseEntity<List<VaccineDto>> getAllVaccinesOrderByExpiredDate(){
-        return ResponseEntity.ok(vaccineService.getAllVaccinesOrderByExpiredDate());
+
+    @GetMapping("")
+    public ModelAndView getAllVaccines(){
+        ModelAndView modelAndView = new ModelAndView("/vaccineTemplates/vaccineList");
+        List<VaccineDto> vaccines = vaccineService.getAllVaccinesOrderByExpiredDate();
+        modelAndView.addObject("vaccines",vaccines);
+        return modelAndView;
+    }
+
+    @GetMapping("/{vaccineType}")
+    public ModelAndView getVetByName(@PathVariable String vaccineType){
+        ModelAndView modelAndView = new ModelAndView("/vaccineTemplates/vaccineDetails");
+        VaccineDto vaccineDto = vaccineService.getVaccineByName(vaccineType);
+        modelAndView.addObject("vaccine", vaccineDto);
+        return modelAndView;
+    }
+
+    @RequestMapping("/add")
+    public String addVaccineForm(Model model) {
+        model.addAttribute("vaccine", new VaccineDto());
+        return "/vaccineTemplates/addVaccineForm";
     }
 
     @PostMapping
-    @ApiOperation("Addition of a new vaccine characterized by name, quantity brought and expiration date")
-    public ResponseEntity<VaccineDto> addNewVaccine(@Valid @RequestBody VaccineDto vaccineDto){
-        return ResponseEntity.ok(vaccineService.addVaccine(vaccineDto));
+    public String saveVaccine(@ModelAttribute("vaccine") @Valid VaccineDto vaccineDto,
+                           BindingResult bindingResult){
+        if (bindingResult.hasErrors()) {
+            return "/vaccineTemplates/addVaccineForm";
+        }
+        try{
+            vaccineService.addVaccine(vaccineDto);
+        }catch (Exception exception){
+            bindingResult.reject("globalError", exception.getMessage());
+            return "/vaccineTemplates/addVaccineForm";
+        }
+        return "redirect:/vaccines";
     }
 
-    @DeleteMapping("/deleteExpiredVaccines")
-    @ApiOperation("Deleting expired vaccines from the system, equivalent to throwing them in the trash")
-    public ResponseEntity<String> deleteExpiredVaccines(){
-        return ResponseEntity.ok(vaccineService.deleteExpiredVaccines());
+    @RequestMapping("/edit/{oldVaccineName}")
+    public String editVaccineForm(@PathVariable String oldVaccineName, Model model) {
+        model.addAttribute("vaccine", vaccineService.getVaccineByName(oldVaccineName));
+        model.addAttribute("oldVaccineName", oldVaccineName);
+        return "/vaccineTemplates/editVaccineForm";
     }
 
-    @GetMapping("/getAllVaccinesWithEmptyStock")
-    @ApiOperation("Viewing the vaccines with empty stock, to know what needs to be repurchased")
-    public ResponseEntity<List<VaccineDto>> getAllVaccinesWithEmptyStock(){
-        return ResponseEntity.ok(vaccineService.getAllVaccinesWithEmptyStock());
+    @PostMapping("/updateVaccine/{oldVaccineName}")
+    public String editCaretaker(@PathVariable String oldVaccineName,
+                                @ModelAttribute("vaccine") @Valid PartialVaccineDto partialVaccineDto,
+                                BindingResult bindingResult){
+        if (bindingResult.hasErrors()) {
+            return "/vaccineTemplates/editVaccineForm";
+        }
+        try{
+            vaccineService.updateVaccine(oldVaccineName, partialVaccineDto);
+        }catch (Exception exception){
+            bindingResult.reject("globalError", exception.getMessage());
+            return "/vaccineTemplates/editVaccineForm";
+        }
+        return "redirect:/vaccines";
     }
 
-    @PutMapping("/{vaccineName}")
-    @ApiOperation("Changing the stock and expiration date of an existing vaccine")
-    public ResponseEntity<VaccineDto> updateVaccine(@PathVariable String vaccineName, @Valid @RequestBody PartialVaccineDto newVaccine){
-        return ResponseEntity.ok(vaccineService.updateVaccine(vaccineName, newVaccine));
+    @RequestMapping("/deleteExpiredVaccines")
+    public String deleteVaccineIfStockEmpty(RedirectAttributes redirectAttributes){
+        String result = vaccineService.deleteExpiredVaccines();
+        redirectAttributes.addAttribute("result", result);
+        return "redirect:/vaccines";
     }
-
-
-
 }

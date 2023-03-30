@@ -46,15 +46,21 @@ public class CageMapper {
     }
 
     public Cage mapPartialToCage(PartialCageDto cageDto) {
-        if(cageDto.getCaretaker() != null) {
             return Cage.builder()
                     .numberPlaces(cageDto.getNumberPlaces())
-                    .caretaker(employeeMapper.mapToEmployee(cageDto.getCaretaker()))
+                    .build();
+    }
+
+    public PartialCageDto mapCageToPartial(Cage cage) {
+        if(cage.getCaretaker() != null) {
+            return PartialCageDto.builder()
+                    .numberPlaces(cage.getNumberPlaces())
+                    .caretakerId(cage.getCaretaker().getId())
                     .build();
         }
         else{
-            return Cage.builder()
-                    .numberPlaces(cageDto.getNumberPlaces())
+            return PartialCageDto.builder()
+                    .numberPlaces(cage.getNumberPlaces())
                     .build();
         }
     }

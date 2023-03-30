@@ -15,7 +15,4 @@ public interface EmployeeService {
     public boolean deleteEmployee(String firstName, String lastName);
 
     public EmployeeDto updateEmployee(String oldFirstName, String oldLastName, EmployeeDto newEmployeeDto);
-
-    public List<EmployeeDto> updateAllSalariesWithAPercent(Integer percent);
-
 }

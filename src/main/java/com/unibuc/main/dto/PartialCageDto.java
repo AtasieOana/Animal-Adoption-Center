@@ -18,6 +18,6 @@ public class PartialCageDto {
     @Min(value = 1, message = ProjectConstants.NR_PLACES_NEGATIVE)
     private Integer numberPlaces;
 
-    private EmployeeDto caretaker;
+    private Long caretakerId;
 
 }

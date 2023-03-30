@@ -1,11 +1,8 @@
 package com.unibuc.main.controller;
 
 import com.unibuc.main.dto.DietDto;
-import com.unibuc.main.dto.EmployeeDto;
 import com.unibuc.main.service.DietService;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -28,6 +25,14 @@ public class DietController {
         ModelAndView modelAndView = new ModelAndView("/dietTemplates/dietList");
         List<DietDto> diets = dietService.getAllDiets();
         modelAndView.addObject("diets",diets);
+        return modelAndView;
+    }
+
+    @GetMapping("/{dietType}")
+    public ModelAndView getDietByType(@PathVariable String dietType){
+        ModelAndView modelAndView = new ModelAndView("/dietTemplates/dietDetails");
+        DietDto dietDto = dietService.getDietByType(dietType);
+        modelAndView.addObject("diet", dietDto);
         return modelAndView;
     }
 
@@ -81,29 +86,4 @@ public class DietController {
         redirectAttributes.addAttribute("result", result);
         return "redirect:/diets";
     }
-    /*
-    @GetMapping("/getAllDiets")
-    @ApiOperation("Viewing all the diets bought")
-    public ResponseEntity<List<DietDto>> getAllDiets(){
-        return ResponseEntity.ok(dietService.getAllDiets());
-    }
-
-    @PostMapping
-    @ApiOperation("Addition of a new diet characterized by type and quantity brought")
-    public ResponseEntity<DietDto> addNewDiet(@Valid @RequestBody DietDto dietDto){
-        return ResponseEntity.ok(dietService.addDiet(dietDto));
-    }
-
-    @DeleteMapping("/deleteIfStockEmpty/{dietType}")
-    @ApiOperation("Deleting a useless diet type, this operation can only be performed if the stock is empty")
-    public ResponseEntity<String> deleteDietOnlyIfStockEmpty(@PathVariable String dietType){
-        return ResponseEntity.ok(dietService.deleteDietOnlyIfStockEmpty(dietType));
-    }
-
-     @PutMapping("/{dietType}")
-    @ApiOperation("Updating the info about a specific diet")
-    public ResponseEntity<DietDto> updateDiet(@PathVariable String dietType, @RequestBody DietDto newDiet){
-        return ResponseEntity.ok(dietService.updateDietPartial(dietType, newDiet));
-    }
-     */
 }

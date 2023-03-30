@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add cage</title>
+
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+          crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" rel="stylesheet" type="text/css" />
+
+    <div th:replace="/includes/header :: header"> </div>
+</head>
+<body>
+    <form enctype="multipart/form-data" method="post" th:action="@{/cages}" th:object="${cage}">
+
+        <div class="container" style="margin-top: 50px">
+            <div class="panel panel-default">
+                <div  class="panel-heading">
+                    <h3> Add a new cage </h3>
+                </div>
+
+                <div th:if="${#fields.hasErrors('global')}">
+                    <h3>Errors:</h3>
+                    <p th:each="exception : ${#fields.errors('global')}" th:text="${exception}" class="text-danger"></p>
+                </div>
+
+                <div class="panel-body">
+                    <div class="form-group row">
+
+                        <div class="col-md-5 ">
+                            <div class="form-row">
+                                <label>
+                                    Number of places
+                                    <input class="form-control" th:field="*{numberPlaces}" type="text" placeholder="Number of places..."/>
+                                </label>
+                                <p th:if="${#fields.hasErrors('numberPlaces')}"
+                                   th:text="${#strings.listJoin(#fields.errors('numberPlaces'), ', ')}"
+                                   class="text-danger"></p>
+                            </div>
+                            <br>
+                            <div class="col-md-12 " style="padding: 0">
+                                <ul id="caretakers" style="list-style: none;padding: 0">
+                                    Choose a caretaker to take care of the cage
+                                    <li th:each="caretaker: ${caretakersAll}">
+                                        <label>
+                                            <input th:field="*{caretakerId}"
+                                                   th:value="${caretaker.id}"
+                                                   type="radio"/>
+                                        </label>
+                                        <label
+                                                th:for="${#ids.prev('caretakerId')}"
+                                                th:text="${caretaker.personDetails.firstName + ' ' + caretaker.personDetails.lastName}">
+                                        </label>
+                                    </li>
+
+                                </ul>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-md-1 ml-md-auto">
+                                    <button class="btn btn-primary" type="submit">Submit</button>
+                                </div>
+                            </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</body>
+</html>

@@ -34,6 +34,7 @@ public class VetController {
         modelAndView.addObject("vet",vet);
         return modelAndView;
     }
+
     @RequestMapping("/add")
     public String addVetForm(Model model) {
         model.addAttribute("vet", new EmployeeDto());

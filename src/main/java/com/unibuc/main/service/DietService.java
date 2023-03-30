@@ -46,12 +46,6 @@ public class DietService {
         return dietMapper.mapToDietDto(dietRepository.save(dietMapper.mapToDiet(dietDto)));
     }
 
-    public List<DietDto> getAllDietsWithEmptyStock() {
-        return dietRepository.findAllDietsWithEmptyStock()
-                .stream().map(v -> dietMapper.mapToDietDto(v))
-                .collect(Collectors.toList());
-    }
-
     public DietDto updateDietPartial(String dietType, DietDto dietDto) {
         Optional<Diet> diet = dietRepository.findByDietType(dietType);
         if (diet.isEmpty()) {

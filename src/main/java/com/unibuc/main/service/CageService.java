@@ -47,10 +47,10 @@ public class CageService {
     }
     public CageDto addCage(PartialCageDto partialCageDto) {
         Cage cage = cageMapper.mapPartialToCage(partialCageDto);
-        if (partialCageDto.getCaretaker() != null) {
-            Optional<Employee> employee = employeeRepository.findCaretakerByName(partialCageDto.getCaretaker().getFirstName(), partialCageDto.getCaretaker().getLastName());
+        if (partialCageDto.getCaretakerId() != null) {
+            Optional<Employee> employee = employeeRepository.findById(partialCageDto.getCaretakerId());
             if (employee.isEmpty()) {
-                throw new EmployeeNotFoundException(String.format(ProjectConstants.EMPLOYEE_NOT_FOUND, partialCageDto.getCaretaker().getFirstName() + ' ' + partialCageDto.getCaretaker().getLastName()));
+                throw new EmployeeNotFoundException(String.format(ProjectConstants.EMP_ID_NOT_FOUND, partialCageDto.getCaretakerId()));
             }
             cage.setCaretaker(employee.get());
         }
@@ -66,28 +66,25 @@ public class CageService {
         return true;
     }
 
-    public CageDto updatePlacesInCage(Long id, Integer newPlacesNumber) {
+    public CageDto updateCage(Long id, PartialCageDto partialCageDto) {
+        Cage cage = cageRepository.findById(id)
+                .orElseThrow(() -> new CageNotFoundException(String.format(ProjectConstants.CAGE_NOT_FOUND, id)));
+
+        if (partialCageDto.getCaretakerId() != null) {
+            Employee employee = employeeRepository.findById(partialCageDto.getCaretakerId())
+                    .orElseThrow(() -> new EmployeeNotFoundException(String.format(ProjectConstants.EMP_ID_NOT_FOUND, partialCageDto.getCaretakerId())));
+            cage.setCaretaker(employee);
+        }
+        cage.setNumberPlaces(partialCageDto.getNumberPlaces());
+        Cage updatedCage = cageRepository.save(cage);
+        return cageMapper.mapToCageDto(updatedCage);
+    }
+
+    public PartialCageDto getPartialCageById(Long id) {
         Optional<Cage> cage = cageRepository.findById(id);
         if (cage.isEmpty()) {
             throw new CageNotFoundException(String.format(ProjectConstants.CAGE_NOT_FOUND, id));
         }
-        Cage newCage = cage.get();
-        newCage.setNumberPlaces(newPlacesNumber);
-        return cageMapper.mapToCageDto(cageRepository.save(newCage));
+        return cageMapper.mapCageToPartial(cage.get());
     }
-
-    public CageDto updateCageCaretaker(Long id, String caretakerFirstName, String caretakerLastName) {
-        Optional<Cage> cage = cageRepository.findById(id);
-        if (cage.isEmpty()) {
-            throw new CageNotFoundException(String.format(ProjectConstants.CAGE_NOT_FOUND, id));
-        }
-        Optional<Employee> employee = employeeRepository.findCaretakerByName(caretakerFirstName, caretakerLastName);
-        if (employee.isEmpty()) {
-            throw new EmployeeNotFoundException(String.format(ProjectConstants.EMPLOYEE_NOT_FOUND, caretakerFirstName + ' ' + caretakerLastName));
-        }
-        Cage newCage = cage.get();
-        newCage.setCaretaker(employee.get());
-        return cageMapper.mapToCageDto(cageRepository.save(newCage));
-    }
-
 }

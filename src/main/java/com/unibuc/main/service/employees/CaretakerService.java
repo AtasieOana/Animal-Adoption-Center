@@ -87,11 +87,4 @@ public class CaretakerService implements EmployeeService {
         return employeeMapper.mapToEmployeeDto(employeeRepository.save(newEmployee));
     }
 
-    @Override
-    public List<EmployeeDto> updateAllSalariesWithAPercent(Integer percent) {
-        return employeeRepository.findAllByResponsibilityNotNull()
-                .stream().map(e -> { e.setSalary(e.getSalary() + (percent * e.getSalary())/100); return employeeMapper.mapToEmployeeDto(employeeRepository.save(e));})
-                .collect(Collectors.toList());
-    }
-
 }

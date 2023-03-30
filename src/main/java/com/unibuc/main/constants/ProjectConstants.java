@@ -11,6 +11,7 @@ public class ProjectConstants {
     public static final String NR_PLACES_NULL = "Number of places in a cage should not be null";
     public static final String NR_PLACES_NEGATIVE = "Number of places must be greater or equal to 1";
     public static final String NR_QUANTITY_NEGATIVE = "Quantity must be greater or equal to 0";
+    public static final String VACCINE_NAME_SIZE = "The size of the vaccine name needs to be greater or equal with 5";
     public static final String GENDER_MATCH = "Gender can be M or F";
     public static final String DIET_TYPE_NULL = "Diet type should not be null";
     public static final String VACCINE_NAME_NULL = "Vaccine name should not be null";
@@ -47,8 +48,7 @@ public class ProjectConstants {
     public static final String NO_ADOPTED_ANIMALS = "There are no adopted animals.";
     public static final String DELETED_ADOPTED_ANIMALS = "All adopted animals have been deleted";
     public static final String ANIMAL_EMPTY = "There are no animals";
-
-
+    public static final String EMP_ID_NOT_FOUND = "Employee with id %s doesn't exist";
 
 
 }

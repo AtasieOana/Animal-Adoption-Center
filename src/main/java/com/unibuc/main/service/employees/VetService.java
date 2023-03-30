@@ -81,12 +81,4 @@ public class VetService implements EmployeeService {
         newEmployee.setId(employee.get().getId());
         return employeeMapper.mapToEmployeeDto(employeeRepository.save(newEmployee));
     }
-
-    @Override
-    public List<EmployeeDto> updateAllSalariesWithAPercent(Integer percent) {
-        return employeeRepository.findAllByExperienceNotNull()
-                .stream().map(e -> {e.setSalary(e.getSalary() + (percent * e.getSalary())/100); return employeeMapper.mapToEmployeeDto(employeeRepository.save(e));})
-                            .collect(Collectors.toList());
-    }
-
 }

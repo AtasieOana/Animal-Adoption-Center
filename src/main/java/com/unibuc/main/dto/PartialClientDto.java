@@ -6,6 +6,7 @@ import com.unibuc.main.validation.phonenumber.PhoneNumberMatch;
 import lombok.*;
 
 import javax.persistence.Entity;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
@@ -17,10 +18,10 @@ import java.util.Date;
 @Getter
 public class PartialClientDto {
 
-    @NotNull(message = ProjectConstants.FIRST_NAME_NULL)
+    @NotBlank(message = ProjectConstants.FIRST_NAME_BLANK)
     private String firstName;
 
-    @NotNull(message = ProjectConstants.LAST_NAME_NULL)
+    @NotBlank(message = ProjectConstants.LAST_NAME_BLANK)
     private String lastName;
 
     @PhoneNumberMatch

@@ -35,25 +35,33 @@ public class MedicalRecordService {
     @Autowired
     private EmployeeRepository employeeRepository;
 
-    public MedicalRecordDto addMedicalRecord(MedicalRecordDto addedMedicalRecord) {
+    public MedicalRecordDto addMedicalRecord(AddMedicalRecordDto addedMedicalRecord) {
         MedicalRecord mr = medicalRecordMapper.mapToMedicalRecord(addedMedicalRecord);
         Optional<Animal> animal = animalRepository.findById(addedMedicalRecord.getAnimalId());
         if (animal.isEmpty()) {
             throw new AnimalNotFoundException(String.format(ProjectConstants.ANIMAL_NOT_FOUND, addedMedicalRecord.getAnimalId()));
         }
-        Optional<Employee> vet = employeeRepository.findVetByName(addedMedicalRecord.getVetFirstName(), addedMedicalRecord.getVetLastName());
+        Optional<Employee> vet = employeeRepository.findById(addedMedicalRecord.getVetId());
         if (vet.isEmpty()) {
-            throw new EmployeeNotFoundException(String.format(ProjectConstants.EMPLOYEE_NOT_FOUND, addedMedicalRecord.getVetFirstName() + ' ' + addedMedicalRecord.getVetLastName()));
+            throw new EmployeeNotFoundException(String.format(ProjectConstants.EMPLOYEE_NOT_ID, addedMedicalRecord.getVetId()));
         }
         mr.setAnimal(animal.get());
         mr.setVet(vet.get());
         return medicalRecordMapper.mapToMedicalRecordDto(medicalRecordRepository.save(mr));
     }
 
-    public List<MedicalRecordDto> getAllMedicalRecordsForAnimal(Long animalId) {
-        return medicalRecordRepository.findAllByAnimal_Id(animalId)
+    public List<MedicalRecordDto> getAllMedicalRecords() {
+        return medicalRecordRepository.findAll()
                 .stream().map(a -> medicalRecordMapper.mapToMedicalRecordDto(a))
                 .collect(Collectors.toList());
+    }
+
+    public MedicalRecordDto getMedicalRecordById(Long id) {
+        Optional<MedicalRecord> medicalRecord = medicalRecordRepository.findById(id);
+        if (medicalRecord.isEmpty()) {
+            throw new MedicalRecordNotFoundException(String.format(ProjectConstants.RECORD_NOT_FOUND, id));
+        }
+        return medicalRecordMapper.mapToMedicalRecordDto(medicalRecord.get());
     }
 
     public MedicalRecordDto updateMedicalRecord(Long id, PartialMedicalRecordDto updatedRecord) {
@@ -67,20 +75,13 @@ public class MedicalRecordService {
         return medicalRecordMapper.mapToMedicalRecordDto(medicalRecordRepository.save(updatedMedicalRecord));
     }
 
-    public String deleteMedicalRecordBeforeADate(String dateString)  {
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = null;
-        try {
-            date = formatter.parse(dateString);
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
+    public Boolean deleteMedicalRecord(Long medicalRecordId)  {
+        Optional<MedicalRecord> medicalRecord = medicalRecordRepository.findById(medicalRecordId);
+        if (medicalRecord.isEmpty()) {
+            throw new MedicalRecordNotFoundException(String.format(ProjectConstants.RECORD_NOT_FOUND, medicalRecordId));
         }
-        List<MedicalRecord> medicalRecordList = medicalRecordRepository.findAllByGenerationDateBefore(date);
-        if(medicalRecordList.isEmpty()){
-            return ProjectConstants.NO_RECORD_BEFORE;
-        }
-        medicalRecordRepository.deleteAll(medicalRecordList);
-        return ProjectConstants.DELETED_RECORDS;
+        medicalRecordRepository.delete(medicalRecord.get());
+        return true;
     }
 
 }

@@ -2,8 +2,6 @@ package com.unibuc.main.constants;
 
 public class ProjectConstants {
 
-    public static final String FIRST_NAME_NULL = "First name should not be null";
-    public static final String LAST_NAME_NULL = "Last name should not be null";
     public static final String FIRST_NAME_BLANK = "First name should not be blank";
     public static final String LAST_NAME_BLANK = "Last name should not be blank";
     public static final String PHONE_NUMBER_MATCH = "Phone number is invalid";
@@ -13,17 +11,23 @@ public class ProjectConstants {
     public static final String NR_QUANTITY_NEGATIVE = "Quantity must be greater or equal to 0";
     public static final String VACCINE_NAME_SIZE = "The size of the vaccine name needs to be greater or equal with 5";
     public static final String GENDER_MATCH = "Gender can be M or F";
-    public static final String DIET_TYPE_NULL = "Diet type should not be null";
-    public static final String VACCINE_NAME_NULL = "Vaccine name should not be null";
+    public static final String DIET_TYPE_BLANK = "Diet type should not be blank";
+    public static final String DIET_NULL = "Diet should not be null";
+    public static final String CAGE_ID_NULL = "The cage id should not be null";
+    public static final String CLIENT_ID_NULL = "The client id should not be null";
+    public static final String VACCINE_NAME_BLANK = "Vaccine name should not be blank";
     public static final String EXP_DATE_NULL = "Expiration date should not be null";
     public static final String FOUND_DATE_NULL = "Found date should not be null";
     public static final String GENERATION_DATE_NULL = "Generation date should not be null";
     public static final String YEAR_NULL = "Birth year should not be null";
-    public static final String ANIMAL_TYPE_NULL = "Animal type should not be null";
-    public static final String HEALTH_NULL = "General health state should not be null";
+    public static final String YEAR_MIN = "Birth year should be greater than 1900";
+    public static final String ANIMAL_TYPE_BLANK = "Animal type should not be blank";
+    public static final String HEALTH_BLANK = "General health state should not be blank";
     public static final String EMPLOYEE_NOT_FOUND = "Employee with name %s doesn't exist";
+    public static final String EMPLOYEE_NOT_ID = "Employee with id %s doesn't exist";
     public static final String CARETAKER_WRONG_INFO = "In order to insert a caretaker, responsibilities must be mentioned, experience is not required.";
     public static final String CLIENT_NOT_FOUND = "Client with name %s doesn't exist";
+    public static final String CLIENT_NOT_ID = "Client with id %s doesn't exist";
     public static final String CLIENT_EXISTS = "Client with name %s already exists.";
     public static final String REG_VACCINE_NOT_FOUND = "Register vaccine with id %s doesn't exist";
     public static final String VET_WRONG_INFO = "In order to insert a VET, experience must be mentioned, responsibilities is not required.";
@@ -31,6 +35,7 @@ public class ProjectConstants {
     public static final String EMPLOYEE_EXISTS = "Employee with name %s already exists.";
     public static final String CAGE_NOT_FOUND = "Cage with id %s doesn't exist";
     public static final String VACCINE_NOT_FOUND = "Vaccine with name %s doesn't exist";
+    public static final String VACCINE_NOT_ID = "Vaccine with id %s doesn't exist";
     public static final String VACCINE_EXISTS = "Vaccine with name %s already exists.";
     public static final String NO_EXP_VACCINES = "There are no expired vaccines.";
     public static final String DELETED_EXP_VACCINES = "All expired vaccines have been deleted";
@@ -49,6 +54,7 @@ public class ProjectConstants {
     public static final String DELETED_ADOPTED_ANIMALS = "All adopted animals have been deleted";
     public static final String ANIMAL_EMPTY = "There are no animals";
     public static final String EMP_ID_NOT_FOUND = "Employee with id %s doesn't exist";
-
+    public static final String VACCINE_LIST_SIZE = "List of vaccine needs to have size between 1 and 3";
+    public static final String REG_DATE_NULL = "Registration Date should not be null";
 
 }

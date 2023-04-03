@@ -15,6 +15,8 @@ public interface AnimalRepository extends JpaRepository<Animal, Long> {
 
     List<Animal> findAllByClientIsNotNull();
 
+    List<Animal> findAllByClientIsNull();
+
     @Query("SELECT a FROM Animal a WHERE a.foundDate = (SELECT MIN(m.foundDate) FROM Animal m)")
     List<Animal> findOldestAnimal();
 }

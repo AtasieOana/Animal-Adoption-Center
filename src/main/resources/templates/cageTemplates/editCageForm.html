@@ -13,7 +13,7 @@
     <div th:replace="/includes/header :: header"> </div>
 </head>
 <body>
-    <form enctype="multipart/form-data" method="post" th:action="@{'/cages/updateDiet/' + ${cageId}}" th:object="${cage}">
+    <form enctype="multipart/form-data" method="post" th:action="@{'/cages/updateCage/' + ${cageId}}" th:object="${cage}">
 
         <div class="container" style="margin-top: 50px">
             <div class="panel panel-default">
@@ -33,7 +33,7 @@
                             <div class="form-row">
                                 <label>
                                     Number of places
-                                    <input class="form-control" th:field="*{numberPlaces}" type="text" placeholder="Number of places..."/>
+                                    <input class="form-control" th:field="*{numberPlaces}" type="number" placeholder="Number of places..."/>
                                 </label>
                                 <p th:if="${#fields.hasErrors('numberPlaces')}"
                                    th:text="${#strings.listJoin(#fields.errors('numberPlaces'), ', ')}"

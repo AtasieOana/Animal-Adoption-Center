@@ -2,8 +2,8 @@ package com.unibuc.main.dto;
 
 import com.unibuc.main.constants.ProjectConstants;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
@@ -21,11 +21,13 @@ public class AnimalDto {
 
     private Integer birthYear;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date foundDate;
 
     private CageDto cageDto;
 
     private ClientDto clientDto;
 
+    @NotNull(message = ProjectConstants.DIET_NULL)
     private DietDto dietDto;
 }

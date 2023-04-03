@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Medical Record</title>
+
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+          crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" rel="stylesheet" type="text/css" />
+
+    <div th:replace="/includes/header :: header"> </div>
+</head>
+<body>
+    <form enctype="multipart/form-data" method="post" th:action="@{/medicalRecords}" th:object="${medicalRecord}">
+
+        <div class="container" style="margin-top: 50px">
+            <div class="panel panel-default">
+                <div  class="panel-heading">
+                    <h3> Add a new Medical Record </h3>
+                </div>
+
+                <div th:if="${#fields.hasErrors('global')}">
+                    <h3>Errors:</h3>
+                    <p th:each="exception : ${#fields.errors('global')}" th:text="${exception}" class="text-danger"></p>
+                </div>
+
+                <div class="panel-body">
+                    <div class="form-group row">
+
+                        <div class="col-md-5 ">
+                            <div class="form-row">
+                                <label>
+                                    General Health State
+                                    <input class="form-control" th:field="*{generalHealthState}" type="text" placeholder="General Health State..."/>
+                                </label>
+                                <p th:if="${#fields.hasErrors('generalHealthState')}"
+                                   th:text="${#strings.listJoin(#fields.errors('generalHealthState'), ', ')}"
+                                   class="text-danger"></p>
+                            </div>
+                            <br>
+                            <div class="form-column">
+                                <label>
+                                    Generation Date
+                                    <input class="form-control" th:field="*{generationDate}" type="date" placeholder="Generation Date..."/>
+                                </label>
+                                <div class="form-row">
+                                    <p th:if="${#fields.hasErrors('generationDate')}"
+                                    th:text="${#strings.listJoin(#fields.errors('generationDate'), ', ')}"
+                                    class="text-danger"></p>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="col-md-12 " style="padding: 0">
+                                <ul id="animals" style="list-style: none;padding: 0">
+                                    Choose the animal for which is the medical record
+                                    <li th:each="animal: ${animalsAll}">
+                                        <label>
+                                            <input th:field="*{animalId}"
+                                                   th:value="${animal.id}"
+                                                   type="radio"/>
+                                        </label>
+                                        <label
+                                                th:for="${#ids.prev('animalId')}"
+                                                th:text="${animal.id}">
+                                        </label>
+                                    </li>
+                                </ul>
+                                <p th:if="${#fields.hasErrors('animalId')}"
+                                   th:text="${#strings.listJoin(#fields.errors('animalId'), ', ')}"
+                                   class="text-danger"></p>
+                            </div>
+                            <div class="col-md-12 " style="padding: 0">
+                                <ul id="vets" style="list-style: none;padding: 0">
+                                    Choose the vet that made the medical record
+                                    <li th:each="vet: ${vetsAll}">
+                                        <label>
+                                            <input th:field="*{vetId}"
+                                                   th:value="${vet.id}"
+                                                   type="radio"/>
+                                        </label>
+                                        <label
+                                                th:for="${#ids.prev('vetId')}"
+                                                th:text="${vet.personDetails.firstName + ' ' + vet.personDetails.lastName}">
+                                        </label>
+                                    </li>
+                                </ul>
+                                <p th:if="${#fields.hasErrors('vetId')}"
+                                   th:text="${#strings.listJoin(#fields.errors('vetId'), ', ')}"
+                                   class="text-danger"></p>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-md-1 ml-md-auto">
+                                    <button class="btn btn-primary" type="submit">Submit</button>
+                                </div>
+                            </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</body>
+</html>

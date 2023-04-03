@@ -1,11 +1,8 @@
 package com.unibuc.main.mapper;
 
 import com.unibuc.main.dto.AnimalDto;
-import com.unibuc.main.dto.CageDto;
 import com.unibuc.main.dto.PartialAnimalDto;
 import com.unibuc.main.entity.Animal;
-import com.unibuc.main.entity.Cage;
-import com.unibuc.main.repository.DietRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -69,6 +66,7 @@ public class AnimalMapper {
                 .birthYear(animal.getBirthYear())
                 .foundDate(animal.getFoundDate())
                 .dietType(animal.getDiet().getDietType())
+                .cageId(animal.getCage().getId())
                 .build();
     }
 }

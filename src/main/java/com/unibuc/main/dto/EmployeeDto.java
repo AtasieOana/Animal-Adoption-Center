@@ -7,6 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Entity;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 @Builder
@@ -17,11 +18,9 @@ import java.util.Date;
 @Getter
 public class EmployeeDto {
 
-    @NotNull(message = ProjectConstants.FIRST_NAME_NULL)
     @NotBlank(message = ProjectConstants.FIRST_NAME_BLANK)
     private String firstName;
 
-    @NotNull(message = ProjectConstants.LAST_NAME_NULL)
     @NotBlank(message = ProjectConstants.LAST_NAME_BLANK)
     private String lastName;
 

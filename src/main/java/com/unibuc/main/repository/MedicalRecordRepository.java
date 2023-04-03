@@ -12,8 +12,4 @@ import java.util.List;
 @Repository
 public interface MedicalRecordRepository extends JpaRepository<MedicalRecord, Long> {
 
-    List<MedicalRecord> findAllByAnimal_Id(Long animalId);
-
-    List<MedicalRecord> findAllByGenerationDateBefore(Date generationDate);
-
 }

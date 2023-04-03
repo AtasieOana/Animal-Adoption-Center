@@ -14,9 +14,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Setter
 @Getter
-public class MedicalRecordDto {
-
-    private Long id;
+public class AddMedicalRecordDto {
 
     @NotBlank(message = ProjectConstants.HEALTH_BLANK)
     private String generalHealthState;
@@ -28,10 +26,7 @@ public class MedicalRecordDto {
     @NotNull(message = ProjectConstants.ID_NULL)
     private Long animalId;
 
-    @NotBlank(message = ProjectConstants.FIRST_NAME_BLANK)
-    private String vetFirstName;
-
-    @NotBlank(message = ProjectConstants.LAST_NAME_BLANK)
-    private String vetLastName;
+    @NotNull(message = ProjectConstants.ID_NULL)
+    private Long vetId;
 
 }

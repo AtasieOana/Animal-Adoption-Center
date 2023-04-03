@@ -4,7 +4,6 @@ import com.unibuc.main.dto.CageDto;
 import com.unibuc.main.dto.PartialCageDto;
 import com.unibuc.main.repository.EmployeeRepository;
 import com.unibuc.main.service.CageService;
-import com.unibuc.main.service.employees.CaretakerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -72,7 +71,7 @@ public class CageController {
         return "/cageTemplates/editCageForm";
     }
 
-    @PostMapping("/updateDiet/{cageId}")
+    @PostMapping("/updateCage/{cageId}")
     public String editCage(@PathVariable Long cageId,
                            @ModelAttribute("cage") @Valid PartialCageDto partialCageDto,
                            BindingResult bindingResult, Model model){
@@ -90,7 +89,7 @@ public class CageController {
     }
 
     @RequestMapping("/delete/{cageId}")
-    public String deleteDietIfStockEmpty(@PathVariable Long cageId){
+    public String deleteCage(@PathVariable Long cageId){
         cageService.deleteCage(cageId);
         return "redirect:/cages";
     }

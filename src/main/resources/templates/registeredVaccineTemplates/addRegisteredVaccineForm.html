@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add registered vaccine</title>
+
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+          crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" rel="stylesheet" type="text/css" />
+
+    <div th:replace="/includes/header :: header"> </div>
+</head>
+<body>
+    <form enctype="multipart/form-data" method="post" th:action="@{/registeredVaccines}" th:object="${registeredVaccine}">
+
+        <div class="container" style="margin-top: 50px">
+            <div class="panel panel-default">
+                <div  class="panel-heading">
+                    <h3> Add a new Registered Vaccine </h3>
+                </div>
+
+                <div th:if="${#fields.hasErrors('global')}">
+                    <h3>Errors:</h3>
+                    <p th:each="exception : ${#fields.errors('global')}" th:text="${exception}" class="text-danger"></p>
+                </div>
+
+                <div class="panel-body">
+                    <div class="form-group row">
+
+                        <div class="col-md-5 ">
+                            <div class="form-row">
+                                <label>
+                                    Registration date
+                                    <input class="form-control" th:field="*{registrationDate}" type="date" placeholder="Registration date..."/>
+                                </label>
+                                <p th:if="${#fields.hasErrors('registrationDate')}"
+                                   th:text="${#strings.listJoin(#fields.errors('registrationDate'), ', ')}"
+                                   class="text-danger"></p>
+                            </div>
+                            <br>
+                            <div class="col-md-12 " style="padding: 0">
+                                <ul id="medicalRecords" style="list-style: none;padding: 0">
+                                    Choose the medical record that will contain the vaccines
+                                    <li th:each="medicalRecord: ${medicalRecordsAll}">
+                                        <label>
+                                            <input th:field="*{medicalRecordId}"
+                                                   th:value="${medicalRecord.id}"
+                                                   type="radio"/>
+                                        </label>
+                                        <label
+                                                th:for="${#ids.prev('medicalRecordId')}"
+                                                th:text="${medicalRecord.id}">
+                                        </label>
+                                    </li>
+                                </ul>
+                                <p th:if="${#fields.hasErrors('medicalRecordId')}"
+                                   th:text="${#strings.listJoin(#fields.errors('medicalRecordId'), ', ')}"
+                                   class="text-danger"></p>
+                            </div>
+                            <br>
+                            <div class="col-md-12 " style="padding: 0">
+                                <ul id="vaccines" style="list-style: none;padding: 0">
+                                    Choose the vaccines registered
+                                    <li th:each="vaccine: ${vaccinesAll}">
+                                        <label>
+                                            <input th:field="*{vaccinesId}"
+                                                   th:value="${vaccine.id}"
+                                                   type="checkbox"/>
+                                        </label>
+                                        <label
+                                                th:for="${#ids.prev('vaccinesId')}"
+                                                th:text="${vaccine.vaccineName}">
+                                        </label>
+                                    </li>
+                                </ul>
+                                <p th:if="${#fields.hasErrors('vaccinesId')}"
+                                   th:text="${#strings.listJoin(#fields.errors('vaccinesId'), ', ')}"
+                                   class="text-danger"></p>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-md-1 ml-md-auto">
+                                    <button class="btn btn-primary" type="submit">Submit</button>
+                                </div>
+                            </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</body>
+</html>

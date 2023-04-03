@@ -15,13 +15,13 @@ import java.util.List;
 @NoArgsConstructor
 @Setter
 @Getter
-public class RegisteredVaccineDto {
+public class PartialRegisteredVaccineDto {
 
     @Size(min=1, max=3, message = ProjectConstants.VACCINE_LIST_SIZE)
-    private List<VaccineDto> vaccinesDto;
+    private List<Long> vaccinesId;
 
     @NotNull(message = ProjectConstants.ID_NULL)
-    private MedicalRecordDto medicalRecordDto;
+    private Long medicalRecordId;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @NotNull(message = ProjectConstants.REG_DATE_NULL)

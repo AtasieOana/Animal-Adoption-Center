@@ -4,6 +4,7 @@ import com.unibuc.main.constants.ProjectConstants;
 
 import javax.persistence.Entity;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -20,7 +21,7 @@ import java.util.Date;
 @Getter
 public class VaccineDto {
 
-    @NotNull(message = ProjectConstants.VACCINE_NAME_NULL)
+    @NotBlank(message = ProjectConstants.VACCINE_NAME_BLANK)
     @Size(min = 5, message = ProjectConstants.VACCINE_NAME_SIZE)
     private String vaccineName;
 

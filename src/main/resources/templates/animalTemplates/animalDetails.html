@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Animal</title>
+
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+          crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" rel="stylesheet" type="text/css" />
+
+    <div th:replace="/includes/header :: header"> </div>
+</head>
+<body>
+    <div class="container " style="margin-top: 50px">
+        <div class="text-info">
+            If the animal is adopted, it will be removed from its cage. Once adopted, it cannot be adopted again.
+        </div>
+        <div class="row align-self-center">
+            <div class="col-md-8 col-md-offset-3">
+                <div class="panel-group">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading" >
+                            <h1 class="panel-title" th:text="${'Animal with id ' + animalId}" style="text-decoration: underline">Animal</h1>
+                        </div>
+                        <div class="panel-body" style="margin-top: 20px">
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <h5>Animal type:</h5>
+                                </div>
+                                <div class="col-md-6">
+                                    <p th:text="${animal.animalType}">Animal type</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <h5>Birth year:</h5>
+                                </div>
+                                <div class="col-md-6">
+                                    <p th:text="${animal.birthYear}">Birth year</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <h5>Found date:</h5>
+                                </div>
+                                <div class="col-md-6">
+                                    <p th:text="${animal.foundDate}">Found date</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <h5>Diet:</h5>
+                                </div>
+                                <div class="col-md-6">
+                                    <p th:text="${animal.dietDto.dietType}">Diet</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <h5>Cage:</h5>
+                                </div>
+                                <div class="col-md-6">
+                                    <p th:if="${animal.cageDto == null}" th:text="'This animal is not in a cage. The animal is adopted.'">Cage</p>
+                                    <p th:if="${animal.cageDto != null}" th:text="'This animal is in the cage ' + ${animal.cageDto.id}">Cage</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-10">
+                                    <p th:if="${animal.clientDto == null}" th:text="'This animal is not adopted.'">Client</p>
+                                    <p th:if="${animal.clientDto != null}" th:text="'This animal is adopted by the client ' + ${animal.clientDto.firstName + ' ' + animal.clientDto.lastName}">Client</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

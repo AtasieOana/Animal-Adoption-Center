@@ -17,6 +17,7 @@ public class RegisteredVaccineMocks {
                 .build();
     }
 
+    /*
     public static RegisteredVaccineDto mockRegisteredVaccineDto() {
         return RegisteredVaccineDto.builder()
                 .id(1L)
@@ -25,4 +26,6 @@ public class RegisteredVaccineMocks {
                 .registrationDate(new Date(2022,Calendar.NOVEMBER,10))
                 .build();
     }
+
+     */
 }

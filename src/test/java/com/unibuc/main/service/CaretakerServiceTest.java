@@ -9,7 +9,6 @@ import com.unibuc.main.exception.EmployeeInfoWrongException;
 import com.unibuc.main.exception.EmployeeNotFoundException;
 import com.unibuc.main.mapper.EmployeeMapper;
 import com.unibuc.main.repository.EmployeeRepository;
-import com.unibuc.main.service.employees.CaretakerService;
 import com.unibuc.main.utils.EmployeeMocks;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -221,26 +220,4 @@ public class CaretakerServiceTest {
         assertEquals(ProjectConstants.CARETAKER_WRONG_INFO, employeeInfoWrongException.getMessage());
     }
 
-    @Test
-    public void testUpdateAllSalariesWithAPercent() {
-        //GIVEN
-        caretaker = EmployeeMocks.mockCaretaker();
-        caretakerDto = EmployeeMocks.mockCaretakerDto();
-        caretaker.setSalary(caretaker.getSalary() + caretaker.getSalary() * 20/100);
-        caretakerDto.setSalary(caretakerDto.getSalary() + caretakerDto.getSalary() * 20/100);
-
-        List<Employee> employeeList = new ArrayList<>();
-        employeeList.add(caretaker);
-        List<EmployeeDto> employeeDtos = new ArrayList<>();
-        employeeDtos.add(caretakerDto);
-
-        //WHEN
-        when(employeeRepository.findAllByResponsibilityNotNull()).thenReturn(employeeList);
-        when(employeeRepository.save(caretaker)).thenReturn(caretaker);
-        when(employeeMapper.mapToEmployeeDto(caretaker)).thenReturn(caretakerDto);
-
-        //THEN
-        List<EmployeeDto> result = caretakerService.updateAllSalariesWithAPercent(20);
-        assertEquals(result, employeeDtos);
-    }
 }

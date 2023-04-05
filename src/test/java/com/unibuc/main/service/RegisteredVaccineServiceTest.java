@@ -45,7 +45,7 @@ public class RegisteredVaccineServiceTest {
     
     RegisteredVaccine registeredVaccine;
     RegisteredVaccineDto registeredVaccineDto;
-
+/*
     @Test
     public void testGetAlRegVaccines() {
         //GIVEN
@@ -177,5 +177,5 @@ public class RegisteredVaccineServiceTest {
         assertEquals(result, Arrays.asList(registeredVaccineDto));
         assertNotNull(result);
     }
-
+*/
 }

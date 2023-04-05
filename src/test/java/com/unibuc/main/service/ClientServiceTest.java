@@ -106,20 +106,6 @@ public class ClientServiceTest {
         assertEquals(result, 0);
     }
 
-    @Test
-    public void testGetClientNumberByGender() {
-        //GIVEN
-        client = null;
-        clientDto = null;
-
-        //WHEN
-        when(clientRepository.totalClients()).thenReturn(12);
-        when(clientRepository.totalClientsMale()).thenReturn(4);
-
-        //THEN
-        String result = clientService.getClientNumberByGender();
-        assertEquals(result, String.format(ProjectConstants.CLIENT_GENDERS, 12, 8, 4));
-    }
 
     @Test
     public void testGetClientByNameException() {

@@ -9,7 +9,6 @@ import com.unibuc.main.exception.EmployeeInfoWrongException;
 import com.unibuc.main.exception.EmployeeNotFoundException;
 import com.unibuc.main.mapper.EmployeeMapper;
 import com.unibuc.main.repository.EmployeeRepository;
-import com.unibuc.main.service.employees.VetService;
 import com.unibuc.main.utils.EmployeeMocks;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -222,26 +221,4 @@ public class VetServiceTest {
         assertEquals(ProjectConstants.VET_WRONG_INFO, employeeInfoWrongException.getMessage());
     }
 
-    @Test
-    public void testUpdateAllSalariesWithAPercent() {
-        //GIVEN
-        vet = EmployeeMocks.mockVet();
-        vetDto = EmployeeMocks.mockVetDto();
-        vet.setSalary(vet.getSalary() + vet.getSalary() * 20/100);
-        vetDto.setSalary(vetDto.getSalary() + vetDto.getSalary() * 20/100);
-
-        List<Employee> employeeList = new ArrayList<>();
-        employeeList.add(vet);
-        List<EmployeeDto> employeeDtos = new ArrayList<>();
-        employeeDtos.add(vetDto);
-
-        //WHEN
-        when(employeeRepository.findAllByExperienceNotNull()).thenReturn(employeeList);
-        when(employeeRepository.save(vet)).thenReturn(vet);
-        when(employeeMapper.mapToEmployeeDto(vet)).thenReturn(vetDto);
-
-        //THEN
-        List<EmployeeDto> result = vetService.updateAllSalariesWithAPercent(20);
-        assertEquals(result, employeeDtos);
-    }
 }

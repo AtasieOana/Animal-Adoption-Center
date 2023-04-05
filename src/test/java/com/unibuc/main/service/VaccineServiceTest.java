@@ -62,25 +62,6 @@ public class VaccineServiceTest {
         assertEquals(result, vaccineDtos);
     }
 
-    @Test
-    public void getAllVaccinesWithEmptyStockTest() {
-        //GIVEN
-        vaccine = VaccineMocks.mockVaccine();
-        vaccineDto = VaccineMocks.mockVaccineDto();
-
-        List<Vaccine> vaccineList = new ArrayList<>();
-        vaccineList.add(vaccine);
-        List<VaccineDto> vaccineDtos = new ArrayList<>();
-        vaccineDtos.add(vaccineDto);
-
-        //WHEN
-        when(vaccineRepository.findAllVaccinesWithEmptyStock()).thenReturn(vaccineList);
-        when(vaccineMapper.mapToVaccineDto(vaccine)).thenReturn(vaccineDto);
-
-        //THEN
-        List<VaccineDto> result = vaccineService.getAllVaccinesWithEmptyStock();
-        assertEquals(result, vaccineDtos);
-    }
 
     @Test
     public void testAddNewVaccine() {

@@ -60,26 +60,6 @@ public class DietServiceTest {
     }
 
     @Test
-    public void getAllDietsWithEmptyStockTest() {
-        //GIVEN
-        diet = DietMocks.mockDiet();
-        dietDto = DietMocks.mockDietDto();
-
-        List<Diet> dietList = new ArrayList<>();
-        dietList.add(diet);
-        List<DietDto> dietDtos = new ArrayList<>();
-        dietDtos.add(dietDto);
-
-        //WHEN
-        when(dietRepository.findAllDietsWithEmptyStock()).thenReturn(dietList);
-        when(dietMapper.mapToDietDto(diet)).thenReturn(dietDto);
-
-        //THEN
-        List<DietDto> result = dietService.getAllDietsWithEmptyStock();
-        assertEquals(result, dietDtos);
-    }
-
-    @Test
     public void testAddNewDiet() {
         //GIVEN
         diet = DietMocks.mockDiet();

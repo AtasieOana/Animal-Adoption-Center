@@ -26,7 +26,7 @@ public class CageMocks {
     public static PartialCageDto mockPartialCageDto() {
         return PartialCageDto.builder()
                 .numberPlaces(3)
-                .caretaker(EmployeeMocks.mockCaretakerDto())
+                .caretakerId(EmployeeMocks.mockCaretaker().getId())
                 .build();
     }
 

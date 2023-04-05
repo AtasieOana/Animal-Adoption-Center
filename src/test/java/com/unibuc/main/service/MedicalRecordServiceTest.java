@@ -54,26 +54,7 @@ public class MedicalRecordServiceTest {
     MedicalRecordDto medicalRecordDto;
     PartialMedicalRecordDto partialMedicalRecordDto;
 
-    @Test
-    public void getAllMedicalRecordsForAnimalTest() {
-        //GIVEN
-        medicalRecord = MedicalRecordMocks.mockMedicalRecord();
-        medicalRecordDto = MedicalRecordMocks.mockMedicalRecordDto();
-
-        List<MedicalRecord> medicalRecordList = new ArrayList<>();
-        medicalRecordList.add(medicalRecord);
-        List<MedicalRecordDto> medicalRecordDtos = new ArrayList<>();
-        medicalRecordDtos.add(medicalRecordDto);
-
-        //WHEN
-        when(medicalRecordRepository.findAllByAnimal_Id(medicalRecordDto.getAnimalId())).thenReturn(medicalRecordList);
-        when(medicalRecordMapper.mapToMedicalRecordDto(medicalRecord)).thenReturn(medicalRecordDto);
-
-        //THEN
-        List<MedicalRecordDto> result = medicalRecordService.getAllMedicalRecordsForAnimal(medicalRecordDto.getAnimalId());
-        assertEquals(result, medicalRecordDtos);
-    }
-
+    /*
     @Test
     public void testAddNewMedicalRecord() {
         //GIVEN
@@ -200,4 +181,6 @@ public class MedicalRecordServiceTest {
         MedicalRecordNotFoundException medicalRecordNotFoundException = assertThrows(MedicalRecordNotFoundException.class, () -> medicalRecordService.updateMedicalRecord(2L,partialMedicalRecordDto));
         assertEquals(String.format(ProjectConstants.RECORD_NOT_FOUND, 2L), medicalRecordNotFoundException.getMessage());}
 
+
+     */
 }

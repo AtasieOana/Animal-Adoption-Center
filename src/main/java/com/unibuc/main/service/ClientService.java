@@ -64,13 +64,6 @@ public class ClientService {
         }
     }
 
-    public String getClientNumberByGender() {
-        Integer totalClients = clientRepository.totalClients();
-        Integer totalClientsMale = clientRepository.totalClientsMale();
-        Integer totalClientsFemale = totalClients - totalClientsMale;
-        return String.format(ProjectConstants.CLIENT_GENDERS, totalClients, totalClientsFemale, totalClientsMale);
-    }
-
     public ClientDto updateClientInfo(String oldFirstName, String oldLastName, PartialClientDto newClientInfo) {
         Optional<Client> client = clientRepository.findClientByName(oldFirstName, oldLastName);
         if (client.isEmpty()) {

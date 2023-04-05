@@ -40,11 +40,6 @@ public class CageService {
         return cageMapper.mapToCageDto(cage.get());
     }
 
-    public List<CageDto> getCagesWithoutACaretaker(){
-        return cageRepository.findAllByCaretakerNull()
-                .stream().map(c -> cageMapper.mapToCageDto(c))
-                .collect(Collectors.toList());
-    }
     public CageDto addCage(PartialCageDto partialCageDto) {
         Cage cage = cageMapper.mapPartialToCage(partialCageDto);
         if (partialCageDto.getCaretakerId() != null) {

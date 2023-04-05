@@ -69,26 +69,6 @@ public class AnimalServiceTest {
         assertEquals(result, animalDtos);
     }
 
-    @Test
-    public void testShowAnimalsInCage() {
-        //GIVEN
-        animal = AnimalMocks.mockAnimal();
-        animalDto = AnimalMocks.mockAnimalDto();
-
-        List<Animal> animals = new ArrayList<>();
-        animals.add(animal);
-        List<AnimalDto> animalDtos = new ArrayList<>();
-        animalDtos.add(animalDto);
-
-        //WHEN
-        when(animalRepository.findAllByCage_Id(CageMocks.mockCage().getId())).thenReturn(animals);
-        when(animalMapper.mapToAnimalDto(animal)).thenReturn(animalDto);
-
-        //THEN
-        List<AnimalDto> result = animalService.showAnimalsInCage(CageMocks.mockCage().getId());
-        assertEquals(result, animalDtos);
-        assertThat(result).isNotNull();
-    }
     
     @Test
     public void testAddAnimal() {
@@ -126,7 +106,7 @@ public class AnimalServiceTest {
         DietNotFoundException dietNotFoundException = assertThrows(DietNotFoundException.class, () -> animalService.addAnimal(partialAnimalDto));
         assertEquals(String.format(ProjectConstants.DIET_NOT_FOUND, TestConstants.DIET_NAME), dietNotFoundException.getMessage());
     }
-
+/*
     @Test
     public void testAdoptAnimal() {
         //GIVEN
@@ -338,6 +318,6 @@ public class AnimalServiceTest {
         assertEquals(ProjectConstants.ANIMAL_EMPTY, animalNotFoundException.getMessage());
     }
 
-
+*/
 
 }

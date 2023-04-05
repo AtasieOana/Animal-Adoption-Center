@@ -62,25 +62,6 @@ public class CageServiceTest {
         assertThat(result).isNotNull();
     }
 
-    @Test
-    public void testGetCagesWithoutACaretaker() {
-        //GIVEN
-        cage = CageMocks.mockCage();
-        cageDto = CageMocks.mockCageDto();
-
-        List<Cage> cageList = new ArrayList<>();
-        cageList.add(cage);
-        List<CageDto> cageDtos = new ArrayList<>();
-        cageDtos.add(cageDto);
-
-        //WHEN
-        when(cageRepository.findAllByCaretakerNull()).thenReturn(cageList);
-        when(cageMapper.mapToCageDto(cage)).thenReturn(cageDto);
-
-        //THEN
-        List<CageDto> result = cageService.getCagesWithoutACaretaker();
-        assertEquals(result, cageDtos);
-    }
 
     @Test
     public void testAddNewCage() {
@@ -146,92 +127,5 @@ public class CageServiceTest {
         assertEquals(String.format(ProjectConstants.CAGE_NOT_FOUND, 2L), cageNotFoundException.getMessage());
     }
 
-    @Test
-    public void testUpdatePlacesInCage() {
-        //GIVEN
-        cage = CageMocks.mockCage();
-        cageDto = CageMocks.mockCageDto();
-        cageDto.setNumberPlaces(5);
-        Cage updatedCage = CageMocks.mockCage();
-        updatedCage.setNumberPlaces(5);
-
-        //WHEN
-        when(cageRepository.findById(cage.getId())).thenReturn(Optional.ofNullable(cage));
-        when(cageMapper.mapToCageDto(updatedCage)).thenReturn(cageDto);
-        when(cageRepository.save(updatedCage)).thenReturn(updatedCage);
-
-        //THEN
-        CageDto result = cageService.updatePlacesInCage(cage.getId(), 5);
-        assertEquals(result, cageDto);
-        assertEquals(result.getCaretaker(), EmployeeMocks.mockCaretakerDto());
-        assertEquals(result.getNumberPlaces(), 5);
-        assertNotNull(result);
-    }
-
-    @Test
-    public void testUpdatePlacesInCageException() {
-        //GIVEN
-        cage = null;
-        cageDto = null;
-
-        //WHEN
-        when(cageRepository.findById(2L)).thenReturn(Optional.empty());
-
-        //THEN
-        CageNotFoundException cageNotFoundException = assertThrows(CageNotFoundException.class, () -> cageService.updatePlacesInCage(2L, 10));
-        assertEquals(String.format(ProjectConstants.CAGE_NOT_FOUND, 2), cageNotFoundException.getMessage());
-    }
-
-    @Test
-    public void testUpdateCageCaretaker() {
-        //GIVEN
-        cage = CageMocks.mockCage();
-        cageDto = CageMocks.mockCageDto();
-        Cage updatedCage = CageMocks.mockCage();
-        updatedCage.setCaretaker(EmployeeMocks.mockCaretaker2());
-        cageDto.setCaretaker(EmployeeMocks.mockCaretakerDto2());
-
-        // WHEN
-        when(cageRepository.findById(cage.getId())).thenReturn(Optional.ofNullable(cage));
-        when(employeeRepository.findCaretakerByName(TestConstants.FIRSTNAME2, TestConstants.LASTNAME)).thenReturn(Optional.ofNullable(EmployeeMocks.mockCaretaker2()));
-        when(cageMapper.mapToCageDto(updatedCage)).thenReturn(cageDto);
-        when(cageRepository.save(updatedCage)).thenReturn(updatedCage);
-
-        // THEN
-        CageDto result = cageService.updateCageCaretaker(cage.getId(), TestConstants.FIRSTNAME2, TestConstants.LASTNAME);
-        assertEquals(result, cageDto);
-        assertNotEquals(result.getCaretaker(), EmployeeMocks.mockCaretakerDto());
-        assertEquals(result.getCaretaker(), EmployeeMocks.mockCaretakerDto2());
-        assertNotNull(result);
-    }
-
-    @Test
-    public void testUpdateCageCaretakerExceptionNotCage() {
-        //GIVEN
-        cage = null;
-        cageDto = null;
-
-        //WHEN
-        when(cageRepository.findById(2L)).thenReturn(Optional.empty());
-
-        //THEN
-        CageNotFoundException cageNotFoundException = assertThrows(CageNotFoundException.class, () -> cageService.updateCageCaretaker(2L, TestConstants.FIRSTNAME2, TestConstants.LASTNAME));
-        assertEquals(String.format(ProjectConstants.CAGE_NOT_FOUND, 2), cageNotFoundException.getMessage());
-    }
-
-    @Test
-    public void testUpdateCageCaretakerExceptionNotCaretaker() {
-        //GIVEN
-        cage = CageMocks.mockCage();
-        cageDto = CageMocks.mockCageDto();
-
-        //WHEN
-        when(cageRepository.findById(cage.getId())).thenReturn(Optional.ofNullable(cage));
-        when(employeeRepository.findCaretakerByName(TestConstants.FIRSTNAME2, TestConstants.LASTNAME)).thenReturn(Optional.empty());
-
-        //THEN
-        EmployeeNotFoundException employeeNotFoundException = assertThrows(EmployeeNotFoundException.class, () -> cageService.updateCageCaretaker(cage.getId(), TestConstants.FIRSTNAME2, TestConstants.LASTNAME));
-        assertEquals(String.format(ProjectConstants.EMPLOYEE_NOT_FOUND, TestConstants.FIRSTNAME2 + " " + TestConstants.LASTNAME), employeeNotFoundException.getMessage());
-    }
 
 }

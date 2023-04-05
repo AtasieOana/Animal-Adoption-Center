@@ -1,7 +1,7 @@
 package com.unibuc.main.controller;
 
 import com.unibuc.main.dto.EmployeeDto;
-import com.unibuc.main.service.employees.VetService;
+import com.unibuc.main.service.VetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

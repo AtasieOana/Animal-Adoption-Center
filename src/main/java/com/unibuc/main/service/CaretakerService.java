@@ -1,4 +1,4 @@
-package com.unibuc.main.service.employees;
+package com.unibuc.main.service;
 
 import com.unibuc.main.constants.ProjectConstants;
 import com.unibuc.main.dto.EmployeeDto;
@@ -17,7 +17,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class VetService implements EmployeeService {
+public class CaretakerService implements EmployeeService {
 
     @Autowired
     private EmployeeRepository employeeRepository;
@@ -27,14 +27,14 @@ public class VetService implements EmployeeService {
 
     @Override
     public List<EmployeeDto> getAllEmployees() {
-        return employeeRepository.findAllByExperienceNotNull()
+        return employeeRepository.findAllByResponsibilityNotNull()
                 .stream().map(e -> employeeMapper.mapToEmployeeDto(e))
                 .collect(Collectors.toList());
     }
 
     @Override
     public EmployeeDto getEmployeeByName(String firstName, String lastName) {
-        Optional<Employee> employee = employeeRepository.findVetByName(firstName, lastName);
+        Optional<Employee> employee = employeeRepository.findCaretakerByName(firstName, lastName);
         if (employee.isEmpty()) {
             throw new EmployeeNotFoundException(String.format(ProjectConstants.EMPLOYEE_NOT_FOUND, firstName + ' ' + lastName));
         }
@@ -43,18 +43,18 @@ public class VetService implements EmployeeService {
 
     @Override
     public EmployeeDto addNewEmployee(EmployeeDto employeeDto) {
-        if(employeeRepository.findVetByName(employeeDto.getFirstName(), employeeDto.getLastName()).isPresent()){
+        if(employeeRepository.findCaretakerByName(employeeDto.getFirstName(), employeeDto.getLastName()).isPresent()){
             throw new EmployeeAlreadyExistsException(String.format(ProjectConstants.EMPLOYEE_EXISTS,employeeDto.getFirstName() + " " + employeeDto.getLastName()));
         }
-        if(employeeDto.getResponsibility() != null || employeeDto.getExperience() == null){
-            throw new EmployeeInfoWrongException(ProjectConstants.VET_WRONG_INFO);
+        if(employeeDto.getResponsibility() == null || employeeDto.getExperience() != null){
+            throw new EmployeeInfoWrongException(ProjectConstants.CARETAKER_WRONG_INFO);
         }
         return employeeMapper.mapToEmployeeDto(employeeRepository.save(employeeMapper.mapToEmployee(employeeDto)));
     }
 
     @Override
     public boolean deleteEmployee(String firstName, String lastName) {
-        Optional<Employee> employee = employeeRepository.findVetByName(firstName, lastName);
+        Optional<Employee> employee = employeeRepository.findCaretakerByName(firstName, lastName);
         if (employee.isEmpty()) {
             throw new EmployeeNotFoundException(String.format(ProjectConstants.EMPLOYEE_NOT_FOUND, firstName + ' ' + lastName));
         }
@@ -64,21 +64,27 @@ public class VetService implements EmployeeService {
 
     @Override
     public EmployeeDto updateEmployee(String oldFirstName, String oldLastName, EmployeeDto newEmployeeDto) {
-        Optional<Employee> employee = employeeRepository.findVetByName(oldFirstName, oldLastName);
-        if (employee.isEmpty()) {
+        Optional<Employee> employeeOpt = employeeRepository.findCaretakerByName(oldFirstName, oldLastName);
+        if (employeeOpt.isEmpty()) {
             throw new EmployeeNotFoundException(String.format(ProjectConstants.EMPLOYEE_NOT_FOUND, oldFirstName + ' ' + oldLastName));
         }
+
         String newFirstName = newEmployeeDto.getFirstName();
         String newLastName = newEmployeeDto.getLastName();
-        Optional<Employee> existingEmployeeOpt = employeeRepository.findVetByName(newFirstName, newLastName);
-        if (existingEmployeeOpt.isPresent() && !Objects.equals(existingEmployeeOpt.get().getId(), employee.get().getId())) {
+        Optional<Employee> existingEmployeeOpt = employeeRepository.findCaretakerByName(newFirstName, newLastName);
+        if (existingEmployeeOpt.isPresent() && !Objects.equals(existingEmployeeOpt.get().getId(), employeeOpt.get().getId())) {
             throw new EmployeeAlreadyExistsException(String.format(ProjectConstants.EMPLOYEE_EXISTS, newFirstName + ' ' + newLastName));
         }
-        if(newEmployeeDto.getResponsibility() != null || newEmployeeDto.getExperience() == null){
-            throw new EmployeeInfoWrongException(String.format(ProjectConstants.VET_WRONG_INFO));
+
+        if (newEmployeeDto.getResponsibility() == null || newEmployeeDto.getExperience() != null) {
+            throw new EmployeeInfoWrongException(String.format(ProjectConstants.CARETAKER_WRONG_INFO));
         }
+
+        Employee existingEmployee = employeeOpt.get();
         Employee newEmployee = employeeMapper.mapToEmployee(newEmployeeDto);
-        newEmployee.setId(employee.get().getId());
+        newEmployee.setId(existingEmployee.getId());
+
         return employeeMapper.mapToEmployeeDto(employeeRepository.save(newEmployee));
     }
+
 }

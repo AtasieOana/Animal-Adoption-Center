@@ -6,10 +6,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import java.sql.SQLIntegrityConstraintViolationException;
-import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
+import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class ExceptionControllerAdvice {
@@ -35,7 +35,7 @@ public class ExceptionControllerAdvice {
     }
 
     @ExceptionHandler
-    public ResponseEntity<String> handleInvalidField(MethodArgumentNotValidException exception){
+    public ResponseEntity<String> handleInvalidField(MethodArgumentNotValidException exception) {
         String invalidFields = "Invalid fields: \n"
                 + exception.getBindingResult().getFieldErrors().stream()
                 .map(e -> "Field: " + e.getField() + ", error: " + e.getDefaultMessage() + ", value: " + e.getRejectedValue())

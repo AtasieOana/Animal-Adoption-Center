@@ -49,7 +49,7 @@
                                     <p th:text="${animal.foundDate}">Found date</p>
                                 </div>
                             </div>
-                            <div class="row">
+                            <div class="row" th:if="${animal.dietDto == null}">
                                 <div class="col-md-5">
                                     <h5>Diet:</h5>
                                 </div>

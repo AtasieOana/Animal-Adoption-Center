@@ -36,6 +36,9 @@ public class AnimalService {
     @Autowired
     private DietRepository dietRepository;
 
+    @Autowired
+    private MedicalRecordService medicalRecordService;
+
     public List<AnimalDto> getAllAnimals() {
         return animalRepository.findAll()
                 .stream().map(a -> animalMapper.mapToAnimalDto(a))
@@ -97,6 +100,9 @@ public class AnimalService {
         if(animalsAdopted.isEmpty()){
             return ProjectConstants.NO_ADOPTED_ANIMALS;
         }
+        System.out.println("inainte");
+        medicalRecordService.deleteMedicalRecordAnimals(animalsAdopted);
+        System.out.println("dupa");
         animalRepository.deleteAll(animalsAdopted);
         return ProjectConstants.DELETED_ADOPTED_ANIMALS;
     }

@@ -8,23 +8,20 @@ import org.springframework.stereotype.Component;
 @Component
 public class MedicalRecordMapper {
 
-    public MedicalRecord mapToMedicalRecord(MedicalRecordDto medicalRecordDto) {
-        return MedicalRecord.builder()
-                .id(medicalRecordDto.getId())
-                .generalHealthState(medicalRecordDto.getGeneralHealthState())
-                .generationDate(medicalRecordDto.getGenerationDate())
-                .build();
-    }
-
     public MedicalRecordDto mapToMedicalRecordDto(MedicalRecord medicalRecord){
-        return MedicalRecordDto.builder()
+        MedicalRecordDto medicalRecordDto =  MedicalRecordDto.builder()
                 .id(medicalRecord.getId())
                 .generalHealthState(medicalRecord.getGeneralHealthState())
                 .generationDate(medicalRecord.getGenerationDate())
                 .animalId(medicalRecord.getAnimal().getId())
-                .vetFirstName(medicalRecord.getVet().getPersonDetails().getFirstName())
-                .vetLastName(medicalRecord.getVet().getPersonDetails().getLastName())
                 .build();
+
+        if(medicalRecord.getVet() != null){
+            medicalRecordDto.setVetLastName(medicalRecord.getVet().getPersonDetails().getLastName());
+            medicalRecordDto.setVetFirstName(medicalRecord.getVet().getPersonDetails().getFirstName());
+        }
+
+        return medicalRecordDto;
     }
 
     public MedicalRecord mapToMedicalRecord(AddMedicalRecordDto addMedicalRecordDto) {

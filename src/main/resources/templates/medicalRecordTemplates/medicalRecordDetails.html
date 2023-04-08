@@ -46,7 +46,7 @@
                                     <p th:text="${medicalRecord.animalId}">Animal id</p>
                                 </div>
                             </div>
-                            <div class="row">
+                            <div class="row" th:if="${medicalRecord.vetFirstName != null}">
                                 <div class="col-md-5">
                                     <h5>Vet name:</h5>
                                 </div>

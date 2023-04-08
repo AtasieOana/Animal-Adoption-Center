@@ -18,31 +18,16 @@ public class AnimalMapper {
     @Autowired
     private DietMapper dietMapper;
 
-    public Animal mapToAnimal(AnimalDto animalDto) {
-        Animal animal = Animal.builder()
-                .id(animalDto.getId())
-                .animalType(animalDto.getAnimalType())
-                .birthYear(animalDto.getBirthYear())
-                .foundDate(animalDto.getFoundDate())
-                .diet(dietMapper.mapToDiet(animalDto.getDietDto()))
-                .build();
-        if(animalDto.getCageDto() != null) {
-            animal.setCage(cageMapper.mapToCage((animalDto.getCageDto())));
-        }
-        if(animalDto.getClientDto() != null) {
-            animal.setClient(clientMapper.mapToClient(animalDto.getClientDto()));
-        }
-        return animal;
-    }
-
     public AnimalDto mapToAnimalDto(Animal animal){
         AnimalDto animalDto = AnimalDto.builder()
                 .id(animal.getId())
                 .animalType(animal.getAnimalType())
                 .birthYear(animal.getBirthYear())
                 .foundDate(animal.getFoundDate())
-                .dietDto(dietMapper.mapToDietDto(animal.getDiet()))
                 .build();
+        if(animal.getDiet() != null) {
+            animalDto.setDietDto(dietMapper.mapToDietDto(animal.getDiet()));
+        }
         if(animal.getCage() != null) {
             animalDto.setCageDto(cageMapper.mapToCageDto((animal.getCage())));
         }
@@ -60,13 +45,4 @@ public class AnimalMapper {
                 .build();
     }
 
-    public PartialAnimalDto mapToPartialAnimalDto(Animal animal){
-        return PartialAnimalDto.builder()
-                .animalType(animal.getAnimalType())
-                .birthYear(animal.getBirthYear())
-                .foundDate(animal.getFoundDate())
-                .dietType(animal.getDiet().getDietType())
-                .cageId(animal.getCage().getId())
-                .build();
-    }
 }

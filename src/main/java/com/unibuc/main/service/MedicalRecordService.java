@@ -88,5 +88,14 @@ public class MedicalRecordService {
         Page<MedicalRecordDto> medicalRecordPage = medicalRecordRepository.findAll(pageable).map(medicalRecord -> medicalRecordMapper.mapToMedicalRecordDto(medicalRecord));
         return medicalRecordPage;
     }
+
+    public Boolean deleteMedicalRecordAnimals(List<Animal> adoptedAnimals)  {
+        System.out.println(medicalRecordRepository.findMedicalRecordsByAnimalsId(adoptedAnimals.stream().map(Animal::getId).collect(Collectors.toList())));
+
+        List<MedicalRecord> medicalRecords = medicalRecordRepository.findMedicalRecordsByAnimalsId(adoptedAnimals.stream().map(Animal::getId).collect(Collectors.toList()));
+        System.out.println(medicalRecords);
+        medicalRecordRepository.deleteAll(medicalRecords);
+        return true;
+    }
     
 }

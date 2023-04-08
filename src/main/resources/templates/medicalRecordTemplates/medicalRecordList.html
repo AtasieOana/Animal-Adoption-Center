@@ -40,10 +40,13 @@
                         <p th:text="${medicalRecord.animalId}"></p>
                     </a>
                 </td>
-                <td >
+                <td th:if="${medicalRecord.vetFirstName != null}">
                     <a th:href="@{'/vets/' + ${medicalRecord.vetFirstName + '/' + medicalRecord.vetLastName}}">
                         <p th:text="${medicalRecord.vetFirstName + ' ' + medicalRecord.vetLastName}"></p>
                     </a>
+                </td>
+                <td th:if="${medicalRecord.vetFirstName == null}" >
+                    No vet
                 </td>
                 <td><a th:href="@{'/medicalRecords/' + ${medicalRecord.id}}"><i class="fas fa-info-circle mx-1"></i></a></td>
                 <td><a th:href="@{'/medicalRecords/edit/' + ${medicalRecord.id}}"><i class="fas fa-pen mx-1"></i></a></td>

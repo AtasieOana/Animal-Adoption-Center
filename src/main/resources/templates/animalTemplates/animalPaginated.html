@@ -43,10 +43,13 @@
                 <td th:text="${animal.animalType}">Animal type</td>
                 <td th:text="${animal.birthYear}">Birth year</td>
                 <td th:text="${animal.foundDate}">Found date</td>
-                <td>
+                <td th:if="${animal.dietDto != null}">
                     <a th:href="@{'/diets/' + ${animal.dietDto.dietType}}">
                         <p th:text="${animal.dietDto.dietType}"></p>
                     </a>
+                </td>
+                <td th:if="${animal.dietDto == null}" >
+                    No diet
                 </td>
                 <td th:if="${animal.cageDto != null}" >
                     <a th:href="@{'/animals/' + ${animal.cageDto.id}}">

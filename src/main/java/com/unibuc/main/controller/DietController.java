@@ -3,6 +3,8 @@ package com.unibuc.main.controller;
 import com.unibuc.main.dto.DietDto;
 import com.unibuc.main.service.DietService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -11,7 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/diets")
@@ -20,6 +22,18 @@ public class DietController {
     @Autowired
     private DietService dietService;
 
+    @RequestMapping("")
+    public String getDietsPage(Model model,
+                               @RequestParam("page") Optional<Integer> page,
+                               @RequestParam("size") Optional<Integer> size) {
+        int currentPage = page.orElse(1);
+        int pageSize = size.orElse(5);
+        Page<DietDto> dietPage = dietService.findPaginatedDiets(PageRequest.of(currentPage - 1, pageSize));
+        model.addAttribute("dietPage",dietPage);
+        return "dietTemplates/dietPaginated";
+    }
+
+    /*
     @GetMapping("")
     public ModelAndView getAllDiets(){
         ModelAndView modelAndView = new ModelAndView("/dietTemplates/dietList");
@@ -27,6 +41,7 @@ public class DietController {
         modelAndView.addObject("diets",diets);
         return modelAndView;
     }
+    */
 
     @GetMapping("/{dietType}")
     public ModelAndView getDietByType(@PathVariable String dietType){

@@ -5,6 +5,8 @@ import com.unibuc.main.dto.PartialCageDto;
 import com.unibuc.main.repository.EmployeeRepository;
 import com.unibuc.main.service.CageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/cages")
@@ -24,6 +26,18 @@ public class CageController {
     @Autowired
     private EmployeeRepository employeeRepository;
 
+    @RequestMapping("")
+    public String getCagesPage(Model model,
+                               @RequestParam("page") Optional<Integer> page,
+                               @RequestParam("size") Optional<Integer> size) {
+        int currentPage = page.orElse(1);
+        int pageSize = size.orElse(5);
+        Page<CageDto> cagePage = cageService.findPaginatedCages(PageRequest.of(currentPage - 1, pageSize));
+        model.addAttribute("cagePage",cagePage);
+        return "cageTemplates/cagePaginated";
+    }
+
+    /*
     @GetMapping("")
     public ModelAndView cages(){
         ModelAndView modelAndView = new ModelAndView("/cageTemplates/cageList");
@@ -31,6 +45,7 @@ public class CageController {
         modelAndView.addObject("cages",cageList);
         return modelAndView;
     }
+    */
 
     @GetMapping("/{cageId}")
     public ModelAndView getCageById(@PathVariable Long cageId){

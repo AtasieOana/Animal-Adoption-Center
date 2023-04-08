@@ -2,7 +2,6 @@ package com.unibuc.main.service;
 
 import com.unibuc.main.constants.ProjectConstants;
 import com.unibuc.main.dto.AnimalDto;
-import com.unibuc.main.dto.CageDto;
 import com.unibuc.main.dto.PartialAnimalDto;
 import com.unibuc.main.entity.Animal;
 import com.unibuc.main.entity.Cage;
@@ -15,6 +14,8 @@ import com.unibuc.main.repository.CageRepository;
 import com.unibuc.main.repository.ClientRepository;
 import com.unibuc.main.repository.DietRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -98,5 +99,10 @@ public class AnimalService {
         }
         animalRepository.deleteAll(animalsAdopted);
         return ProjectConstants.DELETED_ADOPTED_ANIMALS;
+    }
+
+    public Page<AnimalDto> findPaginatedAnimals(Pageable pageable) {
+        Page<AnimalDto> animalPage = animalRepository.findAll(pageable).map(animal -> animalMapper.mapToAnimalDto(animal));
+        return animalPage;
     }
 }

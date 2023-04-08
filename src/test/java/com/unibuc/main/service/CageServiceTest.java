@@ -52,6 +52,7 @@ public class CageServiceTest {
         //GIVEN
         cage = CageMocks.mockCage();
         cageDto = CageMocks.mockCageDto();
+
         //WHEN
         when(cageRepository.findById(cage.getId())).thenReturn(Optional.ofNullable(cage));
         when(cageMapper.mapToCageDto(cage)).thenReturn(cageDto);
@@ -62,7 +63,6 @@ public class CageServiceTest {
         assertThat(result).isNotNull();
     }
 
-
     @Test
     public void testAddNewCage() {
         //GIVEN
@@ -72,7 +72,7 @@ public class CageServiceTest {
 
         //WHEN
         when(cageMapper.mapPartialToCage(partialCageDto)).thenReturn(cage);
-        when(employeeRepository.findCaretakerByName(TestConstants.FIRSTNAME, TestConstants.LASTNAME)).thenReturn(Optional.ofNullable(EmployeeMocks.mockCaretaker()));
+        when(employeeRepository.findById(partialCageDto.getCaretakerId())).thenReturn(Optional.ofNullable(EmployeeMocks.mockCaretaker()));
         when(cageMapper.mapToCageDto(cage)).thenReturn(cageDto);
         when(cageRepository.save(cage)).thenReturn(cage);
 
@@ -93,11 +93,11 @@ public class CageServiceTest {
 
         //WHEN
         when(cageMapper.mapPartialToCage(partialCageDto)).thenReturn(cage);
-        when(employeeRepository.findCaretakerByName(TestConstants.FIRSTNAME, TestConstants.LASTNAME)).thenReturn(Optional.empty());
+        when(employeeRepository.findById(partialCageDto.getCaretakerId())).thenReturn(Optional.empty());
 
         //THEN
         EmployeeNotFoundException employeeNotFoundException = assertThrows(EmployeeNotFoundException.class, () -> cageService.addCage(partialCageDto));
-        assertEquals(String.format(ProjectConstants.EMPLOYEE_NOT_FOUND, TestConstants.FIRSTNAME + " " + TestConstants.LASTNAME), employeeNotFoundException.getMessage());
+        assertEquals(String.format(ProjectConstants.EMP_ID_NOT_FOUND, partialCageDto.getCaretakerId()), employeeNotFoundException.getMessage());
     }
 
 

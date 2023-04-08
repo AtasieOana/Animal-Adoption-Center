@@ -4,6 +4,8 @@ import com.unibuc.main.dto.ClientDto;
 import com.unibuc.main.dto.PartialClientDto;
 import com.unibuc.main.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -11,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/clients")
@@ -20,6 +22,22 @@ public class ClientController {
     @Autowired
     private ClientService clientService;
 
+    @RequestMapping("")
+    public String getClientsPage(Model model,
+                                 @RequestParam("page") Optional<Integer> page,
+                                 @RequestParam("size") Optional<Integer> size) {
+        int currentPage = page.orElse(1);
+        int pageSize = size.orElse(3);
+        Page<ClientDto> clientPage = clientService.findPaginatedClients(PageRequest.of(currentPage - 1, pageSize));
+        model.addAttribute("clientPage", clientPage);
+
+        Integer avgAge = clientService.getAvgAgeForClient();
+        model.addAttribute("avgAge", avgAge);
+
+        return "clientTemplates/clientPaginated";
+    }
+    
+    /*
     @GetMapping("")
     public ModelAndView getAllClients(){
         ModelAndView modelAndView = new ModelAndView("clientTemplates/clientList");
@@ -30,7 +48,8 @@ public class ClientController {
         modelAndView.addObject("avgAge",avgAge);
         return modelAndView;
     }
-
+    */
+    
     @GetMapping("/{firstName}/{lastName}")
     public ModelAndView getClientByName(@PathVariable String firstName, @PathVariable String lastName){
         ModelAndView modelAndView = new ModelAndView("/clientTemplates/clientDetails");

@@ -7,7 +7,8 @@ import com.unibuc.main.repository.MedicalRecordRepository;
 import com.unibuc.main.repository.VaccineRepository;
 import com.unibuc.main.service.RegisteredVaccineService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/registeredVaccines")
@@ -33,6 +34,18 @@ public class RegisteredVaccineController {
     @Autowired
     private RegisteredVaccineMapper registeredVaccineMapper;
 
+    @RequestMapping("")
+    public String getRegisteredVaccinesPage(Model model,
+                                 @RequestParam("page") Optional<Integer> page,
+                                 @RequestParam("size") Optional<Integer> size) {
+        int currentPage = page.orElse(1);
+        int pageSize = size.orElse(3);
+        Page<RegisteredVaccineDto> registeredVaccinePage = registeredVaccineService.findPaginatedRegisteredVaccines(PageRequest.of(currentPage - 1, pageSize));
+        model.addAttribute("registeredVaccinePage",registeredVaccinePage);
+        return "registeredVaccineTemplates/registeredVaccinePaginated";
+    }
+    
+    /*
     @GetMapping("")
     public ModelAndView registeredVaccines(){
         ModelAndView modelAndView = new ModelAndView("/registeredVaccineTemplates/registeredVaccineList");
@@ -40,7 +53,8 @@ public class RegisteredVaccineController {
         modelAndView.addObject("registeredVaccines",registeredVaccineList);
         return modelAndView;
     }
-
+    */
+    
     @GetMapping("/{medicalRecordId}")
     public ModelAndView getRegisteredVaccineByMedicalRecordId(@PathVariable Long medicalRecordId){
         ModelAndView modelAndView = new ModelAndView("/registeredVaccineTemplates/registeredVaccineDetails");

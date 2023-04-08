@@ -9,6 +9,8 @@ import com.unibuc.main.exception.VaccineNotFoundException;
 import com.unibuc.main.mapper.VaccineMapper;
 import com.unibuc.main.repository.VaccineRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -62,5 +64,10 @@ public class VaccineService {
         newVaccine.setQuantityOnStock(partialVaccineDto.getQuantityOnStock()  != null ? partialVaccineDto.getQuantityOnStock()  : vaccine.get().getQuantityOnStock());
         newVaccine.setExpirationDate(partialVaccineDto.getExpirationDate()  != null ? partialVaccineDto.getExpirationDate()  : vaccine.get().getExpirationDate());
         return vaccineMapper.mapToVaccineDto(vaccineRepository.save(newVaccine));
+    }
+
+    public Page<VaccineDto> findPaginatedVaccines(Pageable pageable) {
+        Page<VaccineDto> vaccinePage = vaccineRepository.findAll(pageable).map(vaccine -> vaccineMapper.mapToVaccineDto(vaccine));
+        return vaccinePage;
     }
 }

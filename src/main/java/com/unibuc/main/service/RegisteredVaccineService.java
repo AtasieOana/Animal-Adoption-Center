@@ -8,7 +8,6 @@ import com.unibuc.main.entity.MedicalRecord;
 import com.unibuc.main.entity.RegisteredVaccine;
 import com.unibuc.main.entity.Vaccine;
 import com.unibuc.main.exception.MedicalRecordNotFoundException;
-import com.unibuc.main.exception.RegisteredVaccineNotFoundException;
 import com.unibuc.main.exception.VaccineNotFoundException;
 import com.unibuc.main.mapper.MedicalRecordMapper;
 import com.unibuc.main.mapper.RegisteredVaccineMapper;
@@ -17,6 +16,9 @@ import com.unibuc.main.repository.MedicalRecordRepository;
 import com.unibuc.main.repository.RegisteredVaccineRepository;
 import com.unibuc.main.repository.VaccineRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -146,4 +148,9 @@ public class RegisteredVaccineService {
         return true;
     }
 
+    public Page<RegisteredVaccineDto> findPaginatedRegisteredVaccines(Pageable pageable) {
+        List<RegisteredVaccineDto> registeredVaccineDtoList = getAllRegisteredVaccines();
+        Page<RegisteredVaccineDto> registeredVaccinePage = new PageImpl<>(registeredVaccineDtoList, pageable, registeredVaccineDtoList.size());
+        return registeredVaccinePage;
+    }
 }

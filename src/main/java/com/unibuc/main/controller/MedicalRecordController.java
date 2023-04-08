@@ -7,6 +7,8 @@ import com.unibuc.main.repository.AnimalRepository;
 import com.unibuc.main.repository.EmployeeRepository;
 import com.unibuc.main.service.MedicalRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/medicalRecords")
@@ -29,6 +31,18 @@ public class MedicalRecordController {
     @Autowired
     private EmployeeRepository employeeRepository;
 
+    @RequestMapping("")
+    public String getMedicalRecordsPage(Model model,
+                                 @RequestParam("page") Optional<Integer> page,
+                                 @RequestParam("size") Optional<Integer> size) {
+        int currentPage = page.orElse(1);
+        int pageSize = size.orElse(3);
+        Page<MedicalRecordDto> medicalRecordPage = medicalRecordService.findPaginatedMedicalRecords(PageRequest.of(currentPage - 1, pageSize));
+        model.addAttribute("medicalRecordPage",medicalRecordPage);
+        return "medicalRecordTemplates/medicalRecordPaginated";
+    }
+
+    /*
     @GetMapping("")
     public ModelAndView medicalRecords(){
         ModelAndView modelAndView = new ModelAndView("/medicalRecordTemplates/medicalRecordList");
@@ -36,6 +50,7 @@ public class MedicalRecordController {
         modelAndView.addObject("medicalRecords",medicalRecordList);
         return modelAndView;
     }
+     */
 
     @GetMapping("/{medicalRecordId}")
     public ModelAndView getMedicalRecordById(@PathVariable Long medicalRecordId){

@@ -10,6 +10,8 @@ import com.unibuc.main.exception.EmployeeAlreadyExistsException;
 import com.unibuc.main.mapper.DietMapper;
 import com.unibuc.main.repository.DietRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -74,6 +76,11 @@ public class DietService {
             dietRepository.delete(diet.get());
             return ProjectConstants.DIET_DELETED;
         }
+    }
+
+    public Page<DietDto> findPaginatedDiets(Pageable pageable) {
+        Page<DietDto> dietPage = dietRepository.findAll(pageable).map(diet -> dietMapper.mapToDietDto(diet));;
+        return dietPage;
     }
 
 }

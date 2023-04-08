@@ -11,6 +11,8 @@ import com.unibuc.main.mapper.CageMapper;
 import com.unibuc.main.repository.CageRepository;
 import com.unibuc.main.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -81,5 +83,10 @@ public class CageService {
             throw new CageNotFoundException(String.format(ProjectConstants.CAGE_NOT_FOUND, id));
         }
         return cageMapper.mapCageToPartial(cage.get());
+    }
+
+    public Page<CageDto> findPaginatedCages(Pageable pageable) {
+        Page<CageDto> cagePage = cageRepository.findAll(pageable).map(cage -> cageMapper.mapToCageDto(cage));;
+        return cagePage;
     }
 }

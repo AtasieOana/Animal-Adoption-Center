@@ -8,6 +8,8 @@ import com.unibuc.main.service.AnimalService;
 import com.unibuc.main.service.CageService;
 import com.unibuc.main.service.DietService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,7 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/animals")
@@ -34,6 +36,18 @@ public class AnimalController {
     @Autowired
     private ClientRepository clientRepository;
 
+    @RequestMapping("")
+    public String getAnimalsPage(Model model,
+                                  @RequestParam("page") Optional<Integer> page,
+                                  @RequestParam("size") Optional<Integer> size) {
+        int currentPage = page.orElse(1);
+        int pageSize = size.orElse(3);
+        Page<AnimalDto> animalPage = animalService.findPaginatedAnimals(PageRequest.of(currentPage - 1, pageSize));
+        model.addAttribute("animalPage",animalPage);
+        return "animalTemplates/animalPaginated";
+    }
+
+    /*
     @GetMapping("")
     public ModelAndView animals(){
         ModelAndView modelAndView = new ModelAndView("/animalTemplates/animalList");
@@ -41,7 +55,8 @@ public class AnimalController {
         modelAndView.addObject("animals",animalList);
         return modelAndView;
     }
-
+     */
+    
     @GetMapping("/{animalId}")
     public ModelAndView getAnimalById(@PathVariable Long animalId){
         ModelAndView modelAndView = new ModelAndView("/animalTemplates/animalDetails");

@@ -9,6 +9,8 @@ import com.unibuc.main.exception.EmployeeNotFoundException;
 import com.unibuc.main.mapper.EmployeeMapper;
 import com.unibuc.main.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -80,5 +82,11 @@ public class VetService implements EmployeeService {
         Employee newEmployee = employeeMapper.mapToEmployee(newEmployeeDto);
         newEmployee.setId(employee.get().getId());
         return employeeMapper.mapToEmployeeDto(employeeRepository.save(newEmployee));
+    }
+
+    @Override
+    public Page<EmployeeDto> findPaginatedEmployees(Pageable pageable) {
+        Page<EmployeeDto> employeePage = employeeRepository.findAllByExperienceNotNull(pageable).map(employee -> employeeMapper.mapToEmployeeDto(employee));
+        return employeePage;
     }
 }

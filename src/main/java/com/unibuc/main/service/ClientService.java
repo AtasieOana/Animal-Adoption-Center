@@ -10,6 +10,8 @@ import com.unibuc.main.exception.ClientNotFoundException;
 import com.unibuc.main.mapper.ClientMapper;
 import com.unibuc.main.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -83,5 +85,9 @@ public class ClientService {
         return clientMapper.mapToClientDto(clientRepository.save(updateClient));
     }
 
+    public Page<ClientDto> findPaginatedClients(Pageable pageable) {
+        Page<ClientDto> clientPage = clientRepository.findAll(pageable).map(client -> clientMapper.mapToClientDto(client));
+        return clientPage;
+    }
 
 }

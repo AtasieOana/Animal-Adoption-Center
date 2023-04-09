@@ -9,34 +9,69 @@ import com.unibuc.main.entity.Employee;
 import com.unibuc.main.entity.PersonDetails;
 import com.unibuc.main.entity.Vaccine;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
 public class VaccineMocks {
 
+    static SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
 
     public static Vaccine mockVaccine() {
-        return Vaccine.builder()
-                .id(1L)
-                .vaccineName(TestConstants.VACCINE_NAME)
-                .expirationDate(new Date(2022,Calendar.NOVEMBER,10))
-                .quantityOnStock(0)
-                .build();
+        String date_string = "26-09-2021";
+        try {
+            Date date = formatter.parse(date_string);
+            return Vaccine.builder()
+                    .id(1L)
+                    .vaccineName(TestConstants.VACCINE_NAME)
+                    .expirationDate(date)
+                    .quantityOnStock(0)
+                    .build();
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static VaccineDto mockVaccineDto() {
-        return VaccineDto.builder()
-                .vaccineName(TestConstants.VACCINE_NAME)
-                .expirationDate(new Date(2022,Calendar.NOVEMBER,10))
-                .quantityOnStock(0)
-                .build();
+        String date_string = "26-09-2021";
+        try {
+            Date date = formatter.parse(date_string);
+            return VaccineDto.builder()
+                    .vaccineName(TestConstants.VACCINE_NAME)
+                    .expirationDate(date)
+                    .quantityOnStock(0)
+                    .build();
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static PartialVaccineDto mockPartialVaccineDto() {
-        return PartialVaccineDto.builder()
-                .expirationDate(new Date(2022,Calendar.NOVEMBER,10))
-                .quantityOnStock(0)
-                .build();
+        String date_string = "26-09-2021";
+        try {
+            Date date = formatter.parse(date_string);
+            return PartialVaccineDto.builder()
+                    .expirationDate(date)
+                    .quantityOnStock(0)
+                    .build();
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static Vaccine mockVaccine2() {
+        String date_string = "26-09-2024";
+        try {
+            Date date = formatter.parse(date_string);
+            return Vaccine.builder()
+                    .id(2L)
+                    .vaccineName(TestConstants.VACCINE_NAME2)
+                    .expirationDate(date)
+                    .quantityOnStock(0)
+                    .build();
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

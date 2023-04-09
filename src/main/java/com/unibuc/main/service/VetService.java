@@ -10,6 +10,7 @@ import com.unibuc.main.mapper.EmployeeMapper;
 import com.unibuc.main.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -86,7 +87,8 @@ public class VetService implements EmployeeService {
 
     @Override
     public Page<EmployeeDto> findPaginatedEmployees(Pageable pageable) {
-        Page<EmployeeDto> employeePage = employeeRepository.findAllByExperienceNotNull(pageable).map(employee -> employeeMapper.mapToEmployeeDto(employee));
+        List<EmployeeDto> employeeDtos = getAllEmployees();
+        Page<EmployeeDto> employeePage = new PageImpl<>(employeeDtos, pageable, employeeDtos.size());
         return employeePage;
     }
 }

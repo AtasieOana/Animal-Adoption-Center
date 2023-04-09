@@ -2,7 +2,7 @@ package com.unibuc.main.service;
 
 import com.unibuc.main.constants.ProjectConstants;
 import com.unibuc.main.dto.AnimalDto;
-import com.unibuc.main.dto.PartialAnimalDto;
+import com.unibuc.main.dto.AddAnimalDto;
 import com.unibuc.main.entity.Animal;
 import com.unibuc.main.entity.Cage;
 import com.unibuc.main.entity.Client;
@@ -59,20 +59,20 @@ public class AnimalService {
                 .findFirst().orElseThrow(() -> new AnimalNotFoundException(ProjectConstants.ANIMAL_EMPTY));
     }
 
-    public AnimalDto addAnimal(PartialAnimalDto partialAnimalDto) {
-        Optional<Diet> diet = dietRepository.findByDietType(partialAnimalDto.getDietType());
+    public AnimalDto addAnimal(AddAnimalDto addAnimalDto) {
+        Optional<Diet> diet = dietRepository.findByDietType(addAnimalDto.getDietType());
         if (diet.isEmpty()) {
-            throw new DietNotFoundException(String.format(ProjectConstants.DIET_NOT_FOUND, partialAnimalDto.getDietType()));
+            throw new DietNotFoundException(String.format(ProjectConstants.DIET_NOT_FOUND, addAnimalDto.getDietType()));
         }
-        Animal animal = animalMapper.mapPartialToAnimal(partialAnimalDto);
+        Animal animal = animalMapper.mapPartialToAnimal(addAnimalDto);
         animal.setDiet(diet.get());
-        Optional<Cage> cage = cageRepository.findById(partialAnimalDto.getCageId());
+        Optional<Cage> cage = cageRepository.findById(addAnimalDto.getCageId());
         if (cage.isEmpty()) {
-            throw new CageNotFoundException(String.format(ProjectConstants.CAGE_NOT_FOUND, partialAnimalDto.getCageId()));
+            throw new CageNotFoundException(String.format(ProjectConstants.CAGE_NOT_FOUND, addAnimalDto.getCageId()));
         }
         animal.setCage(cage.get());
-        if(animalRepository.findAllByCage_Id(partialAnimalDto.getCageId()).size() >= cage.get().getNumberPlaces()){
-            throw new NoPlaceInCageException(String.format(ProjectConstants.CAGE_FULL, partialAnimalDto.getCageId()));
+        if(animalRepository.findAllByCageId(addAnimalDto.getCageId()).size() >= cage.get().getNumberPlaces()){
+            throw new NoPlaceInCageException(String.format(ProjectConstants.CAGE_FULL, addAnimalDto.getCageId()));
         }
         return animalMapper.mapToAnimalDto(animalRepository.save(animal));
     }
@@ -100,9 +100,7 @@ public class AnimalService {
         if(animalsAdopted.isEmpty()){
             return ProjectConstants.NO_ADOPTED_ANIMALS;
         }
-        System.out.println("inainte");
         medicalRecordService.deleteMedicalRecordAnimals(animalsAdopted);
-        System.out.println("dupa");
         animalRepository.deleteAll(animalsAdopted);
         return ProjectConstants.DELETED_ADOPTED_ANIMALS;
     }

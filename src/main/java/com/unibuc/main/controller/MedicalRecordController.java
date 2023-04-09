@@ -2,7 +2,7 @@ package com.unibuc.main.controller;
 
 import com.unibuc.main.dto.AddMedicalRecordDto;
 import com.unibuc.main.dto.MedicalRecordDto;
-import com.unibuc.main.dto.PartialMedicalRecordDto;
+import com.unibuc.main.dto.EditMedicalRecordDto;
 import com.unibuc.main.repository.AnimalRepository;
 import com.unibuc.main.repository.EmployeeRepository;
 import com.unibuc.main.service.MedicalRecordService;
@@ -96,14 +96,14 @@ public class MedicalRecordController {
 
     @PostMapping("/updateMedicalRecord/{medicalRecordId}")
     public String editMedicalRecord(@PathVariable Long medicalRecordId,
-                           @ModelAttribute("medicalRecord") @Valid PartialMedicalRecordDto partialMedicalRecordDto,
+                           @ModelAttribute("medicalRecord") @Valid EditMedicalRecordDto editMedicalRecordDto,
                            BindingResult bindingResult, Model model){
         model.addAttribute("caretakersAll",employeeRepository.findAllByResponsibilityNotNull());
         if (bindingResult.hasErrors()) {
             return "/medicalRecordTemplates/editMedicalRecordForm";
         }
         try{
-            medicalRecordService.updateMedicalRecord(medicalRecordId, partialMedicalRecordDto);
+            medicalRecordService.updateMedicalRecord(medicalRecordId, editMedicalRecordDto);
         }catch (Exception exception){
             bindingResult.reject("globalError", exception.getMessage());
             return "/medicalRecordTemplates/editMedicalRecordForm";

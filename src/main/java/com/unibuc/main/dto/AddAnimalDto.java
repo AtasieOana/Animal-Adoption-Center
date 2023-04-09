@@ -15,7 +15,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Setter
 @Getter
-public class PartialAnimalDto {
+public class AddAnimalDto {
 
     @NotBlank(message = ProjectConstants.ANIMAL_TYPE_BLANK)
     private String animalType;

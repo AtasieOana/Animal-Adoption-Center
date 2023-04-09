@@ -1,7 +1,7 @@
 package com.unibuc.main.mapper;
 
 import com.unibuc.main.dto.AnimalDto;
-import com.unibuc.main.dto.PartialAnimalDto;
+import com.unibuc.main.dto.AddAnimalDto;
 import com.unibuc.main.entity.Animal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -37,7 +37,7 @@ public class AnimalMapper {
         return animalDto;
     }
 
-    public Animal mapPartialToAnimal(PartialAnimalDto animalDto) {
+    public Animal mapPartialToAnimal(AddAnimalDto animalDto) {
         return Animal.builder()
                 .animalType(animalDto.getAnimalType())
                 .birthYear(animalDto.getBirthYear())

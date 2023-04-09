@@ -2,6 +2,7 @@ package com.unibuc.main.service;
 
 import com.unibuc.main.constants.ProjectConstants;
 import com.unibuc.main.dto.EmployeeDto;
+import com.unibuc.main.dto.RegisteredVaccineDto;
 import com.unibuc.main.entity.Employee;
 import com.unibuc.main.exception.EmployeeAlreadyExistsException;
 import com.unibuc.main.exception.EmployeeInfoWrongException;
@@ -10,6 +11,7 @@ import com.unibuc.main.mapper.EmployeeMapper;
 import com.unibuc.main.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -91,7 +93,8 @@ public class CaretakerService implements EmployeeService {
     
     @Override
     public Page<EmployeeDto> findPaginatedEmployees(Pageable pageable) {
-        Page<EmployeeDto> employeePage = employeeRepository.findAllByResponsibilityNotNull(pageable).map(employee -> employeeMapper.mapToEmployeeDto(employee));
+        List<EmployeeDto> employeeDtos = getAllEmployees();
+        Page<EmployeeDto> employeePage = new PageImpl<>(employeeDtos, pageable, employeeDtos.size());
         return employeePage;
     }
 }

@@ -2,31 +2,30 @@ package com.unibuc.main.service;
 
 import com.unibuc.main.constants.ProjectConstants;
 import com.unibuc.main.constants.TestConstants;
+import com.unibuc.main.dto.AddMedicalRecordDto;
+import com.unibuc.main.dto.EditMedicalRecordDto;
 import com.unibuc.main.dto.MedicalRecordDto;
-import com.unibuc.main.dto.PartialMedicalRecordDto;
 import com.unibuc.main.entity.MedicalRecord;
 import com.unibuc.main.exception.AnimalNotFoundException;
 import com.unibuc.main.exception.EmployeeNotFoundException;
 import com.unibuc.main.exception.MedicalRecordNotFoundException;
-import com.unibuc.main.exception.VaccineNotFoundException;
 import com.unibuc.main.mapper.MedicalRecordMapper;
 import com.unibuc.main.repository.AnimalRepository;
 import com.unibuc.main.repository.EmployeeRepository;
 import com.unibuc.main.repository.MedicalRecordRepository;
-import com.unibuc.main.utils.AnimalMocks;
-import com.unibuc.main.utils.EmployeeMocks;
 import com.unibuc.main.utils.MedicalRecordMocks;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -52,28 +51,26 @@ public class MedicalRecordServiceTest {
 
     MedicalRecord medicalRecord;
     MedicalRecordDto medicalRecordDto;
-    PartialMedicalRecordDto partialMedicalRecordDto;
+    EditMedicalRecordDto editMedicalRecordDto;
+    AddMedicalRecordDto addMedicalRecordDto;
 
-    /*
     @Test
     public void testAddNewMedicalRecord() {
         //GIVEN
         medicalRecord = MedicalRecordMocks.mockMedicalRecord();
         medicalRecordDto = MedicalRecordMocks.mockMedicalRecordDto();
-
-        MedicalRecord updatedMedicalRecord = MedicalRecordMocks.mockMedicalRecord2();
-        MedicalRecordDto updatedMedicalRecordDto = MedicalRecordMocks.mockMedicalRecordDto2();
+        addMedicalRecordDto = MedicalRecordMocks.mockAddMedicalRecordDto();
 
         //WHEN
-        when(medicalRecordMapper.mapToMedicalRecord(medicalRecordDto)).thenReturn(medicalRecord);
-        when(animalRepository.findById(medicalRecordDto.getAnimalId())).thenReturn(Optional.ofNullable(AnimalMocks.mockAnimal()));
-        when(employeeRepository.findVetByName(medicalRecordDto.getVetFirstName(), medicalRecordDto.getVetLastName())).thenReturn(Optional.ofNullable(EmployeeMocks.mockVet()));
-        when(medicalRecordMapper.mapToMedicalRecordDto(updatedMedicalRecord)).thenReturn(updatedMedicalRecordDto);
-        when(medicalRecordRepository.save(updatedMedicalRecord)).thenReturn(updatedMedicalRecord);
+        when(medicalRecordMapper.mapToMedicalRecord(addMedicalRecordDto)).thenReturn(medicalRecord);
+        when( animalRepository.findById(addMedicalRecordDto.getAnimalId())).thenReturn(Optional.ofNullable(medicalRecord.getAnimal()));
+        when(employeeRepository.findById(addMedicalRecordDto.getVetId())).thenReturn(Optional.ofNullable(medicalRecord.getVet()));
+        when(medicalRecordRepository.save(medicalRecord)).thenReturn(medicalRecord);
+        when(medicalRecordMapper.mapToMedicalRecordDto(medicalRecord)).thenReturn(medicalRecordDto);
 
         //THEN
-        MedicalRecordDto result = medicalRecordService.addMedicalRecord(medicalRecordDto);
-        assertEquals(result, updatedMedicalRecordDto);
+        MedicalRecordDto result = medicalRecordService.addMedicalRecord(addMedicalRecordDto);
+        assertEquals(result, medicalRecordDto);
         assertThat(result.getVetLastName()).isNotNull();
         assertThat(result.getAnimalId()).isNotNull();
         assertNotNull(result);
@@ -82,78 +79,126 @@ public class MedicalRecordServiceTest {
     @Test
     public void testAddNewMedicalRecordAnimalException() {
         //GIVEN
-        medicalRecord = MedicalRecordMocks.mockMedicalRecord2();
-        medicalRecordDto = MedicalRecordMocks.mockMedicalRecordDto2();
+        medicalRecord = MedicalRecordMocks.mockMedicalRecord();
+        medicalRecordDto = MedicalRecordMocks.mockMedicalRecordDto();
+        addMedicalRecordDto = MedicalRecordMocks.mockAddMedicalRecordDto();
 
         //WHEN
-        when(medicalRecordMapper.mapToMedicalRecord(medicalRecordDto)).thenReturn(medicalRecord);
+        when(medicalRecordMapper.mapToMedicalRecord(addMedicalRecordDto)).thenReturn(medicalRecord);
         when(animalRepository.findById(medicalRecordDto.getAnimalId())).thenReturn(Optional.empty());
 
         //THEN
-        AnimalNotFoundException animalNotFoundException = assertThrows(AnimalNotFoundException.class, () -> medicalRecordService.addMedicalRecord(medicalRecordDto));
+        AnimalNotFoundException animalNotFoundException = assertThrows(AnimalNotFoundException.class, () -> medicalRecordService.addMedicalRecord(addMedicalRecordDto));
         assertEquals(String.format(ProjectConstants.ANIMAL_NOT_FOUND, medicalRecordDto.getAnimalId()), animalNotFoundException.getMessage());
     }
 
     @Test
     public void testAddNewMedicalRecordVetException() {
         //GIVEN
-        medicalRecord = MedicalRecordMocks.mockMedicalRecord2();
-        medicalRecordDto = MedicalRecordMocks.mockMedicalRecordDto2();
-
-        //WHEN
-        when(medicalRecordMapper.mapToMedicalRecord(medicalRecordDto)).thenReturn(medicalRecord);
-        when(animalRepository.findById(medicalRecordDto.getAnimalId())).thenReturn(Optional.ofNullable(AnimalMocks.mockAnimal()));
-        when(employeeRepository.findVetByName(medicalRecordDto.getVetFirstName(), medicalRecordDto.getVetLastName())).thenReturn(Optional.empty());
-
-        //THEN
-        EmployeeNotFoundException employeeNotFoundException = assertThrows(EmployeeNotFoundException.class, () -> medicalRecordService.addMedicalRecord(medicalRecordDto));
-        assertEquals(String.format(ProjectConstants.EMPLOYEE_NOT_FOUND, TestConstants.FIRSTNAME + " " + TestConstants.LASTNAME), employeeNotFoundException.getMessage());
-    }
-
-    @Test
-    public void testDeleteMedicalRecordBeforeADate() throws ParseException {
-        //GIVEN
         medicalRecord = MedicalRecordMocks.mockMedicalRecord();
         medicalRecordDto = MedicalRecordMocks.mockMedicalRecordDto();
-        List<MedicalRecord> medicalRecordList = new ArrayList<>();
-        medicalRecordList.add(medicalRecord);
+        addMedicalRecordDto = MedicalRecordMocks.mockAddMedicalRecordDto();
 
         //WHEN
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        when(medicalRecordRepository.findAllByGenerationDateBefore((simpleDateFormat.parse("2022-01-01")))).thenReturn(medicalRecordList);
+        when(medicalRecordMapper.mapToMedicalRecord(addMedicalRecordDto)).thenReturn(medicalRecord);
+        when( animalRepository.findById(addMedicalRecordDto.getAnimalId())).thenReturn(Optional.ofNullable(medicalRecord.getAnimal()));
+        when(employeeRepository.findById(addMedicalRecordDto.getVetId())).thenReturn(Optional.empty());
 
         //THEN
-        String result = medicalRecordService.deleteMedicalRecordBeforeADate("2022-01-01");
-        assertEquals(result, ProjectConstants.DELETED_RECORDS);
+        EmployeeNotFoundException employeeNotFoundException = assertThrows(EmployeeNotFoundException.class, () -> medicalRecordService.addMedicalRecord(addMedicalRecordDto));
+        assertEquals(String.format(ProjectConstants.EMP_ID_NOT_FOUND, addMedicalRecordDto.getVetId()), employeeNotFoundException.getMessage());
     }
 
     @Test
-    public void testDeleteMedicalRecordBeforeADateEmpty() throws ParseException {
+    public void testGetAllMedicalRecords() {
         //GIVEN
         medicalRecord = MedicalRecordMocks.mockMedicalRecord();
         medicalRecordDto = MedicalRecordMocks.mockMedicalRecordDto();
 
+        List<MedicalRecord> medicalRecords = new ArrayList<>();
+        medicalRecords.add(medicalRecord);
+        List<MedicalRecordDto> medicalRecordDtos = new ArrayList<>();
+        medicalRecordDtos.add(medicalRecordDto);
+
         //WHEN
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        when(medicalRecordRepository.findAllByGenerationDateBefore((simpleDateFormat.parse("2022-01-01")))).thenReturn(new ArrayList<>());
+        when(medicalRecordRepository.findAll()).thenReturn(medicalRecords);
+        when(medicalRecordMapper.mapToMedicalRecordDto(medicalRecord)).thenReturn(medicalRecordDto);
 
         //THEN
-        String result = medicalRecordService.deleteMedicalRecordBeforeADate("2022-01-01");
-        assertEquals(result, ProjectConstants.NO_RECORD_BEFORE);
+        List<MedicalRecordDto> result = medicalRecordService.getAllMedicalRecords();
+        assertEquals(result, medicalRecordDtos);
+    }
+
+    @Test
+    public void testGetMedicalRecordById() {
+        //GIVEN
+        medicalRecord = MedicalRecordMocks.mockMedicalRecord();
+        medicalRecordDto = MedicalRecordMocks.mockMedicalRecordDto();
+
+        //WHEN
+        when(medicalRecordRepository.findById(medicalRecord.getId())).thenReturn(Optional.ofNullable(medicalRecord));
+        when(medicalRecordMapper.mapToMedicalRecordDto(medicalRecord)).thenReturn(medicalRecordDto);
+
+        //THEN
+        MedicalRecordDto result = medicalRecordService.getMedicalRecordById(medicalRecord.getId());
+        assertEquals(result, medicalRecordDto);
+        assertThat(result).isNotNull();
+    }
+
+    @Test
+    public void testGetMedicalRecordByIdException() {
+        //GIVEN
+        medicalRecord = MedicalRecordMocks.mockMedicalRecord();
+        medicalRecordDto = MedicalRecordMocks.mockMedicalRecordDto();
+
+        //WHEN
+        when(medicalRecordRepository.findById(medicalRecord.getId())).thenReturn(Optional.empty());
+
+        //THEN
+        MedicalRecordNotFoundException medicalRecordNotFoundException = assertThrows(MedicalRecordNotFoundException.class, () -> medicalRecordService.getMedicalRecordById(medicalRecord.getId()));
+        assertEquals(String.format(ProjectConstants.RECORD_NOT_FOUND, medicalRecord.getId()), medicalRecordNotFoundException.getMessage());
+    }
+    
+    @Test
+    public void testDeleteMedicalById() {
+        //GIVEN
+        medicalRecord = MedicalRecordMocks.mockMedicalRecord();
+        medicalRecordDto = MedicalRecordMocks.mockMedicalRecordDto();
+
+        //WHEN
+        when(medicalRecordRepository.findById(medicalRecord.getId())).thenReturn(Optional.ofNullable(medicalRecord));
+
+        //THEN
+        Boolean result = medicalRecordService.deleteMedicalRecord(medicalRecord.getId());
+        assertEquals(result, true);
+    }
+
+    @Test
+    public void testDeleteMedicalByIdException() throws ParseException {
+        //GIVEN
+        medicalRecord = MedicalRecordMocks.mockMedicalRecord();
+        medicalRecordDto = MedicalRecordMocks.mockMedicalRecordDto();
+
+        //WHEN
+        when(medicalRecordRepository.findById(medicalRecord.getId())).thenReturn(Optional.empty());
+
+        //THEN
+        MedicalRecordNotFoundException medicalRecordNotFoundException = assertThrows(MedicalRecordNotFoundException.class, () -> medicalRecordService.deleteMedicalRecord(medicalRecord.getId()));
+        assertEquals(String.format(ProjectConstants.RECORD_NOT_FOUND, medicalRecord.getId()), medicalRecordNotFoundException.getMessage());
     }
 
 
     @Test
     public void testUpdateMedicalRecord() {
         //GIVEN
-        medicalRecord = MedicalRecordMocks.mockMedicalRecord2();
-        medicalRecordDto = MedicalRecordMocks.mockMedicalRecordDto2();
+        medicalRecord = MedicalRecordMocks.mockMedicalRecord();
+        medicalRecordDto = MedicalRecordMocks.mockMedicalRecordDto();
         medicalRecordDto.setGeneralHealthState("Bad");
 
-        partialMedicalRecordDto = MedicalRecordMocks.mockPartialMedicalRecordDto();
-        partialMedicalRecordDto.setGeneralHealthState("Bad");
+        editMedicalRecordDto = MedicalRecordMocks.mockEditMedicalRecordDto();
+        editMedicalRecordDto.setGeneralHealthState("Bad");
 
-        MedicalRecord updatedMedicalRecord = MedicalRecordMocks.mockMedicalRecord2();
+        MedicalRecord updatedMedicalRecord = MedicalRecordMocks.mockMedicalRecord();
         updatedMedicalRecord.setGeneralHealthState("Bad");
 
         //WHEN
@@ -162,7 +207,7 @@ public class MedicalRecordServiceTest {
         when(medicalRecordRepository.save(updatedMedicalRecord)).thenReturn(updatedMedicalRecord);
 
         //THEN
-        MedicalRecordDto result = medicalRecordService.updateMedicalRecord(medicalRecord.getId(), partialMedicalRecordDto);
+        MedicalRecordDto result = medicalRecordService.updateMedicalRecord(medicalRecord.getId(), editMedicalRecordDto);
         assertEquals(result, medicalRecordDto);
         assertEquals(result.getGeneralHealthState(), updatedMedicalRecord.getGeneralHealthState());
         assertNotNull(result);
@@ -178,9 +223,45 @@ public class MedicalRecordServiceTest {
         when(medicalRecordRepository.findById(2L)).thenReturn(Optional.ofNullable(medicalRecord));
 
         //THEN
-        MedicalRecordNotFoundException medicalRecordNotFoundException = assertThrows(MedicalRecordNotFoundException.class, () -> medicalRecordService.updateMedicalRecord(2L,partialMedicalRecordDto));
-        assertEquals(String.format(ProjectConstants.RECORD_NOT_FOUND, 2L), medicalRecordNotFoundException.getMessage());}
+        MedicalRecordNotFoundException medicalRecordNotFoundException = assertThrows(MedicalRecordNotFoundException.class, () -> medicalRecordService.updateMedicalRecord(2L, editMedicalRecordDto));
+        assertEquals(String.format(ProjectConstants.RECORD_NOT_FOUND, 2L), medicalRecordNotFoundException.getMessage());
+    }
 
+    @Test
+    public void testFindPaginatedMedicalRecords() {
+        //GIVEN
+        medicalRecord = MedicalRecordMocks.mockMedicalRecord();
+        medicalRecordDto = MedicalRecordMocks.mockMedicalRecordDto();
+        Pageable pageable = PageRequest.of(0,20);
 
-     */
+        List<MedicalRecord> medicalRecordList = new ArrayList<>();
+        medicalRecordList.add(medicalRecord);
+        List<MedicalRecordDto> medicalRecordDtos = new ArrayList<>();
+        medicalRecordDtos.add(medicalRecordDto);
+
+        //WHEN
+        when(medicalRecordRepository.findAll(pageable)).thenReturn(new PageImpl<>(medicalRecordList));
+        when(medicalRecordMapper.mapToMedicalRecordDto(medicalRecord)).thenReturn(medicalRecordDto);
+
+        //THEN
+        Page<MedicalRecordDto> result = medicalRecordService.findPaginatedMedicalRecords(pageable);
+        assertEquals(result, new PageImpl<>(medicalRecordDtos));
+    }
+
+    @Test
+    public void testDeleteMedicalRecordAnimals() {
+        //GIVEN
+        medicalRecord = MedicalRecordMocks.mockMedicalRecord();
+        medicalRecordDto = MedicalRecordMocks.mockMedicalRecordDto();
+
+        List<MedicalRecord> medicalRecordList = new ArrayList<>();
+        medicalRecordList.add(medicalRecord);
+
+        //WHEN
+        when(medicalRecordRepository.findMedicalRecordsByAnimalsId(Collections.singletonList(medicalRecord.getAnimal().getId()))).thenReturn(medicalRecordList);
+
+        //THEN
+        Boolean result = medicalRecordService.deleteMedicalRecordAnimals(Collections.singletonList(medicalRecord.getAnimal()));
+        assertEquals(result, true);
+    }
 }

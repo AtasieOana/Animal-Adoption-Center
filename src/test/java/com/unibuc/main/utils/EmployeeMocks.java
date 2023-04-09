@@ -22,18 +22,6 @@ public class EmployeeMocks {
                 .build();
     }
 
-    public static Employee mockVet() {
-        return Employee.builder()
-                .id(1L)
-                .personDetails(PersonDetails.builder().firstName(TestConstants.FIRSTNAME)
-                        .lastName(TestConstants.LASTNAME)
-                        .phoneNumber(TestConstants.PHONE_NUMBER).build())
-                .salary(2000)
-                .employmentDate(new Date(2022,Calendar.NOVEMBER,10))
-                .experience(1)
-                .build();
-    }
-
     public static EmployeeDto mockCaretakerDto() {
         return EmployeeDto.builder()
                 .firstName(TestConstants.FIRSTNAME)
@@ -45,20 +33,9 @@ public class EmployeeMocks {
                 .build();
     }
 
-    public static EmployeeDto mockVetDto() {
-        return EmployeeDto.builder()
-                .firstName(TestConstants.FIRSTNAME)
-                .lastName(TestConstants.LASTNAME)
-                .phoneNumber(TestConstants.PHONE_NUMBER)
-                .salary(2000)
-                .employmentDate(new Date(2022,Calendar.NOVEMBER,10))
-                .experience(1)
-                .build();
-    }
-
     public static Employee mockCaretaker2() {
         return Employee.builder()
-                .id(1L)
+                .id(3L)
                 .personDetails(PersonDetails.builder().firstName(TestConstants.FIRSTNAME2)
                         .lastName(TestConstants.LASTNAME)
                         .phoneNumber(TestConstants.PHONE_NUMBER).build())
@@ -76,6 +53,41 @@ public class EmployeeMocks {
                 .salary(2000)
                 .employmentDate(new Date(2022,Calendar.NOVEMBER,10))
                 .responsibility(TestConstants.RESPONSIBILITY)
+                .build();
+    }
+
+    public static Employee mockVet() {
+        return Employee.builder()
+                .id(2L)
+                .personDetails(PersonDetails.builder().firstName(TestConstants.FIRSTNAME)
+                        .lastName(TestConstants.LASTNAME_VET)
+                        .phoneNumber(TestConstants.PHONE_NUMBER).build())
+                .salary(2000)
+                .employmentDate(new Date(2022,Calendar.NOVEMBER,10))
+                .experience(1)
+                .build();
+    }
+
+    public static EmployeeDto mockVetDto() {
+        return EmployeeDto.builder()
+                .firstName(TestConstants.FIRSTNAME)
+                .lastName(TestConstants.LASTNAME_VET)
+                .phoneNumber(TestConstants.PHONE_NUMBER)
+                .salary(2000)
+                .employmentDate(new Date(2022,Calendar.NOVEMBER,10))
+                .experience(1)
+                .build();
+    }
+
+    public static Employee mockVet2() {
+        return Employee.builder()
+                .id(4L)
+                .personDetails(PersonDetails.builder().firstName(TestConstants.FIRSTNAME)
+                        .lastName(TestConstants.LASTNAME_VET2)
+                        .phoneNumber(TestConstants.PHONE_NUMBER).build())
+                .salary(2000)
+                .employmentDate(new Date(2022,Calendar.NOVEMBER,10))
+                .experience(1)
                 .build();
     }
 }

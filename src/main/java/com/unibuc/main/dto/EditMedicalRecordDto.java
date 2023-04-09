@@ -4,7 +4,6 @@ import com.unibuc.main.constants.ProjectConstants;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Entity;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
@@ -15,7 +14,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Setter
 @Getter
-public class PartialMedicalRecordDto {
+public class EditMedicalRecordDto {
 
     @NotBlank(message = ProjectConstants.HEALTH_BLANK)
     private String generalHealthState;

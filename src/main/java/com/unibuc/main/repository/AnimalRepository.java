@@ -12,7 +12,7 @@ import java.util.List;
 public interface AnimalRepository extends JpaRepository<Animal, Long> {
 
     @Log
-    List<Animal> findAllByCage_Id(Long cageId);
+    List<Animal> findAllByCageId(Long cageId);
     @Log
     List<Animal> findAllByClientIsNotNull();
     @Log

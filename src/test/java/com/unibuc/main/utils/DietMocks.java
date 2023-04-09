@@ -6,7 +6,6 @@ import com.unibuc.main.entity.Diet;
 
 public class DietMocks {
 
-
     public static Diet mockDiet() {
         return Diet.builder()
                 .id(1L)

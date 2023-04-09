@@ -15,6 +15,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -218,6 +222,27 @@ public class CaretakerServiceTest {
         //THEN
         EmployeeInfoWrongException employeeInfoWrongException = assertThrows(EmployeeInfoWrongException.class, () -> caretakerService.updateEmployee(TestConstants.FIRSTNAME, TestConstants.LASTNAME, caretakerDto));
         assertEquals(ProjectConstants.CARETAKER_WRONG_INFO, employeeInfoWrongException.getMessage());
+    }
+
+    @Test
+    public void testFindPaginatedCaretakers() {
+        //GIVEN
+        caretaker = EmployeeMocks.mockCaretaker();
+        caretakerDto = EmployeeMocks.mockCaretakerDto();
+        Pageable pageable = PageRequest.of(0,20);
+
+        List<Employee> employeeList = new ArrayList<>();
+        employeeList.add(caretaker);
+        List<EmployeeDto> employeeDtos = new ArrayList<>();
+        employeeDtos.add(caretakerDto);
+
+        //WHEN
+        when(employeeRepository.findAllByResponsibilityNotNull()).thenReturn(employeeList);
+        when(employeeMapper.mapToEmployeeDto(caretaker)).thenReturn(caretakerDto);
+
+        //THEN
+        Page<EmployeeDto> result = caretakerService.findPaginatedEmployees(pageable);
+        assertEquals(result, new PageImpl<>(employeeDtos, pageable, employeeDtos.size()));
     }
 
 }

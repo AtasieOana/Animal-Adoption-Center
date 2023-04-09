@@ -15,6 +15,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,11 +71,11 @@ public class VetServiceTest {
         vetDto = EmployeeMocks.mockVetDto();
 
         //WHEN
-        when(employeeRepository.findVetByName(TestConstants.FIRSTNAME, TestConstants.LASTNAME)).thenReturn(Optional.ofNullable(vet));
+        when(employeeRepository.findVetByName(TestConstants.FIRSTNAME, TestConstants.LASTNAME_VET)).thenReturn(Optional.ofNullable(vet));
         when(employeeMapper.mapToEmployeeDto(vet)).thenReturn(vetDto);
 
         //THEN
-        EmployeeDto result = vetService.getEmployeeByName(TestConstants.FIRSTNAME, TestConstants.LASTNAME);
+        EmployeeDto result = vetService.getEmployeeByName(TestConstants.FIRSTNAME, TestConstants.LASTNAME_VET);
         assertEquals(result, vetDto);
         assertNotNull(result);
     }
@@ -83,11 +87,11 @@ public class VetServiceTest {
         vetDto = null;
 
         //WHEN
-        when(employeeRepository.findVetByName(TestConstants.FIRSTNAME, TestConstants.LASTNAME)).thenReturn(Optional.ofNullable(vet));
+        when(employeeRepository.findVetByName(TestConstants.FIRSTNAME, TestConstants.LASTNAME_VET)).thenReturn(Optional.ofNullable(vet));
 
         //THEN
-        EmployeeNotFoundException employeeNotFoundException = assertThrows(EmployeeNotFoundException.class, () -> vetService.getEmployeeByName(TestConstants.FIRSTNAME, TestConstants.LASTNAME));
-        assertEquals(String.format(ProjectConstants.EMPLOYEE_NOT_FOUND, TestConstants.FIRSTNAME + " " + TestConstants.LASTNAME), employeeNotFoundException.getMessage());
+        EmployeeNotFoundException employeeNotFoundException = assertThrows(EmployeeNotFoundException.class, () -> vetService.getEmployeeByName(TestConstants.FIRSTNAME, TestConstants.LASTNAME_VET));
+        assertEquals(String.format(ProjectConstants.EMPLOYEE_NOT_FOUND, TestConstants.FIRSTNAME + " " + TestConstants.LASTNAME_VET), employeeNotFoundException.getMessage());
     }
 
     @Test
@@ -97,7 +101,7 @@ public class VetServiceTest {
         vetDto = EmployeeMocks.mockVetDto();
 
         //WHEN
-        when(employeeRepository.findVetByName(TestConstants.FIRSTNAME, TestConstants.LASTNAME)).thenReturn(Optional.empty());
+        when(employeeRepository.findVetByName(TestConstants.FIRSTNAME, TestConstants.LASTNAME_VET)).thenReturn(Optional.empty());
         when(employeeMapper.mapToEmployee(vetDto)).thenReturn(vet);
         when(employeeMapper.mapToEmployeeDto(vet)).thenReturn(vetDto);
         when(employeeRepository.save(vet)).thenReturn(vet);
@@ -117,11 +121,11 @@ public class VetServiceTest {
         vetDto = EmployeeMocks.mockVetDto();
 
         //WHEN
-        when(employeeRepository.findVetByName(TestConstants.FIRSTNAME, TestConstants.LASTNAME)).thenReturn(Optional.ofNullable(vet));
+        when(employeeRepository.findVetByName(TestConstants.FIRSTNAME, TestConstants.LASTNAME_VET)).thenReturn(Optional.ofNullable(vet));
 
         //THEN
         EmployeeAlreadyExistsException employeeAlreadyExistsException = assertThrows(EmployeeAlreadyExistsException.class, () -> vetService.addNewEmployee(vetDto));
-        assertEquals(String.format(ProjectConstants.EMPLOYEE_EXISTS, TestConstants.FIRSTNAME + " " + TestConstants.LASTNAME), employeeAlreadyExistsException.getMessage());
+        assertEquals(String.format(ProjectConstants.EMPLOYEE_EXISTS, TestConstants.FIRSTNAME + " " + TestConstants.LASTNAME_VET), employeeAlreadyExistsException.getMessage());
     }
 
     @Test
@@ -132,7 +136,7 @@ public class VetServiceTest {
         vetDto.setResponsibility(TestConstants.RESPONSIBILITY);
 
         //WHEN
-        when(employeeRepository.findVetByName(TestConstants.FIRSTNAME, TestConstants.LASTNAME)).thenReturn(Optional.empty());
+        when(employeeRepository.findVetByName(TestConstants.FIRSTNAME, TestConstants.LASTNAME_VET)).thenReturn(Optional.empty());
 
         //THEN
         EmployeeInfoWrongException employeeInfoWrongException = assertThrows(EmployeeInfoWrongException.class, () -> vetService.addNewEmployee(vetDto));
@@ -146,10 +150,10 @@ public class VetServiceTest {
         vetDto = EmployeeMocks.mockVetDto();
 
         //WHEN
-        when(employeeRepository.findVetByName(TestConstants.FIRSTNAME, TestConstants.LASTNAME)).thenReturn(Optional.ofNullable(vet));
+        when(employeeRepository.findVetByName(TestConstants.FIRSTNAME, TestConstants.LASTNAME_VET)).thenReturn(Optional.ofNullable(vet));
 
         //THEN
-        Boolean result = vetService.deleteEmployee(TestConstants.FIRSTNAME, TestConstants.LASTNAME);
+        Boolean result = vetService.deleteEmployee(TestConstants.FIRSTNAME, TestConstants.LASTNAME_VET);
         assertEquals(result, true);
     }
 
@@ -160,11 +164,11 @@ public class VetServiceTest {
         vetDto = null;
 
         //WHEN
-        when(employeeRepository.findVetByName(TestConstants.FIRSTNAME, TestConstants.LASTNAME)).thenReturn(Optional.ofNullable(vet));
+        when(employeeRepository.findVetByName(TestConstants.FIRSTNAME, TestConstants.LASTNAME_VET)).thenReturn(Optional.ofNullable(vet));
 
         //THEN
-        EmployeeNotFoundException employeeNotFoundException = assertThrows(EmployeeNotFoundException.class, () -> vetService.deleteEmployee(TestConstants.FIRSTNAME, TestConstants.LASTNAME));
-        assertEquals(String.format(ProjectConstants.EMPLOYEE_NOT_FOUND, TestConstants.FIRSTNAME + " " + TestConstants.LASTNAME), employeeNotFoundException.getMessage());
+        EmployeeNotFoundException employeeNotFoundException = assertThrows(EmployeeNotFoundException.class, () -> vetService.deleteEmployee(TestConstants.FIRSTNAME, TestConstants.LASTNAME_VET));
+        assertEquals(String.format(ProjectConstants.EMPLOYEE_NOT_FOUND, TestConstants.FIRSTNAME + " " + TestConstants.LASTNAME_VET), employeeNotFoundException.getMessage());
     }
 
     @Test
@@ -178,13 +182,13 @@ public class VetServiceTest {
         vetDto.setExperience(2);
 
         //WHEN
-        when(employeeRepository.findVetByName(TestConstants.FIRSTNAME, TestConstants.LASTNAME)).thenReturn(Optional.ofNullable(vet));
+        when(employeeRepository.findVetByName(TestConstants.FIRSTNAME, TestConstants.LASTNAME_VET)).thenReturn(Optional.ofNullable(vet));
         when(employeeMapper.mapToEmployee(vetDto)).thenReturn(updatedVet);
         when(employeeMapper.mapToEmployeeDto(updatedVet)).thenReturn(vetDto);
         when(employeeRepository.save(updatedVet)).thenReturn(updatedVet);
 
         //THEN
-        EmployeeDto result = vetService.updateEmployee(TestConstants.FIRSTNAME, TestConstants.LASTNAME, vetDto);
+        EmployeeDto result = vetService.updateEmployee(TestConstants.FIRSTNAME, TestConstants.LASTNAME_VET, vetDto);
         assertEquals(result, vetDto);
         assertThat(result.getExperience()).isNotNull();
         assertEquals(result.getExperience(), 2);
@@ -199,11 +203,11 @@ public class VetServiceTest {
         vetDto = null;
 
         //WHEN
-        when(employeeRepository.findVetByName(TestConstants.FIRSTNAME, TestConstants.LASTNAME)).thenReturn(Optional.ofNullable(vet));
+        when(employeeRepository.findVetByName(TestConstants.FIRSTNAME, TestConstants.LASTNAME_VET)).thenReturn(Optional.ofNullable(vet));
 
         //THEN
-        EmployeeNotFoundException employeeNotFoundException = assertThrows(EmployeeNotFoundException.class, () -> vetService.updateEmployee(TestConstants.FIRSTNAME, TestConstants.LASTNAME,vetDto));
-        assertEquals(String.format(ProjectConstants.EMPLOYEE_NOT_FOUND, TestConstants.FIRSTNAME + " " + TestConstants.LASTNAME), employeeNotFoundException.getMessage());
+        EmployeeNotFoundException employeeNotFoundException = assertThrows(EmployeeNotFoundException.class, () -> vetService.updateEmployee(TestConstants.FIRSTNAME, TestConstants.LASTNAME_VET,vetDto));
+        assertEquals(String.format(ProjectConstants.EMPLOYEE_NOT_FOUND, TestConstants.FIRSTNAME + " " + TestConstants.LASTNAME_VET), employeeNotFoundException.getMessage());
     }
 
     @Test
@@ -214,11 +218,31 @@ public class VetServiceTest {
         vetDto.setResponsibility(TestConstants.RESPONSIBILITY);
 
         //WHEN
-        when(employeeRepository.findVetByName(TestConstants.FIRSTNAME, TestConstants.LASTNAME)).thenReturn(Optional.ofNullable(vet));
+        when(employeeRepository.findVetByName(TestConstants.FIRSTNAME, TestConstants.LASTNAME_VET)).thenReturn(Optional.ofNullable(vet));
 
         //THEN
-        EmployeeInfoWrongException employeeInfoWrongException = assertThrows(EmployeeInfoWrongException.class, () -> vetService.updateEmployee(TestConstants.FIRSTNAME, TestConstants.LASTNAME, vetDto));
+        EmployeeInfoWrongException employeeInfoWrongException = assertThrows(EmployeeInfoWrongException.class, () -> vetService.updateEmployee(TestConstants.FIRSTNAME, TestConstants.LASTNAME_VET, vetDto));
         assertEquals(ProjectConstants.VET_WRONG_INFO, employeeInfoWrongException.getMessage());
     }
 
+    @Test
+    public void testFindPaginatedCaretakers() {
+        //GIVEN
+        vet = EmployeeMocks.mockVet();
+        vetDto = EmployeeMocks.mockVetDto();
+        Pageable pageable = PageRequest.of(0,20);
+
+        List<Employee> employeeList = new ArrayList<>();
+        employeeList.add(vet);
+        List<EmployeeDto> employeeDtos = new ArrayList<>();
+        employeeDtos.add(vetDto);
+
+        //WHEN
+        when(employeeRepository.findAllByExperienceNotNull()).thenReturn(employeeList);
+        when(employeeMapper.mapToEmployeeDto(vet)).thenReturn(vetDto);
+
+        //THEN
+        Page<EmployeeDto> result = vetService.findPaginatedEmployees(pageable);
+        assertEquals(result, new PageImpl<>(employeeDtos, pageable, employeeDtos.size()));
+    }
 }

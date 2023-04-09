@@ -2,7 +2,7 @@ package com.unibuc.main.controller;
 
 import com.unibuc.main.dto.AdoptAnimalDto;
 import com.unibuc.main.dto.AnimalDto;
-import com.unibuc.main.dto.PartialAnimalDto;
+import com.unibuc.main.dto.AddAnimalDto;
 import com.unibuc.main.repository.ClientRepository;
 import com.unibuc.main.service.AnimalService;
 import com.unibuc.main.service.CageService;
@@ -77,14 +77,14 @@ public class AnimalController {
 
     @RequestMapping("/add")
     public String addAnimalForm(Model model) {
-        model.addAttribute("animal", new PartialAnimalDto());
+        model.addAttribute("animal", new AddAnimalDto());
         model.addAttribute("cagesAll", cageService.getAllCages());
         model.addAttribute("dietsAll", dietService.getAllDiets());
         return "/animalTemplates/addAnimalForm";
     }
 
     @PostMapping
-    public String saveAnimal(@ModelAttribute("animal") @Valid PartialAnimalDto partialAnimalDto,
+    public String saveAnimal(@ModelAttribute("animal") @Valid AddAnimalDto addAnimalDto,
                            BindingResult bindingResult, Model model){
         model.addAttribute("cagesAll", cageService.getAllCages());
         model.addAttribute("dietsAll", dietService.getAllDiets());
@@ -92,7 +92,7 @@ public class AnimalController {
             return "/animalTemplates/addAnimalForm";
         }
         try{
-            animalService.addAnimal(partialAnimalDto);
+            animalService.addAnimal(addAnimalDto);
         }catch (Exception exception){
             bindingResult.reject("globalError", exception.getMessage());
             return "/animalTemplates/addAnimalForm";

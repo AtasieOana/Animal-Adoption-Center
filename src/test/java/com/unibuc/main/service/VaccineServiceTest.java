@@ -15,9 +15,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -169,4 +172,54 @@ public class VaccineServiceTest {
         assertEquals(String.format(ProjectConstants.VACCINE_NOT_FOUND, TestConstants.VACCINE_NAME), vaccineNotFoundException.getMessage());
     }
 
+    @Test
+    public void testGetVaccineByName() {
+        //GIVEN
+        vaccine = VaccineMocks.mockVaccine();
+        vaccineDto = VaccineMocks.mockVaccineDto();
+
+        //WHEN
+        when(vaccineRepository.findByVaccineName(vaccine.getVaccineName())).thenReturn(Optional.ofNullable(vaccine));
+        when(vaccineMapper.mapToVaccineDto(vaccine)).thenReturn(vaccineDto);
+
+        //THEN
+        VaccineDto result = vaccineService.getVaccineByName(vaccine.getVaccineName());
+        assertEquals(result, vaccineDto);
+        assertThat(result).isNotNull();
+    }
+
+    @Test
+    public void testGetVaccineByNameException() {
+        //GIVEN
+        vaccine = VaccineMocks.mockVaccine();
+        vaccineDto = VaccineMocks.mockVaccineDto();
+
+        //WHEN
+        when(vaccineRepository.findByVaccineName(vaccine.getVaccineName())).thenReturn(Optional.empty());
+
+        //THEN
+        VaccineNotFoundException vaccineNotFoundException = assertThrows(VaccineNotFoundException.class, () -> vaccineService.getVaccineByName(vaccine.getVaccineName()));
+        assertEquals(String.format(ProjectConstants.VACCINE_NOT_FOUND, vaccine.getVaccineName()), vaccineNotFoundException.getMessage());
+    }
+
+    @Test
+    public void testFindPaginatedVaccines() {
+        //GIVEN
+        vaccine = VaccineMocks.mockVaccine();
+        vaccineDto = VaccineMocks.mockVaccineDto();
+        Pageable pageable = PageRequest.of(0,20);
+
+        List<Vaccine> vaccineList = new ArrayList<>();
+        vaccineList.add(vaccine);
+        List<VaccineDto> vaccineDtos = new ArrayList<>();
+        vaccineDtos.add(vaccineDto);
+
+        //WHEN
+        when(vaccineRepository.findAll(pageable)).thenReturn(new PageImpl<>(vaccineList));
+        when(vaccineMapper.mapToVaccineDto(vaccine)).thenReturn(vaccineDto);
+
+        //THEN
+        Page<VaccineDto> result = vaccineService.findPaginatedVaccines(pageable);
+        assertEquals(result, new PageImpl<>(vaccineDtos));
+    }
 }

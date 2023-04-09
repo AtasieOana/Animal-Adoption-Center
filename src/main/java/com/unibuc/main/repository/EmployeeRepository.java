@@ -18,12 +18,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     List<Employee> findAllByResponsibilityNotNull();
 
     @Log
-    Page<Employee> findAllByResponsibilityNotNull(Pageable pageable);
-
-    @Log
-    Page<Employee> findAllByExperienceNotNull(Pageable pageable);
-
-    @Log
     List<Employee> findAllByExperienceNotNull();
 
     @Log

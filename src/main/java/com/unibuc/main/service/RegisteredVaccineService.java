@@ -8,6 +8,7 @@ import com.unibuc.main.entity.MedicalRecord;
 import com.unibuc.main.entity.RegisteredVaccine;
 import com.unibuc.main.entity.Vaccine;
 import com.unibuc.main.exception.MedicalRecordNotFoundException;
+import com.unibuc.main.exception.RegisteredVaccineNotFoundException;
 import com.unibuc.main.exception.VaccineNotFoundException;
 import com.unibuc.main.mapper.MedicalRecordMapper;
 import com.unibuc.main.mapper.RegisteredVaccineMapper;
@@ -29,9 +30,6 @@ public class RegisteredVaccineService {
 
     @Autowired
     private RegisteredVaccineRepository registeredVaccineRepository;
-
-    @Autowired
-    private RegisteredVaccineMapper registeredVaccineMapper;
 
     @Autowired
     private MedicalRecordRepository medicalRecordRepository;
@@ -74,7 +72,7 @@ public class RegisteredVaccineService {
     public RegisteredVaccineDto getRegisteredVaccineByMedicalRecordId(Long medicalRecordId) {
         List<RegisteredVaccine> registeredVaccines = registeredVaccineRepository.findByMedicalRecordId(medicalRecordId);
         if (registeredVaccines.isEmpty()) {
-            throw new IllegalArgumentException("No registered vaccines found for medical record with ID " + medicalRecordId);
+            throw new RegisteredVaccineNotFoundException(String.format(ProjectConstants.REG_VACCINE_NOT_FOUND, medicalRecordId));
         }
         List<VaccineDto> vaccinesForMedicalRecord = new ArrayList<>();
         for (RegisteredVaccine registeredVaccine : registeredVaccines) {
@@ -142,7 +140,7 @@ public class RegisteredVaccineService {
     public boolean deleteVaccinesFromMedicalRecord(Long medicalRecordId) {
         List<RegisteredVaccine> registeredVaccines = registeredVaccineRepository.findByMedicalRecordId(medicalRecordId);
         if (registeredVaccines.isEmpty()) {
-            throw new IllegalArgumentException("No registered vaccines found for medical record with ID " + medicalRecordId);
+            throw new RegisteredVaccineNotFoundException(String.format(ProjectConstants.REG_VACCINE_NOT_FOUND, medicalRecordId));
         }
         registeredVaccineRepository.deleteAll(registeredVaccines);
         return true;

@@ -19,7 +19,6 @@ public class DataLoader implements CommandLineRunner {
     private UserRepository userRepository;
     private PasswordEncoder passwordEncoder;
 
-
     private void loadUserData() {
         if (userRepository.count() == 0){
             Authority adminRole = authorityRepository.save(Authority.builder().role("ROLE_ADMIN").build());

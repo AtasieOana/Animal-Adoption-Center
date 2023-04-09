@@ -14,6 +14,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +61,57 @@ public class DietServiceTest {
         //THEN
         List<DietDto> result = dietService.getAllDiets();
         assertEquals(result, dietDtos);
+    }
+
+    @Test
+    public void testFindPaginatedDiets() {
+        //GIVEN
+        diet = DietMocks.mockDiet();
+        dietDto = DietMocks.mockDietDto();
+        Pageable pageable = PageRequest.of(0,20);
+
+        List<Diet> dietList = new ArrayList<>();
+        dietList.add(diet);
+        List<DietDto> dietDtos = new ArrayList<>();
+        dietDtos.add(dietDto);
+
+        //WHEN
+        when(dietRepository.findAll(pageable)).thenReturn(new PageImpl<>(dietList));
+        when(dietMapper.mapToDietDto(diet)).thenReturn(dietDto);
+
+        //THEN
+        Page<DietDto> result = dietService.findPaginatedDiets(pageable);
+        assertEquals(result, new PageImpl<>(dietDtos));
+    }
+
+    @Test
+    public void testGetDietByType() {
+        //GIVEN
+        diet = DietMocks.mockDiet();
+        dietDto = DietMocks.mockDietDto();
+
+        //WHEN
+        when(dietRepository.findByDietType(diet.getDietType())).thenReturn(Optional.ofNullable(diet));
+        when(dietMapper.mapToDietDto(diet)).thenReturn(dietDto);
+
+        //THEN
+        DietDto result = dietService.getDietByType(diet.getDietType());
+        assertEquals(result, dietDto);
+        assertThat(result).isNotNull();
+    }
+
+    @Test
+    public void testGetDietByTypeNotFoundException() {
+        //GIVEN
+        diet = null;
+        dietDto = null;
+
+        //WHEN
+        when(dietRepository.findByDietType(TestConstants.DIET_NAME)).thenReturn(Optional.empty());
+
+        //THEN
+        DietNotFoundException dietNotFoundException = assertThrows(DietNotFoundException.class, () -> dietService.getDietByType(TestConstants.DIET_NAME));
+        assertEquals(String.format(ProjectConstants.DIET_NOT_FOUND, TestConstants.DIET_NAME), dietNotFoundException.getMessage());
     }
 
     @Test
@@ -120,8 +175,6 @@ public class DietServiceTest {
         String result = dietService.deleteDietOnlyIfStockEmpty(TestConstants.DIET_NAME);
         assertEquals(result, ProjectConstants.DIET_DELETED);
     }
-
-
 
     @Test
     public void testUpdateDiet() {

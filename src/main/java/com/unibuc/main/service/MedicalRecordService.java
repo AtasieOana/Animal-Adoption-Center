@@ -3,7 +3,7 @@ package com.unibuc.main.service;
 import com.unibuc.main.constants.ProjectConstants;
 import com.unibuc.main.dto.AddMedicalRecordDto;
 import com.unibuc.main.dto.MedicalRecordDto;
-import com.unibuc.main.dto.PartialMedicalRecordDto;
+import com.unibuc.main.dto.EditMedicalRecordDto;
 import com.unibuc.main.entity.Animal;
 import com.unibuc.main.entity.Employee;
 import com.unibuc.main.entity.MedicalRecord;
@@ -64,7 +64,7 @@ public class MedicalRecordService {
         return medicalRecordMapper.mapToMedicalRecordDto(medicalRecord.get());
     }
 
-    public MedicalRecordDto updateMedicalRecord(Long id, PartialMedicalRecordDto updatedRecord) {
+    public MedicalRecordDto updateMedicalRecord(Long id, EditMedicalRecordDto updatedRecord) {
         Optional<MedicalRecord> medicalRecord = medicalRecordRepository.findById(id);
         if (medicalRecord.isEmpty()) {
             throw new MedicalRecordNotFoundException(String.format(ProjectConstants.RECORD_NOT_FOUND, id));
@@ -90,12 +90,9 @@ public class MedicalRecordService {
     }
 
     public Boolean deleteMedicalRecordAnimals(List<Animal> adoptedAnimals)  {
-        System.out.println(medicalRecordRepository.findMedicalRecordsByAnimalsId(adoptedAnimals.stream().map(Animal::getId).collect(Collectors.toList())));
-
         List<MedicalRecord> medicalRecords = medicalRecordRepository.findMedicalRecordsByAnimalsId(adoptedAnimals.stream().map(Animal::getId).collect(Collectors.toList()));
-        System.out.println(medicalRecords);
         medicalRecordRepository.deleteAll(medicalRecords);
         return true;
     }
-    
+
 }

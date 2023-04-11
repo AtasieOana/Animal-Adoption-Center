@@ -30,19 +30,9 @@ public class VetController {
         int pageSize = size.orElse(3);
         Page<EmployeeDto> vetPage = vetService.findPaginatedEmployees(PageRequest.of(currentPage - 1, pageSize));
         model.addAttribute("vetPage",vetPage);
-        return "employeeTemplates/vetPaginated";
+        return "/employeeTemplates/vetPaginated";
     }
-    
-    /*
-    @GetMapping("")
-    public ModelAndView getAllVets(){
-        ModelAndView modelAndView = new ModelAndView("/employeeTemplates/vetList");
-        List<EmployeeDto> vets = vetService.getAllEmployees();
-        modelAndView.addObject("vets",vets);
-        return modelAndView;
-    }
-     */
-    
+
     @GetMapping("/{firstName}/{lastName}")
     public ModelAndView getVetByName(@PathVariable String firstName, @PathVariable String lastName){
         ModelAndView modelAndView = new ModelAndView("/employeeTemplates/vetDetails");

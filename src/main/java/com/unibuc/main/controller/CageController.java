@@ -34,18 +34,8 @@ public class CageController {
         int pageSize = size.orElse(5);
         Page<CageDto> cagePage = cageService.findPaginatedCages(PageRequest.of(currentPage - 1, pageSize));
         model.addAttribute("cagePage",cagePage);
-        return "cageTemplates/cagePaginated";
+        return "/cageTemplates/cagePaginated";
     }
-
-    /*
-    @GetMapping("")
-    public ModelAndView cages(){
-        ModelAndView modelAndView = new ModelAndView("/cageTemplates/cageList");
-        List<CageDto> cageList = cageService.getAllCages();
-        modelAndView.addObject("cages",cageList);
-        return modelAndView;
-    }
-    */
 
     @GetMapping("/{cageId}")
     public ModelAndView getCageById(@PathVariable Long cageId){

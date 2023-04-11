@@ -34,21 +34,8 @@ public class ClientController {
         Integer avgAge = clientService.getAvgAgeForClient();
         model.addAttribute("avgAge", avgAge);
 
-        return "clientTemplates/clientPaginated";
+        return "/clientTemplates/clientPaginated";
     }
-    
-    /*
-    @GetMapping("")
-    public ModelAndView getAllClients(){
-        ModelAndView modelAndView = new ModelAndView("clientTemplates/clientList");
-        List<ClientDto> clientList = clientService.getAllClients();
-        modelAndView.addObject("clients",clientList);
-
-        Integer avgAge = clientService.getAvgAgeForClient();
-        modelAndView.addObject("avgAge",avgAge);
-        return modelAndView;
-    }
-    */
     
     @GetMapping("/{firstName}/{lastName}")
     public ModelAndView getClientByName(@PathVariable String firstName, @PathVariable String lastName){

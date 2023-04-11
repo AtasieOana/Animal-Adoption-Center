@@ -41,19 +41,9 @@ public class RegisteredVaccineController {
         int currentPage = page.orElse(1);
         int pageSize = size.orElse(3);
         Page<RegisteredVaccineDto> registeredVaccinePage = registeredVaccineService.findPaginatedRegisteredVaccines(PageRequest.of(currentPage - 1, pageSize));
-        model.addAttribute("registeredVaccinePage",registeredVaccinePage);
-        return "registeredVaccineTemplates/registeredVaccinePaginated";
+        model.addAttribute("registeredVaccinePage", registeredVaccinePage);
+        return "/registeredVaccineTemplates/registeredVaccinePaginated";
     }
-    
-    /*
-    @GetMapping("")
-    public ModelAndView registeredVaccines(){
-        ModelAndView modelAndView = new ModelAndView("/registeredVaccineTemplates/registeredVaccineList");
-        List<RegisteredVaccineDto> registeredVaccineList = registeredVaccineService.getAllRegisteredVaccines();
-        modelAndView.addObject("registeredVaccines",registeredVaccineList);
-        return modelAndView;
-    }
-    */
     
     @GetMapping("/{medicalRecordId}")
     public ModelAndView getRegisteredVaccineByMedicalRecordId(@PathVariable Long medicalRecordId){

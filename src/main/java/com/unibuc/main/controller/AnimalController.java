@@ -44,24 +44,13 @@ public class AnimalController {
         int pageSize = size.orElse(3);
         Page<AnimalDto> animalPage = animalService.findPaginatedAnimals(PageRequest.of(currentPage - 1, pageSize));
         model.addAttribute("animalPage",animalPage);
-        return "animalTemplates/animalPaginated";
+        return "/animalTemplates/animalPaginated";
     }
-
-    /*
-    @GetMapping("")
-    public ModelAndView animals(){
-        ModelAndView modelAndView = new ModelAndView("/animalTemplates/animalList");
-        List<AnimalDto> animalList = animalService.getAllAnimals();
-        modelAndView.addObject("animals",animalList);
-        return modelAndView;
-    }
-     */
     
     @GetMapping("/{animalId}")
     public ModelAndView getAnimalById(@PathVariable Long animalId){
         ModelAndView modelAndView = new ModelAndView("/animalTemplates/animalDetails");
         AnimalDto animalDto = animalService.getAnimalById(animalId);
-        modelAndView.addObject("animalId", animalId);
         modelAndView.addObject("animal", animalDto);
         return modelAndView;
     }
@@ -70,7 +59,6 @@ public class AnimalController {
     public ModelAndView getOldestAnimalInCenter(){
         ModelAndView modelAndView = new ModelAndView("/animalTemplates/animalDetails");
         AnimalDto animalDto = animalService.getOldestAnimalInCenter();
-        modelAndView.addObject("animalId", animalDto.getId());
         modelAndView.addObject("animal", animalDto);
         return modelAndView;
     }

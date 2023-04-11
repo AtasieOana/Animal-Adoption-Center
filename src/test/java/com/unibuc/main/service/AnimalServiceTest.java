@@ -149,7 +149,7 @@ public class AnimalServiceTest {
         //GIVEN
         animal = AnimalMocks.mockAnimal();
         animalDto = AnimalMocks.mockAnimalDto();
-        addAnimalDto = AnimalMocks.mockPartialAnimalDto();
+        addAnimalDto = AnimalMocks.mockAddAnimalDto();
 
         //WHEN
         when(dietRepository.findByDietType(addAnimalDto.getDietType())).thenReturn(Optional.ofNullable(animal.getDiet()));
@@ -173,7 +173,7 @@ public class AnimalServiceTest {
         //GIVEN
         animal = AnimalMocks.mockAnimal();
         animalDto = AnimalMocks.mockAnimalDto();
-        addAnimalDto = AnimalMocks.mockPartialAnimalDto();
+        addAnimalDto = AnimalMocks.mockAddAnimalDto();
 
         //WHEN
         when(dietRepository.findByDietType(addAnimalDto.getDietType())).thenReturn(Optional.empty());
@@ -188,7 +188,7 @@ public class AnimalServiceTest {
         //GIVEN
         animal = AnimalMocks.mockAnimal();
         animalDto = AnimalMocks.mockAnimalDto();
-        addAnimalDto = AnimalMocks.mockPartialAnimalDto();
+        addAnimalDto = AnimalMocks.mockAddAnimalDto();
 
         //WHEN
         when(dietRepository.findByDietType(addAnimalDto.getDietType())).thenReturn(Optional.ofNullable(animal.getDiet()));
@@ -205,7 +205,7 @@ public class AnimalServiceTest {
         //GIVEN
         animal = AnimalMocks.mockAnimal();
         animalDto = AnimalMocks.mockAnimalDto();
-        addAnimalDto = AnimalMocks.mockPartialAnimalDto();
+        addAnimalDto = AnimalMocks.mockAddAnimalDto();
 
         List<Animal> animals = new ArrayList<>();
         animals.add(animal);

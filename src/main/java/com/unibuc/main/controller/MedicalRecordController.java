@@ -39,18 +39,8 @@ public class MedicalRecordController {
         int pageSize = size.orElse(3);
         Page<MedicalRecordDto> medicalRecordPage = medicalRecordService.findPaginatedMedicalRecords(PageRequest.of(currentPage - 1, pageSize));
         model.addAttribute("medicalRecordPage",medicalRecordPage);
-        return "medicalRecordTemplates/medicalRecordPaginated";
+        return "/medicalRecordTemplates/medicalRecordPaginated";
     }
-
-    /*
-    @GetMapping("")
-    public ModelAndView medicalRecords(){
-        ModelAndView modelAndView = new ModelAndView("/medicalRecordTemplates/medicalRecordList");
-        List<MedicalRecordDto> medicalRecordList = medicalRecordService.getAllMedicalRecords();
-        modelAndView.addObject("medicalRecords",medicalRecordList);
-        return modelAndView;
-    }
-     */
 
     @GetMapping("/{medicalRecordId}")
     public ModelAndView getMedicalRecordById(@PathVariable Long medicalRecordId){
@@ -98,7 +88,8 @@ public class MedicalRecordController {
     public String editMedicalRecord(@PathVariable Long medicalRecordId,
                            @ModelAttribute("medicalRecord") @Valid EditMedicalRecordDto editMedicalRecordDto,
                            BindingResult bindingResult, Model model){
-        model.addAttribute("caretakersAll",employeeRepository.findAllByResponsibilityNotNull());
+        model.addAttribute("animalsAll", animalRepository.findAllByClientIsNull());
+        model.addAttribute("vetsAll", employeeRepository.findAllByExperienceNotNull());
         if (bindingResult.hasErrors()) {
             return "/medicalRecordTemplates/editMedicalRecordForm";
         }

@@ -1,6 +1,7 @@
 package com.unibuc.main.utils;
 
 import com.unibuc.main.constants.TestConstants;
+import com.unibuc.main.dto.AdoptAnimalDto;
 import com.unibuc.main.dto.AnimalDto;
 import com.unibuc.main.dto.AddAnimalDto;
 import com.unibuc.main.entity.Animal;
@@ -46,7 +47,7 @@ public class AnimalMocks {
         }
     }
 
-    public static AddAnimalDto mockPartialAnimalDto() {
+    public static AddAnimalDto mockAddAnimalDto() {
         String date_string = "26-09-2022";
         try {
             Date date = formatter.parse(date_string);
@@ -94,5 +95,13 @@ public class AnimalMocks {
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
+    }
+
+
+    public static AdoptAnimalDto mockAdoptAnimalDto() {
+        return AdoptAnimalDto.builder()
+                .id(1L)
+                .clientId(1L)
+                .build();
     }
 }

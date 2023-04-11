@@ -29,18 +29,8 @@ public class CaretakerController {
         int pageSize = size.orElse(3);
         Page<EmployeeDto> caretakerPage = caretakerService.findPaginatedEmployees(PageRequest.of(currentPage - 1, pageSize));
         model.addAttribute("caretakerPage",caretakerPage);
-        return "employeeTemplates/caretakerPaginated";
+        return "/employeeTemplates/caretakerPaginated";
     }
-    
-    /*
-    @GetMapping("")
-    public ModelAndView getAllCaretakers(){
-        ModelAndView modelAndView = new ModelAndView("/employeeTemplates/caretakerList");
-        List<EmployeeDto> caretakers = caretakerService.getAllEmployees();
-        modelAndView.addObject("caretakers",caretakers);
-        return modelAndView;
-    }
-    */
     
     @GetMapping("/{firstName}/{lastName}")
     public ModelAndView getCaretakerByName(@PathVariable String firstName, @PathVariable String lastName){

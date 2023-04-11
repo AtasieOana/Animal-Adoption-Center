@@ -30,18 +30,8 @@ public class DietController {
         int pageSize = size.orElse(5);
         Page<DietDto> dietPage = dietService.findPaginatedDiets(PageRequest.of(currentPage - 1, pageSize));
         model.addAttribute("dietPage",dietPage);
-        return "dietTemplates/dietPaginated";
+        return "/dietTemplates/dietPaginated";
     }
-
-    /*
-    @GetMapping("")
-    public ModelAndView getAllDiets(){
-        ModelAndView modelAndView = new ModelAndView("/dietTemplates/dietList");
-        List<DietDto> diets = dietService.getAllDiets();
-        modelAndView.addObject("diets",diets);
-        return modelAndView;
-    }
-    */
 
     @GetMapping("/{dietType}")
     public ModelAndView getDietByType(@PathVariable String dietType){
@@ -80,7 +70,7 @@ public class DietController {
     }
 
     @PostMapping("/updateDiet/{oldDietType}")
-    public String editCaretaker(@PathVariable String oldDietType,
+    public String editDiet(@PathVariable String oldDietType,
                                 @ModelAttribute("diet") @Valid DietDto dietDto,
                                 BindingResult bindingResult){
         if (bindingResult.hasErrors()) {

@@ -30,21 +30,11 @@ public class VaccineController {
         int pageSize = size.orElse(5);
         Page<VaccineDto> vaccinePage = vaccineService.findPaginatedVaccines(PageRequest.of(currentPage - 1, pageSize));
         model.addAttribute("vaccinePage",vaccinePage);
-        return "vaccineTemplates/vaccinePaginated";
+        return "/vaccineTemplates/vaccinePaginated";
     }
-    
-    /*
-    @GetMapping("")
-    public ModelAndView getAllVaccines(){
-        ModelAndView modelAndView = new ModelAndView("/vaccineTemplates/vaccineList");
-        List<VaccineDto> vaccines = vaccineService.getAllVaccinesOrderByExpiredDate();
-        modelAndView.addObject("vaccines",vaccines);
-        return modelAndView;
-    }
-     */
 
     @GetMapping("/{vaccineType}")
-    public ModelAndView getVetByName(@PathVariable String vaccineType){
+    public ModelAndView getVaccineByName(@PathVariable String vaccineType){
         ModelAndView modelAndView = new ModelAndView("/vaccineTemplates/vaccineDetails");
         VaccineDto vaccineDto = vaccineService.getVaccineByName(vaccineType);
         modelAndView.addObject("vaccine", vaccineDto);

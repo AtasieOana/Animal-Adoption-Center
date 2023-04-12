@@ -35,4 +35,12 @@ public class RegisteredVaccineMocks {
                 .registrationDate(new Date(2022,Calendar.NOVEMBER,10))
                 .build();
     }
+
+    public static PartialRegisteredVaccineDto mockPartialRegisteredVaccineDto2() {
+        return PartialRegisteredVaccineDto.builder()
+                .vaccinesId(Collections.singletonList(VaccineMocks.mockVaccine().getId()))
+                .medicalRecordId(MedicalRecordMocks.mockMedicalRecord2().getId())
+                .registrationDate(new Date(2022,Calendar.NOVEMBER,10))
+                .build();
+    }
 }

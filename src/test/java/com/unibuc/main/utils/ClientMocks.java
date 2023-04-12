@@ -58,4 +58,22 @@ public class ClientMocks {
                 .phoneNumber(TestConstants.PHONE_NUMBER)
                 .build();
     }
+
+
+    public static ClientDto mockClientDto2() {
+        String date_string = "02-01-2001";
+        try {
+            Date date = formatter.parse(date_string);
+            return ClientDto.builder()
+                    .firstName(TestConstants.FIRSTNAME2)
+                    .lastName(TestConstants.LASTNAME)
+                    .phoneNumber(TestConstants.PHONE_NUMBER)
+                    .birthDate(date)
+                    .dateBecomingClient(new Date(2022,Calendar.NOVEMBER,10))
+                    .gender("M")
+                    .build();
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

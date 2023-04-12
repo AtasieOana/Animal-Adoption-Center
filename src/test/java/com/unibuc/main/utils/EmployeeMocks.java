@@ -90,4 +90,15 @@ public class EmployeeMocks {
                 .experience(1)
                 .build();
     }
+
+    public static EmployeeDto mockVetDto2() {
+        return EmployeeDto.builder()
+                .firstName(TestConstants.FIRSTNAME)
+                .lastName(TestConstants.LASTNAME_VET2)
+                .phoneNumber(TestConstants.PHONE_NUMBER)
+                .salary(2000)
+                .employmentDate(new Date(2022,Calendar.NOVEMBER,10))
+                .experience(1)
+                .build();
+    }
 }

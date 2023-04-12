@@ -176,7 +176,7 @@ public class CageControllerMockMvcTest {
 
     @Test
     @WithMockUser(username = "admin", password = "pass123", roles = "ADMIN")
-    public void deleteCageIfStockEmptyMockMvcTest() throws Exception {
+    public void deleteCageMockMvcTest() throws Exception {
         //GIVEN
         cageDto = CageMocks.mockCageDto();
 

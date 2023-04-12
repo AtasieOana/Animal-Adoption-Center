@@ -205,7 +205,7 @@ public class AnimalControllerMockMvcTest {
         when(animalService.deleteAdoptedAnimals()).thenReturn(ProjectConstants.NO_ADOPTED_ANIMALS);
 
         //THEN
-        mockMvc.perform(get("/animals/deleteAdoptedAnimals", 1L))
+        mockMvc.perform(get("/animals/deleteAdoptedAnimals"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(model().attribute("result", ProjectConstants.NO_ADOPTED_ANIMALS))
                 .andExpect(view().name("redirect:/animals"));

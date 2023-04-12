@@ -74,4 +74,18 @@ public class VaccineMocks {
             throw new RuntimeException(e);
         }
     }
+
+    public static VaccineDto mockVaccineDto2() {
+        String date_string = "26-09-2021";
+        try {
+            Date date = formatter.parse(date_string);
+            return VaccineDto.builder()
+                    .vaccineName(TestConstants.VACCINE_NAME2)
+                    .expirationDate(date)
+                    .quantityOnStock(0)
+                    .build();
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

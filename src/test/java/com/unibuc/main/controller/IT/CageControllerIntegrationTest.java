@@ -1,7 +1,5 @@
 package com.unibuc.main.controller.IT;
 
-import com.unibuc.main.constants.TestConstants;
-import com.unibuc.main.dto.CageDto;
 import com.unibuc.main.dto.PartialCageDto;
 import com.unibuc.main.entity.Cage;
 import com.unibuc.main.repository.CageRepository;
@@ -18,6 +16,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -33,6 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Rollback(false)
 @ActiveProfiles("h2")
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 public class CageControllerIntegrationTest {
 
     @Autowired

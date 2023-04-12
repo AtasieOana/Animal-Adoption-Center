@@ -70,7 +70,7 @@ public class VaccineController {
     }
 
     @PostMapping("/updateVaccine/{oldVaccineName}")
-    public String editCaretaker(@PathVariable String oldVaccineName,
+    public String editVaccine(@PathVariable String oldVaccineName,
                                 @ModelAttribute("vaccine") @Valid PartialVaccineDto partialVaccineDto,
                                 BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
@@ -86,7 +86,7 @@ public class VaccineController {
     }
 
     @RequestMapping("/deleteExpiredVaccines")
-    public String deleteVaccineIfStockEmpty(RedirectAttributes redirectAttributes){
+    public String deleteExpiredVaccines(RedirectAttributes redirectAttributes){
         String result = vaccineService.deleteExpiredVaccines();
         redirectAttributes.addAttribute("result", result);
         return "redirect:/vaccines";

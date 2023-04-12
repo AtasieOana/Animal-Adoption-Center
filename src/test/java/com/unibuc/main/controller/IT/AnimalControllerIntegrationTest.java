@@ -16,6 +16,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -32,6 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Rollback(false)
 @ActiveProfiles("h2")
 @Slf4j
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 public class AnimalControllerIntegrationTest {
 
     @Autowired
@@ -137,5 +139,14 @@ public class AnimalControllerIntegrationTest {
         mockMvc.perform(get("/animals/deleteAdoptedAnimals"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/animals"));
+    }
+
+    @Test
+    @Order(10)
+    @WithMockUser(username = "admin", password = "pass123", roles = "ADMIN")
+    public void getOldestAnimalInCenterTest() throws Exception {
+        mockMvc.perform(get("/animals/getOldestAnimalInCenter"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("/animalTemplates/animalDetails"));
     }
 }

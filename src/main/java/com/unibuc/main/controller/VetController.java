@@ -23,7 +23,7 @@ public class VetController {
     private VetService vetService;
 
     @RequestMapping("")
-    public String getCaretakersPage(Model model,
+    public String getVetsPage(Model model,
                                     @RequestParam("page") Optional<Integer> page,
                                     @RequestParam("size") Optional<Integer> size) {
         int currentPage = page.orElse(1);

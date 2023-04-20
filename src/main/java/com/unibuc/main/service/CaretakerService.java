@@ -10,6 +10,7 @@ import com.unibuc.main.exception.EmployeeNotFoundException;
 import com.unibuc.main.mapper.EmployeeMapper;
 import com.unibuc.main.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.support.PagedListHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -92,9 +93,12 @@ public class CaretakerService implements EmployeeService {
     }
     
     @Override
-    public Page<EmployeeDto> findPaginatedEmployees(Pageable pageable) {
+    public Page<EmployeeDto> findPaginatedEmployees(Pageable pageable, int pageSize, int page) {
         List<EmployeeDto> employeeDtos = getAllEmployees();
-        Page<EmployeeDto> employeePage = new PageImpl<>(employeeDtos, pageable, employeeDtos.size());
+        PagedListHolder<EmployeeDto> pagedListHolder = new PagedListHolder<>(employeeDtos);
+        pagedListHolder.setPageSize(pageSize);
+        pagedListHolder.setPage(page);
+        Page<EmployeeDto> employeePage = new PageImpl<>(pagedListHolder.getPageList(), pageable, employeeDtos.size());
         return employeePage;
     }
 }

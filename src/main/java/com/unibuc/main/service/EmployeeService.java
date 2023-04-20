@@ -18,6 +18,6 @@ public interface EmployeeService {
 
     EmployeeDto updateEmployee(String oldFirstName, String oldLastName, EmployeeDto newEmployeeDto);
 
-    Page<EmployeeDto> findPaginatedEmployees(Pageable pageable);
+    Page<EmployeeDto> findPaginatedEmployees(Pageable pageable, int pageSize, int page);
 
 }

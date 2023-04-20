@@ -54,7 +54,7 @@ public class CaretakerControllerMockMvcTest {
         int pageSize = 5;
 
         //WHEN
-        when(caretakerService.findPaginatedEmployees(PageRequest.of(currentPage - 1, pageSize))).thenReturn(new PageImpl<>(caretakerDtos));
+        when(caretakerService.findPaginatedEmployees(PageRequest.of(currentPage - 1, pageSize), pageSize, currentPage-1)).thenReturn(new PageImpl<>(caretakerDtos));
 
         //THEN
         mockMvc.perform(get("/caretakers?page={page}&size={size}", currentPage, pageSize))
@@ -62,7 +62,7 @@ public class CaretakerControllerMockMvcTest {
                 .andExpect(view().name("/employeeTemplates/caretakerPaginated"))
                 .andExpect(model().attribute("caretakerPage", new PageImpl<>(caretakerDtos)))
                 .andExpect(content().contentType("text/html;charset=UTF-8"));
-        verify(caretakerService, times(1)).findPaginatedEmployees(PageRequest.of(currentPage - 1, pageSize));
+        verify(caretakerService, times(1)).findPaginatedEmployees(PageRequest.of(currentPage - 1, pageSize), pageSize, currentPage-1);
     }
 
     @Test

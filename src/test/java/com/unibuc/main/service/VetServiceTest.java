@@ -15,6 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.support.PagedListHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -237,12 +238,16 @@ public class VetServiceTest {
         List<EmployeeDto> employeeDtos = new ArrayList<>();
         employeeDtos.add(vetDto);
 
+        PagedListHolder<EmployeeDto> pagedListHolder = new PagedListHolder<>(employeeDtos);
+        pagedListHolder.setPageSize(0);
+        pagedListHolder.setPage(20);
+
         //WHEN
         when(employeeRepository.findAllByExperienceNotNull()).thenReturn(employeeList);
         when(employeeMapper.mapToEmployeeDto(vet)).thenReturn(vetDto);
 
         //THEN
-        Page<EmployeeDto> result = vetService.findPaginatedEmployees(pageable);
-        assertEquals(result, new PageImpl<>(employeeDtos, pageable, employeeDtos.size()));
+        Page<EmployeeDto> result = vetService.findPaginatedEmployees(pageable, 0, 20);
+        assertEquals(result, new PageImpl<>(pagedListHolder.getPageList(), pageable, employeeDtos.size()));
     }
 }

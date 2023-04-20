@@ -28,7 +28,7 @@ public class VetController {
                                     @RequestParam("size") Optional<Integer> size) {
         int currentPage = page.orElse(1);
         int pageSize = size.orElse(3);
-        Page<EmployeeDto> vetPage = vetService.findPaginatedEmployees(PageRequest.of(currentPage - 1, pageSize));
+        Page<EmployeeDto> vetPage = vetService.findPaginatedEmployees(PageRequest.of(currentPage - 1, pageSize), pageSize, currentPage-1);
         model.addAttribute("vetPage",vetPage);
         return "/employeeTemplates/vetPaginated";
     }

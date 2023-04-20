@@ -47,13 +47,13 @@ public class VetControllerTest {
         int pageSize = 5;
 
         //WHEN
-        when(vetService.findPaginatedEmployees(PageRequest.of(currentPage - 1, pageSize))).thenReturn(new PageImpl<>(vetDtos));
+        when(vetService.findPaginatedEmployees(PageRequest.of(currentPage - 1, pageSize), pageSize, currentPage-1)).thenReturn(new PageImpl<>(vetDtos));
 
         //THEN
         String viewName = vetController.getVetsPage(model, Optional.of(currentPage), Optional.of(pageSize));
 
         assertEquals("/employeeTemplates/vetPaginated", viewName);
-        verify(vetService, times(1)).findPaginatedEmployees(PageRequest.of(currentPage - 1, pageSize));
+        verify(vetService, times(1)).findPaginatedEmployees(PageRequest.of(currentPage - 1, pageSize), pageSize, currentPage-1);
 
         ArgumentCaptor<PageImpl> argumentCaptor = ArgumentCaptor.forClass(PageImpl.class);
         verify(model, times(1))

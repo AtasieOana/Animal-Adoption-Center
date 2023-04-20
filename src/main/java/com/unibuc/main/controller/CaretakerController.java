@@ -27,7 +27,7 @@ public class CaretakerController {
                                  @RequestParam("size") Optional<Integer> size) {
         int currentPage = page.orElse(1);
         int pageSize = size.orElse(3);
-        Page<EmployeeDto> caretakerPage = caretakerService.findPaginatedEmployees(PageRequest.of(currentPage - 1, pageSize));
+        Page<EmployeeDto> caretakerPage = caretakerService.findPaginatedEmployees(PageRequest.of(currentPage - 1, pageSize), pageSize, currentPage-1);
         model.addAttribute("caretakerPage",caretakerPage);
         return "/employeeTemplates/caretakerPaginated";
     }

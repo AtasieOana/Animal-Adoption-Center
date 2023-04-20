@@ -48,13 +48,13 @@ public class CaretakerControllerTest {
         int pageSize = 5;
 
         //WHEN
-        when(caretakerService.findPaginatedEmployees(PageRequest.of(currentPage - 1, pageSize))).thenReturn(new PageImpl<>(caretakerDtos));
+        when(caretakerService.findPaginatedEmployees(PageRequest.of(currentPage - 1, pageSize), pageSize, currentPage-1)).thenReturn(new PageImpl<>(caretakerDtos));
 
         //THEN
         String viewName = caretakerController.getCaretakersPage(model, Optional.of(currentPage), Optional.of(pageSize));
 
         assertEquals("/employeeTemplates/caretakerPaginated", viewName);
-        verify(caretakerService, times(1)).findPaginatedEmployees(PageRequest.of(currentPage - 1, pageSize));
+        verify(caretakerService, times(1)).findPaginatedEmployees(PageRequest.of(currentPage - 1, pageSize), pageSize, currentPage-1);
 
         ArgumentCaptor<PageImpl> argumentCaptor = ArgumentCaptor.forClass(PageImpl.class);
         verify(model, times(1))

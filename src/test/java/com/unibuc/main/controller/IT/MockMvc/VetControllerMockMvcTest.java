@@ -54,7 +54,7 @@ public class VetControllerMockMvcTest {
         int pageSize = 5;
 
         //WHEN
-        when(vetService.findPaginatedEmployees(PageRequest.of(currentPage - 1, pageSize))).thenReturn(new PageImpl<>(vetDtos));
+        when(vetService.findPaginatedEmployees(PageRequest.of(currentPage - 1, pageSize), pageSize, currentPage-1)).thenReturn(new PageImpl<>(vetDtos));
 
         //THEN
         mockMvc.perform(get("/vets?page={page}&size={size}", currentPage, pageSize))
@@ -62,7 +62,7 @@ public class VetControllerMockMvcTest {
                 .andExpect(view().name("/employeeTemplates/vetPaginated"))
                 .andExpect(model().attribute("vetPage", new PageImpl<>(vetDtos)))
                 .andExpect(content().contentType("text/html;charset=UTF-8"));
-        verify(vetService, times(1)).findPaginatedEmployees(PageRequest.of(currentPage - 1, pageSize));
+        verify(vetService, times(1)).findPaginatedEmployees(PageRequest.of(currentPage - 1, pageSize), pageSize, currentPage-1);
     }
 
     @Test
